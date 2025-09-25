@@ -672,34 +672,51 @@
                 </div>
             </form>
             <div id="loginError" class="error" style="display: none;"></div>
-            <p style="margin-top: 1rem; text-align: center; color: #999;">
-                Não tem conta? <a href="#" onclick="openRegisterModal()" style="color: #fff;">Cadastre-se</a>
+            <p style="text-align: center; margin-top: 1rem; color: #ccc;">
+                Não tem conta? <a href="#" onclick="openRegisterModal()" style="color: #fff;">Cadastre-se</a><br>
+                <a href="#" onclick="openForgotPasswordModal()" style="color: #4ade80; font-size: 0.9rem;">Esqueci minha senha</a>
             </p>
         </div>
     </div>
-
     <!-- Register Modal -->
     <div id="registerModal" class="modal">
         <div class="modal-content">
-            <h3>Criar nova conta</h3>
+            <h3>Criar Conta</h3>
             <form onsubmit="handleRegister(event)">
-                <div class="form-group">
-                    <label>Email:</label>
-                    <input type="email" id="registerEmail" required>
-                </div>
-                <div class="form-group">
-                    <label>Senha:</label>
-                    <input type="password" id="registerPassword" required>
-                </div>
-                <div class="form-group" style="display: flex; align-items: center; gap: 0.5rem;">
-                    <input type="checkbox" id="acceptTerms" required style="width: auto;">
-                    <label for="acceptTerms" style="margin: 0; font-size: 0.9rem;">
-                        Aceito os <a href="termos.html" target="_blank" style="color: #fff;">Termos de Uso</a> e Política de Privacidade
+                <input type="email" id="registerEmail" placeholder="Email" required>
+                <input type="password" id="registerPassword" placeholder="Senha" required>
+                <input type="password" id="confirmPassword" placeholder="Confirmar Senha" required>
+                <div class="checkbox-container">
+                    <input type="checkbox" id="acceptTerms" required>
+                    <label for="acceptTerms">
+                        Aceito os <a href="termos.html" target="_blank">Termos de Uso</a> e Política de Privacidade
                     </label>
                 </div>
-                <div class="modal-buttons">
-                    <button type="button" class="btn-secondary" onclick="closeModal()">Cancelar</button>
-                    <button type="submit" class="btn">Cadastrar</button>
+                <div id="registerError" class="error-message"></div>
+                <button type="submit" class="btn">Criar Conta</button>
+                <button type="button" class="btn-secondary" onclick="openLoginModal()">Já tenho conta</button>
+                <button type="button" class="btn-secondary" onclick="closeModal()">Fechar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Forgot Password Modal -->
+    <div id="forgotPasswordModal" class="modal">
+        <div class="modal-content">
+            <h3>Recuperar Senha</h3>
+            <p style="color: #ccc; margin-bottom: 1rem;">
+                Digite seu email para receber as instruções de recuperação de senha.
+            </p>
+            <form onsubmit="handleForgotPassword(event)">
+                <input type="email" id="forgotEmail" placeholder="Digite seu email" required>
+                <div id="forgotError" class="error-message"></div>
+                <div id="forgotSuccess" class="success-message" style="display: none; color: #4ade80; margin: 1rem 0;"></div>
+                <button type="submit" class="btn">Enviar Instruções</button>
+                <button type="button" class="btn-secondary" onclick="openLoginModal()">Voltar ao Login</button>
+                <button type="button" class="btn-secondary" onclick="closeModal()">Fechar</button>
+            </form>
+        </div>
+    </div>e="submit" class="btn">Cadastrar</button>
                 </div>
             </form>
             <div id="registerError" class="error" style="display: none;"></div>
@@ -744,8 +761,8 @@
         const PIX_NAME = "Verifica Pessoa";
         
         // Mercado Pago - Substitua pelas suas chaves reais
-        const MP_PUBLIC_KEY = "APP_USR-aff32c11-93e2-4ed5-8a5a-9e2ca4405766";
-        const MP_ACCESS_TOKEN = "APP_USR-6850941285056243-092512-017e23d3c41ef7b0c005df7970bf13a1-94875335";
+        const MP_PUBLIC_KEY = "SUA_PUBLIC_KEY_AQUI";
+        const MP_ACCESS_TOKEN = "SEU_ACCESS_TOKEN_AQUI";
         
         let currentUser = null;
         
@@ -1795,9 +1812,16 @@
             document.getElementById('registerModal').classList.add('active');
         }
         
+        function openForgotPasswordModal() {
+            document.getElementById('loginModal').classList.remove('active');
+            document.getElementById('registerModal').classList.remove('active');
+            document.getElementById('forgotPasswordModal').classList.add('active');
+        }
+        
         function closeModal() {
             document.getElementById('loginModal').classList.remove('active');
             document.getElementById('registerModal').classList.remove('active');
+            document.getElementById('forgotPasswordModal').classList.remove('active');
             document.getElementById('paymentModal').classList.remove('active');
         }
         
@@ -1855,6 +1879,52 @@
             currentUser = null;
             localStorage.removeItem('verificapessoa_current_user');
             updateUserInterface();
+        }
+        
+        function handleForgotPassword(event) {
+            event.preventDefault();
+            const email = document.getElementById('forgotEmail').value;
+            const errorDiv = document.getElementById('forgotError');
+            const successDiv = document.getElementById('forgotSuccess');
+            
+            // Verificar se o email existe
+            const users = getAllUsers();
+            const user = users.find(u => u.email === email);
+            
+            if (!user) {
+                errorDiv.textContent = 'Email não encontrado em nossa base de dados';
+                errorDiv.style.display = 'block';
+                successDiv.style.display = 'none';
+                return;
+            }
+            
+            // Simular envio de email (em produção seria real)
+            errorDiv.style.display = 'none';
+            successDiv.textContent = `Instruções de recuperação enviadas para ${email}. Verifique sua caixa de entrada e spam.`;
+            successDiv.style.display = 'block';
+            
+            // Gerar token de recuperação (salvar localmente para simulação)
+            const resetToken = Math.random().toString(36).substring(2, 15);
+            const resetData = {
+                email: email,
+                token: resetToken,
+                expires: Date.now() + (60 * 60 * 1000) // 1 hora
+            };
+            
+            saveToLocalStorage('password_reset_token', resetData);
+            
+            // Em produção, aqui seria enviado um email real com link de recuperação
+            console.log(`Token de recuperação para ${email}: ${resetToken}`);
+            
+            // Mostrar instruções adicionais
+            setTimeout(() => {
+                successDiv.innerHTML = `
+                    Instruções enviadas para ${email}!<br>
+                    <small style="color: #999;">
+                        Para demonstração: Entre em contato com o suporte informando seu email para recuperar a senha.
+                    </small>
+                `;
+            }, 2000);
         }
         
         // Purchase functions
@@ -2141,6 +2211,19 @@
                             texts: {
                                 valueProp: 'smart_option'
                             }
+                        },
+                        callbacks: {
+                            onReady: () => {
+                                console.log('Checkout pronto');
+                            },
+                            onSubmit: ({ selectedPaymentMethod, formData }) => {
+                                console.log('Pagamento iniciado:', selectedPaymentMethod);
+                                // Iniciar verificação automática
+                                startPaymentVerification(paymentData.transaction_id);
+                            },
+                            onError: (error) => {
+                                console.error('Erro no checkout:', error);
+                            }
                         }
                     });
                 };
@@ -2195,6 +2278,86 @@
             `;
         }
 
+        // Sistema de verificação automática de pagamento
+        let paymentVerificationInterval = null;
+        
+        function startPaymentVerification(transactionId) {
+            console.log('Iniciando verificação de pagamento para:', transactionId);
+            
+            // Mostrar status de verificação
+            const container = document.getElementById('mercadopago-checkout');
+            const statusDiv = document.createElement('div');
+            statusDiv.id = 'payment-status';
+            statusDiv.innerHTML = `
+                <div style="text-align: center; padding: 1rem; background: #1a4d1a; border-radius: 6px; margin-top: 1rem;">
+                    <div style="display: inline-block; width: 20px; height: 20px; border: 2px solid #4ade80; border-top: 2px solid transparent; border-radius: 50%; animation: spin 1s linear infinite;"></div>
+                    <p style="margin: 0.5rem 0; color: #4ade80;">Verificando pagamento...</p>
+                    <small style="color: #999;">Aguarde enquanto confirmamos seu pagamento</small>
+                </div>
+            `;
+            container.appendChild(statusDiv);
+            
+            // Verificar a cada 3 segundos
+            paymentVerificationInterval = setInterval(() => {
+                checkPaymentStatus(transactionId);
+            }, 3000);
+            
+            // Parar verificação após 5 minutos
+            setTimeout(() => {
+                if (paymentVerificationInterval) {
+                    clearInterval(paymentVerificationInterval);
+                    showPaymentTimeout();
+                }
+            }, 300000); // 5 minutos
+        }
+        
+        function checkPaymentStatus(transactionId) {
+            // Em produção, isso seria uma chamada real para API do Mercado Pago
+            // Por enquanto, simular verificação baseada em probabilidade
+            
+            const transactions = getFromLocalStorage('verificapessoa_transactions') || [];
+            const transaction = transactions.find(t => t.id == transactionId);
+            
+            if (transaction && transaction.status === 'completed') {
+                clearInterval(paymentVerificationInterval);
+                showPaymentSuccess(transaction);
+            }
+        }
+        
+        function showPaymentSuccess(transaction) {
+            const statusDiv = document.getElementById('payment-status');
+            if (statusDiv) {
+                statusDiv.innerHTML = `
+                    <div style="text-align: center; padding: 1rem; background: #0a4d0a; border-radius: 6px;">
+                        <div style="font-size: 2rem; color: #4ade80;">✅</div>
+                        <p style="margin: 0.5rem 0; color: #4ade80; font-weight: bold;">Pagamento Confirmado!</p>
+                        <p style="color: #ccc; margin: 0;">
+                            ${transaction.credits} ${transaction.credits === 1 ? 'crédito adicionado' : 'créditos adicionados'} à sua conta
+                        </p>
+                        <button class="btn" onclick="closeModal(); location.reload();" style="margin-top: 1rem;">
+                            Continuar
+                        </button>
+                    </div>
+                `;
+            }
+        }
+        
+        function showPaymentTimeout() {
+            const statusDiv = document.getElementById('payment-status');
+            if (statusDiv) {
+                statusDiv.innerHTML = `
+                    <div style="text-align: center; padding: 1rem; background: #4d1a1a; border-radius: 6px;">
+                        <div style="font-size: 2rem; color: #ff6b6b;">⏰</div>
+                        <p style="margin: 0.5rem 0; color: #ff6b6b; font-weight: bold;">Tempo Esgotado</p>
+                        <p style="color: #ccc; margin: 0; font-size: 0.9rem;">
+                            Se você fez o pagamento, seus créditos serão adicionados em breve.<br>
+                            Entre em contato conosco se houver problemas.
+                        </p>
+                    </div>
+                `;
+            }
+        }
+
         // Função para simulação de pagamento apenas para admin
         function adminSimulatePayment(transactionId, credits) {
             const adminPassword = prompt('Digite a senha de admin para simular pagamento:');
@@ -2202,6 +2365,29 @@
                 simulatePayment(transactionId, credits);
             } else {
                 alert('Senha incorreta! Apenas administradores podem simular pagamentos.');
+            }
+        }
+        
+        // Função para admin liberar créditos manualmente
+        function adminReleaseCredits(userEmail, credits, transactionId) {
+            const users = getAllUsers();
+            const userIndex = users.findIndex(u => u.email === userEmail);
+            
+            if (userIndex !== -1) {
+                users[userIndex].credits += credits;
+                saveToLocalStorage('verificapessoa_users', users);
+                
+                // Atualizar transação
+                const transactions = getFromLocalStorage('verificapessoa_transactions') || [];
+                const transactionIndex = transactions.findIndex(t => t.id == transactionId);
+                if (transactionIndex !== -1) {
+                    transactions[transactionIndex].status = 'completed';
+                    transactions[transactionIndex].completed_at = new Date().toISOString();
+                    saveToLocalStorage('verificapessoa_transactions', transactions);
+                }
+                
+                alert(`${credits} créditos liberados para ${userEmail}`);
+                location.reload(); // Atualizar página admin
             }
         }
         
@@ -2216,3 +2402,4 @@
     </script>
 </body>
 </html>
+
