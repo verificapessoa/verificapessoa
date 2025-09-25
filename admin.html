@@ -242,7 +242,23 @@
         <button class="logout-btn" onclick="logout()">Sair</button>
         
         <div class="container">
-            <h1>Painel Administrativo - Dados Reais</h1>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                <h1>Painel Administrativo - Dados Reais</h1>
+                <div style="display: flex; gap: 0.5rem;">
+                    <button onclick="exportData()" style="background: #3b82f6; color: #fff; border: none; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; font-weight: bold;">
+                        📥 Exportar Dados
+                    </button>
+                    <button onclick="document.getElementById('importFile').click()" style="background: #8b5cf6; color: #fff; border: none; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; font-weight: bold;">
+                        📤 Importar Dados
+                    </button>
+                    <button onclick="loadDashboardData()" style="background: #4ade80; color: #000; border: none; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; font-weight: bold;">
+                        🔄 Atualizar Dados
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Input file oculto para importar -->
+            <input type="file" id="importFile" accept=".json" style="display: none;" onchange="importData(event)">
             
             <div class="pix-info">
                 <strong>🔑 Configuração PIX Ativa:</strong><br>
@@ -352,11 +368,16 @@
         function loadDashboardData() {
             if (!isLoggedIn) return;
             
-            try {
-                const users = getAllUsers();
-                const transactions = getAllTransactions();
-                const searches = getAllSearches();
-                
+            const users = getAllUsers();
+            const transactions = getAllTransactions();
+            const searches = getAllSearches();
+            
+            // Debug logs
+            console.log('Carregando dados do admin:');
+            console.log('Usuários:', users.length);
+            console.log('Transações:', transactions.length);
+            console.log('Pesquisas:', searches.length);
+            console.log('Transações completas:', transactions);       
                 // Calcular estatísticas
                 const totalUsers = users.length;
                 const totalSearches = searches.length;
@@ -546,10 +567,86 @@
             document.getElementById('adminPassword').value = '';
         }
         
+        // Funções de exportar/importar dados
+        function exportData() {
+            const data = {
+                users: getAllUsers(),
+                transactions: getAllTransactions(),
+                searches: getAllSearches(),
+                exported_at: new Date().toISOString(),
+                version: '1.0'
+            };
+            
+            const dataStr = JSON.stringify(data, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(dataBlob);
+            link.download = `verificapessoa_backup_${new Date().toISOString().split('T')[0]}.json`;
+            link.click();
+            
+            alert(`Dados exportados com sucesso!\n\nUsuários: ${data.users.length}\nTransações: ${data.transactions.length}\nPesquisas: ${data.searches.length}`);
+        }
+        
+        function importData(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    
+                    // Validar estrutura do arquivo
+                    if (!data.users || !data.transactions || !data.searches) {
+                        alert('Arquivo inválido! Certifique-se de que é um backup válido do VerificaPessoa.');
+                        return;
+                    }
+                    
+                    // Confirmar importação
+                    const confirmMsg = `Importar dados do backup?\n\nUsuários: ${data.users.length}\nTransações: ${data.transactions.length}\nPesquisas: ${data.searches.length}\n\nISTO VAI SUBSTITUIR TODOS OS DADOS ATUAIS!`;
+                    
+                    if (confirm(confirmMsg)) {
+                        // Salvar dados importados
+                        localStorage.setItem('verificapessoa_users', JSON.stringify(data.users));
+                        localStorage.setItem('verificapessoa_transactions', JSON.stringify(data.transactions));
+                        localStorage.setItem('verificapessoa_searches', JSON.stringify(data.searches));
+                        
+                        alert('Dados importados com sucesso!');
+                        loadDashboardData(); // Recarregar dashboard
+                    }
+                    
+                } catch (error) {
+                    alert('Erro ao ler o arquivo! Certifique-se de que é um arquivo JSON válido.');
+                    console.error('Erro na importação:', error);
+                }
+            };
+            
+            reader.readAsText(file);
+            
+            // Limpar input para permitir reimportar o mesmo arquivo
+            event.target.value = '';
+        }
+        
+        // Função para sincronizar dados entre navegadores
+        function syncDataAcrossBrowsers() {
+            // Esta função pode ser chamada periodicamente para verificar
+            // se há dados mais recentes em outros navegadores
+            const lastSync = localStorage.getItem('verificapessoa_last_sync');
+            const now = Date.now();
+            
+            // Verificar a cada 5 minutos
+            if (!lastSync || (now - parseInt(lastSync)) > 300000) {
+                localStorage.setItem('verificapessoa_last_sync', now.toString());
+                // Aqui poderia implementar sincronização automática via servidor
+            }
+        }
+
         // Atualização automática a cada 10 segundos
         setInterval(() => {
             if (isLoggedIn) {
                 loadDashboardData();
+                syncDataAcrossBrowsers();
             }
         }, 10000);
         
@@ -569,4 +666,3 @@
     </script>
 </body>
 </html>
-
