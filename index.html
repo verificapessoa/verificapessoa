@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeepSearch Pro - Busca Profunda de Pessoas</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #000;
+            color: #fff;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header */
+        header {
+            background: rgba(0,0,0,0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid #333;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.5rem;
+            font-weight: 300;
+            letter-spacing: -0.02em;
+        }
+        
+        .btn {
+            background: #fff;
+            color: #000;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .btn:hover {
+            background: #f0f0f0;
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(to bottom, #000, #111);
+            padding: 5rem 0;
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 300;
+            margin-bottom: 2rem;
+            letter-spacing: -0.02em;
+        }
+        
+        .hero .subtitle {
+            color: #666;
+        }
+        
+        .hero p {
+            font-size: 1.25rem;
+            color: #999;
+            margin-bottom: 3rem;
+            font-weight: 300;
+        }
+        
+        .search-box {
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .search-input {
+            flex: 1;
+            padding: 1rem;
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 6px;
+            color: #fff;
+            font-size: 1rem;
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: #fff;
+        }
+        
+        .search-btn {
+            padding: 1rem 2rem;
+            background: #fff;
+            color: #000;
+            border: none;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        
+        /* Pricing Section */
+        .pricing {
+            padding: 5rem 0;
+            background: #111;
+        }
+        
+        .pricing h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 300;
+            margin-bottom: 1rem;
+        }
+        
+        .pricing-subtitle {
+            text-align: center;
+            color: #999;
+            margin-bottom: 3rem;
+        }
+        
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .pricing-card {
+            background: #000;
+            border: 1px solid #333;
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+        }
+        
+        .pricing-card.popular {
+            border-color: #fff;
+        }
+        
+        .popular-badge {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #fff;
+            color: #000;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .price {
+            font-size: 2.5rem;
+            font-weight: 300;
+            margin: 1rem 0;
+        }
+        
+        .price-details {
+            color: #999;
+            margin-bottom: 1rem;
+        }
+        
+        .savings {
+            color: #4ade80;
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+        }
+        
+        /* Testimonials */
+        .testimonials {
+            padding: 5rem 0;
+            background: #000;
+        }
+        
+        .testimonials h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 300;
+            margin-bottom: 3rem;
+        }
+        
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+        
+        .testimonial {
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 12px;
+            padding: 2rem;
+        }
+        
+        .testimonial-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1rem;
+        }
+        
+        .testimonial-author h4 {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+        
+        .testimonial-location {
+            color: #999;
+            font-size: 0.9rem;
+        }
+        
+        .testimonial-date {
+            color: #666;
+            font-size: 0.8rem;
+        }
+        
+        .testimonial-text {
+            font-style: italic;
+            line-height: 1.6;
+        }
+        
+        /* CTA Section */
+        .cta {
+            padding: 5rem 0;
+            background: linear-gradient(to bottom, #111, #000);
+            text-align: center;
+        }
+        
+        .cta h2 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 300;
+            margin-bottom: 2rem;
+            letter-spacing: -0.02em;
+        }
+        
+        .cta p {
+            font-size: 1.25rem;
+            color: #999;
+            margin-bottom: 3rem;
+        }
+        
+        .cta-btn {
+            background: #fff;
+            color: #000;
+            padding: 1rem 3rem;
+            border: none;
+            border-radius: 6px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .cta-btn:hover {
+            background: #f0f0f0;
+            transform: translateY(-2px);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .search-box {
+                flex-direction: column;
+            }
+            
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .testimonials-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                        <circle cx="12" cy="12" r="3"/>
+                    </svg>
+                    <span>VERIFICA PESSOA</span>
+                </div>
+                <button class="btn">Entrar</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>
+                VOCÊ SABE COM<br>
+                <span class="subtitle">QUEM ESTÁ?</span>
+            </h1>
+            
+            <p>
+                Descubra a verdade sobre qualquer pessoa em segundos.<br>
+                <strong>Proteja sua família. Proteja seu futuro.</strong>
+            </p>
+
+            <div class="search-box">
+                <input type="text" class="search-input" placeholder="Digite o nome completo da pessoa...">
+                <button class="search-btn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"/>
+                        <path d="m21 21-4.35-4.35"/>
+                    </svg>
+                </button>
+            </div>
+
+            <p style="font-size: 0.9rem; color: #666;">
+                Faça login para começar sua investigação
+            </p>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="pricing">
+        <div class="container">
+            <h2>ESCOLHA SEU PLANO</h2>
+            <p class="pricing-subtitle">Investigações profissionais ao seu alcance</p>
+            
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <h3>Pesquisa Única</h3>
+                    <div class="price">R$ 1,19</div>
+                    <div class="price-details">1 créditos • R$ 1,19 por pesquisa</div>
+                    <button class="btn" style="width: 100%;">Comprar Agora</button>
+                </div>
+
+                <div class="pricing-card">
+                    <h3>Pacote Básico</h3>
+                    <div class="price">R$ 8,90</div>
+                    <div class="price-details">10 créditos • R$ 0,89 por pesquisa</div>
+                    <div class="savings">Economize R$ 3,00</div>
+                    <button class="btn" style="width: 100%;">Comprar Agora</button>
+                </div>
+
+                <div class="pricing-card">
+                    <h3>Pacote Econômico</h3>
+                    <div class="price">R$ 22,25</div>
+                    <div class="price-details">25 créditos • R$ 0,89 por pesquisa</div>
+                    <div class="savings">Economize R$ 7,50</div>
+                    <button class="btn" style="width: 100%;">Comprar Agora</button>
+                </div>
+
+                <div class="pricing-card popular">
+                    <div class="popular-badge">MAIS POPULAR</div>
+                    <h3>Pacote Premium</h3>
+                    <div class="price">R$ 36,00</div>
+                    <div class="price-details">50 créditos • R$ 0,72 por pesquisa</div>
+                    <div class="savings">Economize R$ 23,50</div>
+                    <button class="btn" style="width: 100%;">Comprar Agora</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials">
+        <div class="container">
+            <h2>ELES DESCOBRIRAM A VERDADE</h2>
+            <p style="text-align: center; color: #999; margin-bottom: 3rem;">Histórias reais de pessoas que se protegeram</p>
+            
+            <div class="testimonials-grid">
+                <div class="testimonial">
+                    <div class="testimonial-header">
+                        <div class="testimonial-author">
+                            <h4>Maria Silva</h4>
+                            <div class="testimonial-location">São Paulo, SP</div>
+                        </div>
+                        <div class="testimonial-date">23 de Setembro, 2025</div>
+                    </div>
+                    <p class="testimonial-text">"Descobri que meu namorado tinha um passado que ele escondeu de mim. Salvou meu futuro!"</p>
+                </div>
+
+                <div class="testimonial">
+                    <div class="testimonial-header">
+                        <div class="testimonial-author">
+                            <h4>Carlos Mendes</h4>
+                            <div class="testimonial-location">Rio de Janeiro, RJ</div>
+                        </div>
+                        <div class="testimonial-date">23 de Setembro, 2025</div>
+                    </div>
+                    <p class="testimonial-text">"Encontrei informações sobre um sócio que me ajudaram a evitar um golpe de R$ 50.000."</p>
+                </div>
+
+                <div class="testimonial">
+                    <div class="testimonial-header">
+                        <div class="testimonial-author">
+                            <h4>Ana Costa</h4>
+                            <div class="testimonial-location">Belo Horizonte, MG</div>
+                        </div>
+                        <div class="testimonial-date">22 de Setembro, 2025</div>
+                    </div>
+                    <p class="testimonial-text">"Minha filha estava namorando alguém perigoso. Consegui protegê-la a tempo."</p>
+                </div>
+
+                <div class="testimonial">
+                    <div class="testimonial-header">
+                        <div class="testimonial-author">
+                            <h4>Roberto Lima</h4>
+                            <div class="testimonial-location">Brasília, DF</div>
+                        </div>
+                        <div class="testimonial-date">22 de Setembro, 2025</div>
+                    </div>
+                    <p class="testimonial-text">"Descobri que meu funcionário tinha antecedentes criminais. Evitei problemas na empresa."</p>
+                </div>
+
+                <div class="testimonial">
+                    <div class="testimonial-header">
+                        <div class="testimonial-author">
+                            <h4>Fernanda Oliveira</h4>
+                            <div class="testimonial-location">Porto Alegre, RS</div>
+                        </div>
+                        <div class="testimonial-date">22 de Setembro, 2025</div>
+                    </div>
+                    <p class="testimonial-text">"Investigei meu ex-marido e descobri bens ocultos. Consegui meus direitos na justiça."</p>
+                </div>
+
+                <div class="testimonial">
+                    <div class="testimonial-header">
+                        <div class="testimonial-author">
+                            <h4>João Santos</h4>
+                            <div class="testimonial-location">Recife, PE</div>
+                        </div>
+                        <div class="testimonial-date">22 de Setembro, 2025</div>
+                    </div>
+                    <p class="testimonial-text">"Verifiquei um inquilino antes de alugar. Descobri que tinha histórico de calote."</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta">
+        <div class="container">
+            <h2>
+                NÃO SEJA MAIS<br>
+                UMA VÍTIMA
+            </h2>
+            <p>Proteja-se agora. Descubra a verdade antes que seja tarde demais.</p>
+            <button class="cta-btn">COMEÇAR INVESTIGAÇÃO</button>
+        </div>
+    </section>
+</body>
+</html>
