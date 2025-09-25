@@ -805,6 +805,11 @@
             transaction.created_at = new Date().toISOString();
             transactions.push(transaction);
             saveToLocalStorage('transactions', transactions);
+            
+            // Debug log
+            console.log('Transação salva:', transaction);
+            console.log('Total de transações:', transactions.length);
+            
             return transaction;
         }
         
@@ -2391,8 +2396,60 @@
             }
         }
         
+        // Sistema de backup automático
+        function createAutoBackup() {
+            const data = {
+                users: getAllUsers(),
+                transactions: getAllTransactions(),
+                searches: getAllSearches(),
+                backup_created: new Date().toISOString()
+            };
+            
+            // Salvar backup no localStorage com timestamp
+            localStorage.setItem('verificapessoa_auto_backup', JSON.stringify(data));
+            console.log('Backup automático criado:', new Date().toLocaleString());
+        }
+        
+        // Criar backup automático a cada transação
+        function saveTransactionWithBackup(transaction) {
+            const result = saveTransaction(transaction);
+            createAutoBackup(); // Backup após cada transação
+            return result;
+        }
+        
+        // Substituir chamadas de saveTransaction por saveTransactionWithBackup
+        function buyPackage(packageType, price, credits) {
+            const email = currentUser ? currentUser.email : prompt('Digite seu email para continuar:');
+            if (!email) return;
+            
+            const packageNames = {
+                'individual': 'Pesquisa Única',
+                'pack10': 'Pacote 10 Créditos',
+                'pack20': 'Pacote 20 Créditos',
+                'pack50': 'Pacote 50 Créditos'
+            };
+            
+            const transaction = saveTransactionWithBackup({
+                user_email: email,
+                package_type: packageType,
+                amount: price,
+                credits: credits,
+                status: 'pending'
+            });
+            
+            showPaymentModal({
+                transaction_id: transaction.id,
+                package_name: packageNames[packageType],
+                amount: price,
+                credits: credits
+            });
+        }
+
         // Initialize
         checkUserSession();
+        
+        // Criar backup inicial
+        createAutoBackup();
         
         // Inicializar Mercado Pago quando a página carregar
         document.addEventListener('DOMContentLoaded', function() {
@@ -2402,4 +2459,3 @@
     </script>
 </body>
 </html>
-
