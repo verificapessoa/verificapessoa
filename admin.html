@@ -412,6 +412,7 @@
                                 <th>Valor</th>
                                 <th>Data</th>
                                 <th>Status</th>
+                                <th>Ações</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -423,8 +424,17 @@
                                     <td>R$ ${transaction.amount.toFixed(2).replace('.', ',')}</td>
                                     <td>${formatDate(transaction.created_at)}</td>
                                     <td class="status-${transaction.status}">${getStatusText(transaction.status)}</td>
+                                    <td>
+                                        ${transaction.status === 'pending' ? 
+                                            `<button onclick="releaseCredits('${transaction.user_email}', ${transaction.credits}, ${transaction.id})" 
+                                                    style="background: #4ade80; color: #000; border: none; padding: 0.3rem 0.8rem; border-radius: 4px; cursor: pointer; font-size: 0.8rem;">
+                                                Liberar ${transaction.credits} créditos
+                                            </button>` : 
+                                            '<span style="color: #999; font-size: 0.8rem;">-</span>'
+                                        }
+                                    </td>
                                 </tr>
-                            `).join('') : '<tr><td colspan="6" style="text-align: center; color: #999;">Nenhuma transação ainda</td></tr>'}
+                            `).join('') : '<tr><td colspan="7" style="text-align: center; color: #999;">Nenhuma transação ainda</td></tr>'}
                         </tbody>
                     </table>
                 `;
@@ -501,6 +511,33 @@
             return statusMap[status] || status;
         }
         
+        function releaseCredits(userEmail, credits, transactionId) {
+            if (confirm(`Liberar ${credits} créditos para ${userEmail}?`)) {
+                // Atualizar usuário
+                const users = getAllUsers();
+                const userIndex = users.findIndex(u => u.email === userEmail);
+                
+                if (userIndex !== -1) {
+                    users[userIndex].credits += credits;
+                    localStorage.setItem('verificapessoa_users', JSON.stringify(users));
+                    
+                    // Atualizar transação
+                    const transactions = getAllTransactions();
+                    const transactionIndex = transactions.findIndex(t => t.id == transactionId);
+                    if (transactionIndex !== -1) {
+                        transactions[transactionIndex].status = 'completed';
+                        transactions[transactionIndex].completed_at = new Date().toISOString();
+                        localStorage.setItem('verificapessoa_transactions', JSON.stringify(transactions));
+                    }
+                    
+                    alert(`${credits} créditos liberados para ${userEmail}!`);
+                    loadDashboardData(); // Recarregar dados
+                } else {
+                    alert('Usuário não encontrado!');
+                }
+            }
+        }
+        
         function logout() {
             isLoggedIn = false;
             document.getElementById('loginForm').style.display = 'block';
@@ -508,6 +545,13 @@
             document.getElementById('adminUser').value = '';
             document.getElementById('adminPassword').value = '';
         }
+        
+        // Atualização automática a cada 10 segundos
+        setInterval(() => {
+            if (isLoggedIn) {
+                loadDashboardData();
+            }
+        }, 10000);
         
         // Auto-refresh a cada 30 segundos
         setInterval(() => {
@@ -525,3 +569,4 @@
     </script>
 </body>
 </html>
+
