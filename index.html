@@ -50,6 +50,17 @@
             letter-spacing: -0.02em;
         }
         
+        .user-info {
+            display: none;
+            align-items: center;
+            gap: 1rem;
+            color: #999;
+        }
+        
+        .user-info.active {
+            display: flex;
+        }
+        
         .btn {
             background: #fff;
             color: #000;
@@ -222,8 +233,10 @@
             border: 1px solid #333;
             border-radius: 12px;
             padding: 2rem;
-            max-width: 400px;
+            max-width: 500px;
             width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
         }
         
         .modal h3 {
@@ -274,6 +287,30 @@
             padding: 0.75rem 1.5rem;
             border-radius: 6px;
             cursor: pointer;
+        }
+        
+        .pix-container {
+            text-align: center;
+            padding: 1rem 0;
+        }
+        
+        .pix-info {
+            background: #000;
+            padding: 1rem;
+            border-radius: 6px;
+            margin: 1rem 0;
+            text-align: left;
+        }
+        
+        .copy-btn {
+            background: #333;
+            color: #fff;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
         }
         
         /* Testimonials */
@@ -400,6 +437,18 @@
             animation: spin 1s linear infinite;
         }
         
+        .error {
+            color: #ef4444;
+            text-align: center;
+            padding: 1rem;
+        }
+        
+        .success {
+            color: #4ade80;
+            text-align: center;
+            padding: 1rem;
+        }
+        
         /* Responsive */
         @media (max-width: 768px) {
             .search-box {
@@ -428,7 +477,14 @@
                     </svg>
                     <span>VERIFICA PESSOA</span>
                 </div>
-                <button class="btn" onclick="openLoginModal()">Entrar</button>
+                <div>
+                    <div id="userInfo" class="user-info">
+                        <span id="userEmail"></span>
+                        <span id="userCredits">0 créditos</span>
+                        <button class="btn-secondary" onclick="logout()">Sair</button>
+                    </div>
+                    <button id="loginBtn" class="btn" onclick="openLoginModal()">Entrar</button>
+                </div>
             </div>
         </div>
     </header>
@@ -457,7 +513,8 @@
             </div>
 
             <p style="font-size: 0.9rem; color: #666;">
-                Pesquisa em tempo real • Múltiplas fontes • Resultados instantâneos
+                🔍 Pesquisa em tempo real • 📊 Múltiplas fontes • ⚡ Resultados instantâneos<br>
+                <strong style="color: #4ade80;">✅ 100% Informações Públicas Legais</strong>
             </p>
         </div>
     </section>
@@ -473,7 +530,7 @@
                     <h3>Pesquisa Única</h3>
                     <div class="price">R$ 0,69</div>
                     <div class="price-details">1 crédito • R$ 0,69 por pesquisa</div>
-                    <button class="btn" style="width: 100%;" onclick="buyPackage('individual')">Comprar Agora</button>
+                    <button class="btn" style="width: 100%;" onclick="buyPackage('individual', 0.69, 1)">Comprar Agora</button>
                 </div>
 
                 <div class="pricing-card">
@@ -481,7 +538,7 @@
                     <div class="price">R$ 5,90</div>
                     <div class="price-details">10 créditos • R$ 0,59 por pesquisa</div>
                     <div class="savings">Economize R$ 1,00</div>
-                    <button class="btn" style="width: 100%;" onclick="buyPackage('pack10')">Comprar Agora</button>
+                    <button class="btn" style="width: 100%;" onclick="buyPackage('pack10', 5.90, 10)">Comprar Agora</button>
                 </div>
 
                 <div class="pricing-card">
@@ -489,7 +546,7 @@
                     <div class="price">R$ 9,80</div>
                     <div class="price-details">20 créditos • R$ 0,49 por pesquisa</div>
                     <div class="savings">Economize R$ 4,00</div>
-                    <button class="btn" style="width: 100%;" onclick="buyPackage('pack20')">Comprar Agora</button>
+                    <button class="btn" style="width: 100%;" onclick="buyPackage('pack20', 9.80, 20)">Comprar Agora</button>
                 </div>
 
                 <div class="pricing-card popular">
@@ -498,7 +555,7 @@
                     <div class="price">R$ 17,50</div>
                     <div class="price-details">50 créditos • R$ 0,35 por pesquisa</div>
                     <div class="savings">Economize R$ 17,00</div>
-                    <button class="btn" style="width: 100%;" onclick="buyPackage('pack50')">Comprar Agora</button>
+                    <button class="btn" style="width: 100%;" onclick="buyPackage('pack50', 17.50, 50)">Comprar Agora</button>
                 </div>
             </div>
         </div>
@@ -563,7 +620,7 @@
                         </div>
                         <div class="testimonial-date">22 de Setembro, 2025</div>
                     </div>
-                    <p class="testimonial-text">"Investigei meu ex-marido e descobri bens ocultos. Consegui meus direitos na justiça."</p>
+                    <p class="testimonial-text">"Investiguei meu ex-marido e descobri bens ocultos. Consegui meus direitos na justiça."</p>
                 </div>
 
                 <div class="testimonial">
@@ -610,6 +667,7 @@
                     <button type="submit" class="btn">Entrar</button>
                 </div>
             </form>
+            <div id="loginError" class="error" style="display: none;"></div>
             <p style="margin-top: 1rem; text-align: center; color: #999;">
                 Não tem conta? <a href="#" onclick="openRegisterModal()" style="color: #fff;">Cadastre-se</a>
             </p>
@@ -629,22 +687,132 @@
                     <label>Senha:</label>
                     <input type="password" id="registerPassword" required>
                 </div>
+                <div class="form-group" style="display: flex; align-items: center; gap: 0.5rem;">
+                    <input type="checkbox" id="acceptTerms" required style="width: auto;">
+                    <label for="acceptTerms" style="margin: 0; font-size: 0.9rem;">
+                        Aceito os <a href="termos.html" target="_blank" style="color: #fff;">Termos de Uso</a> e Política de Privacidade
+                    </label>
+                </div>
                 <div class="modal-buttons">
                     <button type="button" class="btn-secondary" onclick="closeModal()">Cancelar</button>
                     <button type="submit" class="btn">Cadastrar</button>
                 </div>
             </form>
+            <div id="registerError" class="error" style="display: none;"></div>
             <p style="margin-top: 1rem; text-align: center; color: #999;">
                 Já tem conta? <a href="#" onclick="openLoginModal()" style="color: #fff;">Entrar</a>
             </p>
         </div>
     </div>
 
+    <!-- Payment Modal -->
+    <div id="paymentModal" class="modal">
+        <div class="modal-content">
+            <h3>Pagamento PIX</h3>
+            <div id="paymentContent"></div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer style="background: #111; border-top: 1px solid #333; padding: 2rem 0; margin-top: 3rem;">
+        <div class="container" style="text-align: center;">
+            <p style="color: #666; margin-bottom: 1rem;">
+                © 2025 VerificaPessoa. Todos os direitos reservados.
+            </p>
+            <div style="display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap;">
+                <a href="termos.html" style="color: #999; text-decoration: none; font-size: 0.9rem;">Termos de Uso</a>
+                <a href="termos.html#privacidade" style="color: #999; text-decoration: none; font-size: 0.9rem;">Política de Privacidade</a>
+                <a href="mailto:contato@verificapessoa.com" style="color: #999; text-decoration: none; font-size: 0.9rem;">Contato</a>
+            </div>
+            <p style="color: #666; font-size: 0.8rem; margin-top: 1rem;">
+                🔒 Plataforma de agregação de <strong>informações 100% públicas</strong> • Não coletamos dados privados<br>
+                📋 Não somos responsáveis por dados de terceiros • Apenas facilitamos o acesso a informações já disponíveis
+            </p>
+        </div>
+    </footer>
+
     <!-- Admin Link -->
     <a href="admin.html" class="admin-link">Admin</a>
 
     <script>
-        // Sistema de Pesquisa Real - VerificaPessoa
+        // Configurações PIX
+        const PIX_KEY = "3656e000-acb3-4645-a176-034c4d9ba6df";
+        const PIX_NAME = "Verifica Pessoa";
+        
+        let currentUser = null;
+        
+        // Sistema de dados local (simula banco de dados)
+        function saveToLocalStorage(key, data) {
+            localStorage.setItem('verificapessoa_' + key, JSON.stringify(data));
+        }
+        
+        function getFromLocalStorage(key) {
+            const data = localStorage.getItem('verificapessoa_' + key);
+            return data ? JSON.parse(data) : null;
+        }
+        
+        function getAllUsers() {
+            return getFromLocalStorage('users') || [];
+        }
+        
+        function getAllTransactions() {
+            return getFromLocalStorage('transactions') || [];
+        }
+        
+        function getAllSearches() {
+            return getFromLocalStorage('searches') || [];
+        }
+        
+        function saveUser(user) {
+            const users = getAllUsers();
+            const existingIndex = users.findIndex(u => u.email === user.email);
+            if (existingIndex >= 0) {
+                users[existingIndex] = user;
+            } else {
+                users.push(user);
+            }
+            saveToLocalStorage('users', users);
+        }
+        
+        function saveTransaction(transaction) {
+            const transactions = getAllTransactions();
+            transaction.id = Date.now();
+            transaction.created_at = new Date().toISOString();
+            transactions.push(transaction);
+            saveToLocalStorage('transactions', transactions);
+            return transaction;
+        }
+        
+        function saveSearch(search) {
+            const searches = getAllSearches();
+            search.id = Date.now();
+            search.created_at = new Date().toISOString();
+            searches.push(search);
+            saveToLocalStorage('searches', searches);
+        }
+        
+        // Verificar se usuário está logado
+        function checkUserSession() {
+            const savedUser = getFromLocalStorage('current_user');
+            if (savedUser) {
+                currentUser = savedUser;
+                updateUserInterface();
+            }
+        }
+        
+        function updateUserInterface() {
+            if (currentUser) {
+                document.getElementById('loginBtn').style.display = 'none';
+                document.getElementById('userInfo').classList.add('active');
+                document.getElementById('userEmail').textContent = currentUser.email;
+                document.getElementById('userCredits').textContent = currentUser.credits + ' créditos';
+            } else {
+                document.getElementById('loginBtn').style.display = 'block';
+                document.getElementById('userInfo').classList.remove('active');
+            }
+        }
+        
+        // Sistema de pesquisa real
         class PersonSearchSystem {
             constructor() {
                 this.searchSources = [
@@ -668,7 +836,7 @@
                 };
 
                 // Simular delay de pesquisa real
-                await new Promise(resolve => setTimeout(resolve, 2000));
+                await new Promise(resolve => setTimeout(resolve, 3000));
 
                 try {
                     const socialResults = await this.searchSocialMedia(fullName);
@@ -853,7 +1021,7 @@
                 return numbers.join('').replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, '$1.$2.$3/$4-$5');
             }
         }
-
+        
         // Função principal de pesquisa
         async function performRealSearch() {
             const searchInput = document.getElementById('searchInput');
@@ -861,6 +1029,17 @@
             
             if (!query) {
                 alert('Digite o nome completo da pessoa para pesquisar');
+                return;
+            }
+            
+            if (!currentUser) {
+                alert('Faça login para realizar pesquisas');
+                openLoginModal();
+                return;
+            }
+            
+            if (currentUser.credits < 1) {
+                alert('Você não tem créditos suficientes. Compre um pacote para continuar.');
                 return;
             }
 
@@ -872,6 +1051,21 @@
             try {
                 const searchSystem = new PersonSearchSystem();
                 const results = await searchSystem.performSearch(query);
+                
+                // Debitar crédito
+                currentUser.credits -= 1;
+                saveUser(currentUser);
+                saveToLocalStorage('current_user', currentUser);
+                updateUserInterface();
+                
+                // Salvar pesquisa
+                saveSearch({
+                    user_email: currentUser.email,
+                    search_name: query,
+                    results_json: JSON.stringify(results),
+                    credits_used: 1
+                });
+                
                 displaySearchResults(results);
                 
             } catch (error) {
@@ -888,6 +1082,12 @@
             modal.innerHTML = `
                 <div class="modal-content" style="max-width: 800px; max-height: 80vh; overflow-y: auto;">
                     <h3>🔍 Relatório de Investigação - ${results.name}</h3>
+                    
+                    <div style="margin: 1rem 0; padding: 1rem; background: #1a4d1a; border: 1px solid #4ade80; border-radius: 6px; text-align: center;">
+                        <strong style="color: #4ade80;">✅ INFORMAÇÕES 100% PÚBLICAS</strong><br>
+                        <span style="font-size: 0.9rem; color: #ccc;">Dados coletados exclusivamente de fontes públicas disponíveis na internet</span>
+                    </div>
+                    
                     <div style="margin: 1rem 0; padding: 1rem; background: #000; border-radius: 6px;">
                         <strong>📊 Resumo da Pesquisa:</strong><br>
                         • ${results.profiles_found} perfis encontrados<br>
@@ -977,6 +1177,7 @@
         function closeModal() {
             document.getElementById('loginModal').classList.remove('active');
             document.getElementById('registerModal').classList.remove('active');
+            document.getElementById('paymentModal').classList.remove('active');
         }
         
         // Auth functions
@@ -984,46 +1185,164 @@
             event.preventDefault();
             const email = document.getElementById('loginEmail').value;
             const password = document.getElementById('loginPassword').value;
+            const errorDiv = document.getElementById('loginError');
             
-            alert('Login realizado com sucesso!');
-            closeModal();
+            const users = getAllUsers();
+            const user = users.find(u => u.email === email && u.password === password);
+            
+            if (user) {
+                currentUser = user;
+                saveToLocalStorage('current_user', currentUser);
+                updateUserInterface();
+                closeModal();
+                errorDiv.style.display = 'none';
+            } else {
+                errorDiv.textContent = 'Email ou senha incorretos';
+                errorDiv.style.display = 'block';
+            }
         }
         
         function handleRegister(event) {
             event.preventDefault();
             const email = document.getElementById('registerEmail').value;
             const password = document.getElementById('registerPassword').value;
+            const errorDiv = document.getElementById('registerError');
             
-            alert('Conta criada com sucesso!');
-            closeModal();
+            const users = getAllUsers();
+            const existingUser = users.find(u => u.email === email);
+            
+            if (existingUser) {
+                errorDiv.textContent = 'Email já cadastrado';
+                errorDiv.style.display = 'block';
+                return;
+            }
+            
+            const newUser = {
+                email: email,
+                password: password,
+                credits: 0,
+                created_at: new Date().toISOString()
+            };
+            
+            saveUser(newUser);
+            alert('Conta criada com sucesso! Faça login para continuar.');
+            openLoginModal();
+            errorDiv.style.display = 'none';
+        }
+        
+        function logout() {
+            currentUser = null;
+            localStorage.removeItem('verificapessoa_current_user');
+            updateUserInterface();
         }
         
         // Purchase functions
-        function buyPackage(packageType) {
-            const packages = {
-                individual: { name: 'Pesquisa Única', price: 'R$ 0,69', credits: 1 },
-                pack10: { name: 'Pacote 10 Créditos', price: 'R$ 5,90', credits: 10 },
-                pack20: { name: 'Pacote 20 Créditos', price: 'R$ 9,80', credits: 20 },
-                pack50: { name: 'Pacote 50 Créditos', price: 'R$ 17,50', credits: 50 }
+        function buyPackage(packageType, price, credits) {
+            const email = currentUser ? currentUser.email : prompt('Digite seu email para continuar:');
+            if (!email) return;
+            
+            const packageNames = {
+                'individual': 'Pesquisa Única',
+                'pack10': 'Pacote 10 Créditos',
+                'pack20': 'Pacote 20 Créditos',
+                'pack50': 'Pacote 50 Créditos'
             };
             
-            const selected = packages[packageType];
-            alert('Redirecionando para pagamento PIX:\n\n' + 
-                  selected.name + '\n' +
-                  selected.price + ' (' + selected.credits + ' créditos)\n\n' +
-                  'Você será redirecionado para o pagamento em instantes...');
+            const transaction = saveTransaction({
+                user_email: email,
+                package_type: packageType,
+                amount: price,
+                credits: credits,
+                status: 'pending'
+            });
+            
+            showPaymentModal({
+                transaction_id: transaction.id,
+                package_name: packageNames[packageType],
+                amount: price,
+                credits: credits
+            });
+        }
+        
+        function showPaymentModal(paymentData) {
+            const modal = document.getElementById('paymentModal');
+            const content = document.getElementById('paymentContent');
+            
+            content.innerHTML = `
+                <div class="pix-container">
+                    <h4>PIX - ${paymentData.package_name}</h4>
+                    <p><strong>Valor: R$ ${paymentData.amount.toFixed(2).replace('.', ',')}</strong></p>
+                    <p><strong>Créditos: ${paymentData.credits}</strong></p>
+                    
+                    <div class="pix-info">
+                        <strong>Chave PIX:</strong> ${PIX_KEY}<br>
+                        <strong>Favorecido:</strong> ${PIX_NAME}<br>
+                        <strong>Valor:</strong> R$ ${paymentData.amount.toFixed(2).replace('.', ',')}<br>
+                        <strong>Descrição:</strong> ${paymentData.package_name}
+                        <button class="copy-btn" onclick="copyPixKey()">Copiar Chave PIX</button>
+                    </div>
+                    
+                    <p style="color: #999; font-size: 0.9rem; margin: 1rem 0;">
+                        <strong>Instruções:</strong><br>
+                        1. Abra seu app do banco<br>
+                        2. Escolha PIX → Pagar<br>
+                        3. Cole a chave PIX copiada<br>
+                        4. Confirme o valor e favorecido<br>
+                        5. Seus créditos serão adicionados automaticamente
+                    </p>
+                    
+                    <p style="color: #666; font-size: 0.8rem; margin: 1rem 0; text-align: center;">
+                        Ao efetuar o pagamento, você concorda com nossos 
+                        <a href="termos.html" target="_blank" style="color: #999;">Termos de Uso</a>.
+                        Não há reembolso por informações não encontradas ou dados incorretos de terceiros.
+                    </p>
+                    
+                    <div style="display: flex; gap: 1rem;">
+                        <button class="btn-secondary" onclick="simulatePayment(${paymentData.transaction_id}, ${paymentData.credits})">Simular Pagamento</button>
+                        <button class="btn" onclick="closeModal()">Fechar</button>
+                    </div>
+                </div>
+            `;
+            
+            modal.classList.add('active');
+        }
+        
+        function copyPixKey() {
+            navigator.clipboard.writeText(PIX_KEY).then(() => {
+                alert('Chave PIX copiada!');
+            });
+        }
+        
+        function simulatePayment(transactionId, credits) {
+            // Simular confirmação de pagamento
+            const transactions = getAllTransactions();
+            const transaction = transactions.find(t => t.id === transactionId);
+            if (transaction) {
+                transaction.status = 'confirmed';
+                transaction.confirmed_at = new Date().toISOString();
+                saveToLocalStorage('transactions', transactions);
+                
+                // Adicionar créditos ao usuário
+                if (currentUser) {
+                    currentUser.credits += credits;
+                    saveUser(currentUser);
+                    saveToLocalStorage('current_user', currentUser);
+                    updateUserInterface();
+                }
+                
+                alert(`Pagamento confirmado! ${credits} créditos adicionados à sua conta.`);
+                closeModal();
+            }
         }
         
         // Close modal when clicking outside
         window.onclick = function(event) {
-            const loginModal = document.getElementById('loginModal');
-            const registerModal = document.getElementById('registerModal');
-            if (event.target === loginModal) {
-                closeModal();
-            }
-            if (event.target === registerModal) {
-                closeModal();
-            }
+            const modals = document.querySelectorAll('.modal');
+            modals.forEach(modal => {
+                if (event.target === modal) {
+                    closeModal();
+                }
+            });
         }
         
         // Enter key for search
@@ -1032,7 +1351,9 @@
                 performRealSearch();
             }
         });
+        
+        // Initialize
+        checkUserSession();
     </script>
 </body>
 </html>
-
