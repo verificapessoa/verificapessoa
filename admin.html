@@ -324,25 +324,119 @@
         </div>
     </div>
 
+    <!-- Supabase SDK -->
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    
     <script>
+        // Supabase - Mesmas chaves do site principal
+        const SUPABASE_URL = "https://uqktdjthtiruwqbcjibc.supabase.co";
+        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVxa3RkanRodGlydXdxYmNqaWJjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg4MjMyNzksImV4cCI6MjA3NDM5OTI3OX0.U-j0zSYqkqY-453gBvGltN1i0ZfDRVxHGpIZEdnyQPE";
+        
+        // Inicializar Supabase
+        let supabaseClient = null;
+        
+        function initSupabase() {
+            if (SUPABASE_URL !== "https://uqktdjthtiruwqbcjibc.supabase.co" && SUPABASE_ANON_KEY !== "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVxa3RkanRodGlydXdxYmNqaWJjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg4MjMyNzksImV4cCI6MjA3NDM5OTI3OX0.U-j0zSYqkqY-453gBvGltN1i0ZfDRVxHGpIZEdnyQPE") {
+                try {
+                    supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                    console.log('✅ Admin: Supabase conectado');
+                    return true;
+                } catch (error) {
+                    console.error('❌ Admin: Erro Supabase:', error);
+                    return false;
+                }
+            } else {
+                console.log('⚠️ Admin: Supabase não configurado');
+                return false;
+            }
+        }
+        
         let isLoggedIn = false;
         
-        // Funções para acessar dados do localStorage
+        // Funções híbridas Supabase + localStorage para admin
+        async function getAllUsers() {
+            try {
+                if (supabaseClient) {
+                    const { data, error } = await supabaseClient
+                        .from('users')
+                        .select('*')
+                        .order('created_at', { ascending: false });
+                    
+                    if (!error && data) {
+                        console.log('✅ Admin: Usuários do Supabase:', data.length);
+                        return data;
+                    }
+                }
+            } catch (error) {
+                console.error('❌ Admin: Erro Supabase, usando localStorage:', error);
+            }
+            
+            // Fallback localStorage
+            const users = getFromLocalStorage('users') || [];
+            console.log('💾 Admin: Usuários do localStorage:', users.length);
+            return users;
+        }
+        
+        async function getAllTransactions() {
+            try {
+                if (supabaseClient) {
+                    const { data, error } = await supabaseClient
+                        .from('transactions')
+                        .select('*')
+                        .order('created_at', { ascending: false });
+                    
+                    if (!error && data) {
+                        console.log('✅ Admin: Transações do Supabase:', data.length);
+                        return data;
+                    }
+                }
+            } catch (error) {
+                console.error('❌ Admin: Erro Supabase, usando localStorage:', error);
+            }
+            
+            // Fallback localStorage
+            const transactions = getFromLocalStorage('transactions') || [];
+            console.log('💾 Admin: Transações do localStorage:', transactions.length);
+            return transactions;
+        }
+        
+        async function getAllSearches() {
+            try {
+                if (supabaseClient) {
+                    const { data, error } = await supabaseClient
+                        .from('searches')
+                        .select('*')
+                        .order('created_at', { ascending: false });
+                    
+                    if (!error && data) {
+                        // Parse results JSON
+                        data.forEach(search => {
+                            if (typeof search.results === 'string') {
+                                try {
+                                    search.results = JSON.parse(search.results);
+                                } catch (e) {
+                                    search.results = {};
+                                }
+                            }
+                        });
+                        console.log('✅ Admin: Pesquisas do Supabase:', data.length);
+                        return data;
+                    }
+                }
+            } catch (error) {
+                console.error('❌ Admin: Erro Supabase, usando localStorage:', error);
+            }
+            
+            // Fallback localStorage
+            const searches = getFromLocalStorage('searches') || [];
+            console.log('💾 Admin: Pesquisas do localStorage:', searches.length);
+            return searches;
+        }
+        
+        // Função auxiliar localStorage (fallback)
         function getFromLocalStorage(key) {
             const data = localStorage.getItem('verificapessoa_' + key);
             return data ? JSON.parse(data) : null;
-        }
-        
-        function getAllUsers() {
-            return getFromLocalStorage('users') || [];
-        }
-        
-        function getAllTransactions() {
-            return getFromLocalStorage('transactions') || [];
-        }
-        
-        function getAllSearches() {
-            return getFromLocalStorage('searches') || [];
         }
         
         async function handleAdminLogin(event) {
@@ -365,12 +459,12 @@
             }
         }
         
-        function loadDashboardData() {
+        async function loadDashboardData() {
             if (!isLoggedIn) return;
             
-            const users = getAllUsers();
-            const transactions = getAllTransactions();
-            const searches = getAllSearches();
+            const users = await getAllUsers();
+            const transactions = await getAllTransactions();
+            const searches = await getAllSearches();
             
             // Debug logs
             console.log('Carregando dados do admin:');
@@ -641,6 +735,12 @@
                 // Aqui poderia implementar sincronização automática via servidor
             }
         }
+
+        // Inicialização do admin
+        document.addEventListener('DOMContentLoaded', function() {
+            initSupabase();
+            console.log('🚀 Admin inicializado com Supabase + localStorage híbrido');
+        });
 
         // Atualização automática a cada 10 segundos
         setInterval(() => {
