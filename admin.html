@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - VerificaPessoa</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #000;
+            color: #fff;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .login-container {
+            max-width: 400px;
+            margin: 5rem auto;
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 12px;
+            padding: 2rem;
+        }
+        
+        .dashboard {
+            display: none;
+        }
+        
+        .dashboard.active {
+            display: block;
+        }
+        
+        h1, h2 {
+            margin-bottom: 2rem;
+            font-weight: 300;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #999;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem;
+            background: #000;
+            border: 1px solid #333;
+            border-radius: 6px;
+            color: #fff;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: #fff;
+        }
+        
+        .btn {
+            background: #fff;
+            color: #000;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 1rem;
+        }
+        
+        .btn:hover {
+            background: #f0f0f0;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .stat-card {
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 300;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            color: #999;
+        }
+        
+        .table-container {
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+        
+        .table-header {
+            background: #000;
+            padding: 1rem;
+            border-bottom: 1px solid #333;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #333;
+        }
+        
+        th {
+            background: #000;
+            color: #999;
+            font-weight: 500;
+        }
+        
+        .status-active {
+            color: #4ade80;
+        }
+        
+        .status-pending {
+            color: #fbbf24;
+        }
+        
+        .logout-btn {
+            background: #333;
+            color: #fff;
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Form -->
+    <div id="loginForm" class="login-container">
+        <h1>Admin Login</h1>
+        <form onsubmit="handleAdminLogin(event)">
+            <div class="form-group">
+                <label>Usuário:</label>
+                <input type="text" id="adminUser" required>
+            </div>
+            <div class="form-group">
+                <label>Senha:</label>
+                <input type="password" id="adminPassword" required>
+            </div>
+            <button type="submit" class="btn">Entrar</button>
+        </form>
+    </div>
+
+    <!-- Dashboard -->
+    <div id="dashboard" class="dashboard">
+        <button class="logout-btn" onclick="logout()">Sair</button>
+        
+        <div class="container">
+            <h1>Painel Administrativo</h1>
+            
+            <!-- Stats -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">1,247</div>
+                    <div class="stat-label">Usuários Cadastrados</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">3,891</div>
+                    <div class="stat-label">Pesquisas Realizadas</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">R$ 2.847,30</div>
+                    <div class="stat-label">Receita Total</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">156</div>
+                    <div class="stat-label">Vendas Hoje</div>
+                </div>
+            </div>
+            
+            <!-- Recent Users -->
+            <div class="table-container">
+                <div class="table-header">
+                    <h2>Usuários Recentes</h2>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Email</th>
+                            <th>Créditos</th>
+                            <th>Cadastro</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>maria.silva@email.com</td>
+                            <td>15</td>
+                            <td>23/09/2025</td>
+                            <td class="status-active">Ativo</td>
+                        </tr>
+                        <tr>
+                            <td>carlos.mendes@email.com</td>
+                            <td>8</td>
+                            <td>23/09/2025</td>
+                            <td class="status-active">Ativo</td>
+                        </tr>
+                        <tr>
+                            <td>ana.costa@email.com</td>
+                            <td>0</td>
+                            <td>22/09/2025</td>
+                            <td class="status-pending">Sem créditos</td>
+                        </tr>
+                        <tr>
+                            <td>roberto.lima@email.com</td>
+                            <td>25</td>
+                            <td>22/09/2025</td>
+                            <td class="status-active">Ativo</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Recent Transactions -->
+            <div class="table-container">
+                <div class="table-header">
+                    <h2>Transações Recentes</h2>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Email</th>
+                            <th>Pacote</th>
+                            <th>Valor</th>
+                            <th>Data</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>#1001</td>
+                            <td>maria.silva@email.com</td>
+                            <td>Pacote 10 Créditos</td>
+                            <td>R$ 5,90</td>
+                            <td>23/09/2025 14:30</td>
+                            <td class="status-active">Confirmado</td>
+                        </tr>
+                        <tr>
+                            <td>#1002</td>
+                            <td>carlos.mendes@email.com</td>
+                            <td>Pacote 50 Créditos</td>
+                            <td>R$ 17,50</td>
+                            <td>23/09/2025 13:15</td>
+                            <td class="status-active">Confirmado</td>
+                        </tr>
+                        <tr>
+                            <td>#1003</td>
+                            <td>ana.costa@email.com</td>
+                            <td>Pesquisa Única</td>
+                            <td>R$ 0,69</td>
+                            <td>23/09/2025 12:45</td>
+                            <td class="status-pending">Pendente</td>
+                        </tr>
+                        <tr>
+                            <td>#1004</td>
+                            <td>roberto.lima@email.com</td>
+                            <td>Pacote 20 Créditos</td>
+                            <td>R$ 9,80</td>
+                            <td>22/09/2025 18:20</td>
+                            <td class="status-active">Confirmado</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function handleAdminLogin(event) {
+            event.preventDefault();
+            
+            const user = document.getElementById('adminUser').value;
+            const password = document.getElementById('adminPassword').value;
+            
+            // Credenciais de admin (você pode alterar)
+            if (user === 'admin' && password === 'verificapessoa2025') {
+                document.getElementById('loginForm').style.display = 'none';
+                document.getElementById('dashboard').classList.add('active');
+            } else {
+                alert('Credenciais inválidas!');
+            }
+        }
+        
+        function logout() {
+            document.getElementById('loginForm').style.display = 'block';
+            document.getElementById('dashboard').classList.remove('active');
+            document.getElementById('adminUser').value = '';
+            document.getElementById('adminPassword').value = '';
+        }
+    </script>
+</body>
+</html>
