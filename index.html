@@ -8,6 +8,9 @@
     <!-- Mercado Pago SDK -->
     <script src="https://sdk.mercadopago.com/js/v2"></script>
     
+    <!-- Supabase SDK -->
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    
     <style>
         * {
             margin: 0;
@@ -761,12 +764,246 @@
         const PIX_NAME = "Verifica Pessoa";
         
         // Mercado Pago - Substitua pelas suas chaves reais
-        const MP_PUBLIC_KEY = "SUA_PUBLIC_KEY_AQUI";
-        const MP_ACCESS_TOKEN = "SEU_ACCESS_TOKEN_AQUI";
+        const MP_PUBLIC_KEY = "APP_USR-aff32c11-93e2-4ed5-8a5a-9e2ca4405766";
+        const MP_ACCESS_TOKEN = "APP_USR-6850941285056243-092512-017e23d3c41ef7b0c005df7970bf13a1-94875335";
+        
+        // Supabase - Substitua pelas suas chaves reais
+        const SUPABASE_URL = "https://uqktdjthtiruwqbcjibc.supabase.co";
+        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVxa3RkanRodGlydXdxYmNqaWJjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg4MjMyNzksImV4cCI6MjA3NDM5OTI3OX0.U-j0zSYqkqY-453gBvGltN1i0ZfDRVxHGpIZEdnyQPE";
+        
+        // Inicializar Supabase
+        let supabaseClient = null;
+        
+        function initSupabase() {
+            if (SUPABASE_URL !== "https://uqktdjthtiruwqbcjibc.supabase.co" && SUPABASE_ANON_KEY !== "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVxa3RkanRodGlydXdxYmNqaWJjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg4MjMyNzksImV4cCI6MjA3NDM5OTI3OX0.U-j0zSYqkqY-453gBvGltN1i0ZfDRVxHGpIZEdnyQPE") {
+                try {
+                    supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                    console.log('✅ Supabase conectado com sucesso');
+                    return true;
+                } catch (error) {
+                    console.error('❌ Erro ao conectar Supabase:', error);
+                    return false;
+                }
+            } else {
+                console.log('⚠️ Supabase não configurado, usando localStorage');
+                return false;
+            }
+        }
         
         let currentUser = null;
         
         // Sistema de dados local (simula banco de dados)
+        // Funções híbridas Supabase + localStorage
+        async function saveUser(user) {
+            try {
+                if (supabaseClient) {
+                    const { data, error } = await supabaseClient
+                        .from('users')
+                        .upsert([{
+                            email: user.email,
+                            password: user.password,
+                            credits: user.credits || 0,
+                            created_at: user.created_at || new Date().toISOString()
+                        }], { 
+                            onConflict: 'email'
+                        });
+                    
+                    if (!error) {
+                        console.log('✅ Usuário salvo no Supabase:', user.email);
+                        return true;
+                    }
+                }
+            } catch (error) {
+                console.error('❌ Erro Supabase, usando localStorage:', error);
+            }
+            
+            // Fallback localStorage
+            const users = getFromLocalStorage('users') || [];
+            const existingIndex = users.findIndex(u => u.email === user.email);
+            if (existingIndex >= 0) {
+                users[existingIndex] = user;
+            } else {
+                users.push(user);
+            }
+            saveToLocalStorage('users', users);
+            console.log('💾 Usuário salvo no localStorage:', user.email);
+            return true;
+        }
+        
+        async function getUser(email) {
+            try {
+                if (supabaseClient) {
+                    const { data, error } = await supabaseClient
+                        .from('users')
+                        .select('*')
+                        .eq('email', email)
+                        .single();
+                    
+                    if (!error && data) {
+                        console.log('✅ Usuário encontrado no Supabase:', email);
+                        return data;
+                    }
+                }
+            } catch (error) {
+                console.error('❌ Erro Supabase, usando localStorage:', error);
+            }
+            
+            // Fallback localStorage
+            const users = getFromLocalStorage('users') || [];
+            const user = users.find(u => u.email === email);
+            if (user) console.log('💾 Usuário encontrado no localStorage:', email);
+            return user;
+        }
+        
+        async function getAllUsers() {
+            try {
+                if (supabaseClient) {
+                    const { data, error } = await supabaseClient
+                        .from('users')
+                        .select('*')
+                        .order('created_at', { ascending: false });
+                    
+                    if (!error && data) {
+                        console.log('✅ Usuários carregados do Supabase:', data.length);
+                        return data;
+                    }
+                }
+            } catch (error) {
+                console.error('❌ Erro Supabase, usando localStorage:', error);
+            }
+            
+            // Fallback localStorage
+            const users = getFromLocalStorage('users') || [];
+            console.log('💾 Usuários carregados do localStorage:', users.length);
+            return users;
+        }
+        
+        async function saveTransaction(transaction) {
+            try {
+                if (supabaseClient) {
+                    const { data, error } = await supabaseClient
+                        .from('transactions')
+                        .insert([{
+                            user_email: transaction.user_email,
+                            package_type: transaction.package_type,
+                            amount: transaction.amount,
+                            credits: transaction.credits,
+                            status: transaction.status || 'pending',
+                            created_at: new Date().toISOString()
+                        }])
+                        .select()
+                        .single();
+                    
+                    if (!error && data) {
+                        console.log('✅ Transação salva no Supabase:', data.id);
+                        return data;
+                    }
+                }
+            } catch (error) {
+                console.error('❌ Erro Supabase, usando localStorage:', error);
+            }
+            
+            // Fallback localStorage
+            const transactions = getFromLocalStorage('transactions') || [];
+            transaction.id = Date.now();
+            transaction.created_at = new Date().toISOString();
+            transactions.push(transaction);
+            saveToLocalStorage('transactions', transactions);
+            console.log('💾 Transação salva no localStorage:', transaction.id);
+            return transaction;
+        }
+        
+        async function getAllTransactions() {
+            try {
+                if (supabaseClient) {
+                    const { data, error } = await supabaseClient
+                        .from('transactions')
+                        .select('*')
+                        .order('created_at', { ascending: false });
+                    
+                    if (!error && data) {
+                        console.log('✅ Transações carregadas do Supabase:', data.length);
+                        return data;
+                    }
+                }
+            } catch (error) {
+                console.error('❌ Erro Supabase, usando localStorage:', error);
+            }
+            
+            // Fallback localStorage
+            const transactions = getFromLocalStorage('transactions') || [];
+            console.log('💾 Transações carregadas do localStorage:', transactions.length);
+            return transactions;
+        }
+        
+        async function saveSearch(search) {
+            try {
+                if (supabaseClient) {
+                    const { data, error } = await supabaseClient
+                        .from('searches')
+                        .insert([{
+                            user_email: search.user_email,
+                            search_name: search.search_name,
+                            credits_used: search.credits_used || 1,
+                            results: JSON.stringify(search.results),
+                            created_at: new Date().toISOString()
+                        }])
+                        .select()
+                        .single();
+                    
+                    if (!error && data) {
+                        console.log('✅ Pesquisa salva no Supabase:', data.id);
+                        return data;
+                    }
+                }
+            } catch (error) {
+                console.error('❌ Erro Supabase, usando localStorage:', error);
+            }
+            
+            // Fallback localStorage
+            const searches = getFromLocalStorage('searches') || [];
+            search.id = Date.now();
+            search.created_at = new Date().toISOString();
+            searches.push(search);
+            saveToLocalStorage('searches', searches);
+            console.log('💾 Pesquisa salva no localStorage:', search.id);
+            return search;
+        }
+        
+        async function getAllSearches() {
+            try {
+                if (supabaseClient) {
+                    const { data, error } = await supabaseClient
+                        .from('searches')
+                        .select('*')
+                        .order('created_at', { ascending: false });
+                    
+                    if (!error && data) {
+                        // Parse results JSON
+                        data.forEach(search => {
+                            if (typeof search.results === 'string') {
+                                try {
+                                    search.results = JSON.parse(search.results);
+                                } catch (e) {
+                                    search.results = {};
+                                }
+                            }
+                        });
+                        console.log('✅ Pesquisas carregadas do Supabase:', data.length);
+                        return data;
+                    }
+                }
+            } catch (error) {
+                console.error('❌ Erro Supabase, usando localStorage:', error);
+            }
+            
+            // Fallback localStorage
+            const searches = getFromLocalStorage('searches') || [];
+            console.log('💾 Pesquisas carregadas do localStorage:', searches.length);
+            return searches;
+        }
+        
+        // Funções auxiliares localStorage (fallback)
         function saveToLocalStorage(key, data) {
             localStorage.setItem('verificapessoa_' + key, JSON.stringify(data));
         }
@@ -776,50 +1013,9 @@
             return data ? JSON.parse(data) : null;
         }
         
-        function getAllUsers() {
-            return getFromLocalStorage('users') || [];
-        }
+
         
-        function getAllTransactions() {
-            return getFromLocalStorage('transactions') || [];
-        }
-        
-        function getAllSearches() {
-            return getFromLocalStorage('searches') || [];
-        }
-        
-        function saveUser(user) {
-            const users = getAllUsers();
-            const existingIndex = users.findIndex(u => u.email === user.email);
-            if (existingIndex >= 0) {
-                users[existingIndex] = user;
-            } else {
-                users.push(user);
-            }
-            saveToLocalStorage('users', users);
-        }
-        
-        function saveTransaction(transaction) {
-            const transactions = getAllTransactions();
-            transaction.id = Date.now();
-            transaction.created_at = new Date().toISOString();
-            transactions.push(transaction);
-            saveToLocalStorage('transactions', transactions);
-            
-            // Debug log
-            console.log('Transação salva:', transaction);
-            console.log('Total de transações:', transactions.length);
-            
-            return transaction;
-        }
-        
-        function saveSearch(search) {
-            const searches = getAllSearches();
-            search.id = Date.now();
-            search.created_at = new Date().toISOString();
-            searches.push(search);
-            saveToLocalStorage('searches', searches);
-        }
+
         
         // Verificar se usuário está logado
         function checkUserSession() {
@@ -2446,16 +2642,22 @@
         }
 
         // Initialize
-        checkUserSession();
-        
-        // Criar backup inicial
-        createAutoBackup();
-        
-        // Inicializar Mercado Pago quando a página carregar
         document.addEventListener('DOMContentLoaded', function() {
-            // Aguardar um pouco para garantir que o SDK carregou
+            // Inicializar Supabase primeiro
+            initSupabase();
+            
+            // Verificar sessão do usuário
+            checkUserSession();
+            
+            // Criar backup inicial
+            createAutoBackup();
+            
+            // Inicializar Mercado Pago
             setTimeout(initMercadoPago, 1000);
+            
+            console.log('🚀 Sistema inicializado com Supabase + localStorage híbrido');
         });
     </script>
 </body>
 </html>
+    
