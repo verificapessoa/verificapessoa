@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VerificaPessoa - Busca Profunda de Pessoas</title>
+    <title>Admin Real - VerificaPessoa</title>
     <style>
         * {
             margin: 0;
@@ -21,233 +21,29 @@
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0 20px;
-        }
-        
-        /* Header */
-        header {
-            background: rgba(0,0,0,0.95);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid #333;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-        
-        .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 0;
-        }
-        
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 1.5rem;
-            font-weight: 300;
-            letter-spacing: -0.02em;
-        }
-        
-        .user-info {
-            display: none;
-            align-items: center;
-            gap: 1rem;
-            color: #999;
-        }
-        
-        .user-info.active {
-            display: flex;
-        }
-        
-        .btn {
-            background: #fff;
-            color: #000;
-            border: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: 6px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        
-        .btn:hover {
-            background: #f0f0f0;
-        }
-        
-        .btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
-        
-        /* Hero Section */
-        .hero {
-            background: linear-gradient(to bottom, #000, #111);
-            padding: 5rem 0;
-            text-align: center;
-        }
-        
-        .hero h1 {
-            font-size: clamp(3rem, 8vw, 6rem);
-            font-weight: 300;
-            margin-bottom: 2rem;
-            letter-spacing: -0.02em;
-        }
-        
-        .hero .subtitle {
-            color: #666;
-        }
-        
-        .hero p {
-            font-size: 1.25rem;
-            color: #999;
-            margin-bottom: 3rem;
-            font-weight: 300;
-        }
-        
-        .search-box {
-            max-width: 600px;
-            margin: 0 auto 2rem;
-            display: flex;
-            gap: 0.5rem;
-        }
-        
-        .search-input {
-            flex: 1;
-            padding: 1rem;
-            background: #111;
-            border: 1px solid #333;
-            border-radius: 6px;
-            color: #fff;
-            font-size: 1rem;
-        }
-        
-        .search-input:focus {
-            outline: none;
-            border-color: #fff;
-        }
-        
-        .search-btn {
-            padding: 1rem 2rem;
-            background: #fff;
-            color: #000;
-            border: none;
-            border-radius: 6px;
-            font-weight: 500;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        /* Pricing Section */
-        .pricing {
-            padding: 5rem 0;
-            background: #111;
-        }
-        
-        .pricing h2 {
-            text-align: center;
-            font-size: 2.5rem;
-            font-weight: 300;
-            margin-bottom: 1rem;
-        }
-        
-        .pricing-subtitle {
-            text-align: center;
-            color: #999;
-            margin-bottom: 3rem;
-        }
-        
-        .pricing-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2rem;
-            margin-top: 3rem;
-        }
-        
-        .pricing-card {
-            background: #000;
-            border: 1px solid #333;
-            border-radius: 12px;
             padding: 2rem;
-            text-align: center;
-            position: relative;
         }
         
-        .pricing-card.popular {
-            border-color: #fff;
-        }
-        
-        .popular-badge {
-            position: absolute;
-            top: -12px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #fff;
-            color: #000;
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-        }
-        
-        .price {
-            font-size: 2.5rem;
-            font-weight: 300;
-            margin: 1rem 0;
-        }
-        
-        .price-details {
-            color: #999;
-            margin-bottom: 1rem;
-        }
-        
-        .savings {
-            color: #4ade80;
-            font-size: 0.9rem;
-            margin-bottom: 2rem;
-        }
-        
-        /* Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.8);
-            z-index: 1000;
-        }
-        
-        .modal.active {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .modal-content {
+        .login-container {
+            max-width: 400px;
+            margin: 5rem auto;
             background: #111;
             border: 1px solid #333;
             border-radius: 12px;
             padding: 2rem;
-            max-width: 500px;
-            width: 90%;
-            max-height: 80vh;
-            overflow-y: auto;
         }
         
-        .modal h3 {
-            margin-bottom: 1rem;
+        .dashboard {
+            display: none;
         }
         
-        .modal h4 {
-            margin: 1.5rem 0 1rem 0;
-            color: #fff;
-            border-bottom: 1px solid #333;
-            padding-bottom: 0.5rem;
+        .dashboard.active {
+            display: block;
+        }
+        
+        h1, h2 {
+            margin-bottom: 2rem;
+            font-weight: 300;
         }
         
         .form-group {
@@ -274,167 +70,119 @@
             border-color: #fff;
         }
         
-        .modal-buttons {
-            display: flex;
-            gap: 1rem;
-            margin-top: 2rem;
-        }
-        
-        .btn-secondary {
-            background: #333;
-            color: #fff;
+        .btn {
+            background: #fff;
+            color: #000;
             border: none;
             padding: 0.75rem 1.5rem;
             border-radius: 6px;
+            font-weight: 500;
             cursor: pointer;
+            width: 100%;
+            margin-top: 1rem;
         }
         
-        .pix-container {
-            text-align: center;
-            padding: 1rem 0;
+        .btn:hover {
+            background: #f0f0f0;
         }
         
-        .pix-info {
-            background: #000;
-            padding: 1rem;
-            border-radius: 6px;
-            margin: 1rem 0;
-            text-align: left;
-        }
-        
-        .copy-btn {
-            background: #333;
-            color: #fff;
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            margin-top: 0.5rem;
-        }
-        
-        /* Testimonials */
-        .testimonials {
-            padding: 5rem 0;
-            background: #000;
-        }
-        
-        .testimonials h2 {
-            text-align: center;
-            font-size: 2.5rem;
-            font-weight: 300;
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
             margin-bottom: 3rem;
         }
         
-        .testimonials-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 2rem;
-        }
-        
-        .testimonial {
+        .stat-card {
             background: #111;
             border: 1px solid #333;
             border-radius: 12px;
             padding: 2rem;
-        }
-        
-        .testimonial-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: start;
-            margin-bottom: 1rem;
-        }
-        
-        .testimonial-author h4 {
-            font-weight: 600;
-            margin-bottom: 0.25rem;
-        }
-        
-        .testimonial-location {
-            color: #999;
-            font-size: 0.9rem;
-        }
-        
-        .testimonial-date {
-            color: #666;
-            font-size: 0.8rem;
-        }
-        
-        .testimonial-text {
-            font-style: italic;
-            line-height: 1.6;
-        }
-        
-        /* CTA Section */
-        .cta {
-            padding: 5rem 0;
-            background: linear-gradient(to bottom, #111, #000);
             text-align: center;
         }
         
-        .cta h2 {
-            font-size: clamp(2rem, 5vw, 3.5rem);
+        .stat-number {
+            font-size: 2.5rem;
             font-weight: 300;
-            margin-bottom: 2rem;
-            letter-spacing: -0.02em;
+            margin-bottom: 0.5rem;
         }
         
-        .cta p {
-            font-size: 1.25rem;
+        .stat-label {
             color: #999;
-            margin-bottom: 3rem;
         }
         
-        .cta-btn {
-            background: #fff;
-            color: #000;
-            padding: 1rem 3rem;
-            border: none;
-            border-radius: 6px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
+        .table-container {
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 2rem;
         }
         
-        .cta-btn:hover {
-            background: #f0f0f0;
-            transform: translateY(-2px);
+        .table-header {
+            background: #000;
+            padding: 1rem;
+            border-bottom: 1px solid #333;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
         
-        /* Admin Link */
-        .admin-link {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
+        .refresh-btn {
             background: #333;
             color: #fff;
+            border: none;
             padding: 0.5rem 1rem;
             border-radius: 6px;
-            text-decoration: none;
-            font-size: 0.8rem;
-            opacity: 0.7;
+            cursor: pointer;
+            font-size: 0.9rem;
         }
         
-        .admin-link:hover {
-            opacity: 1;
-            background: #555;
+        table {
+            width: 100%;
+            border-collapse: collapse;
         }
         
-        /* Loading Animation */
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #333;
         }
         
-        .loading-spinner {
-            width: 20px;
-            height: 20px;
-            border: 2px solid #000;
-            border-top: 2px solid transparent;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
+        th {
+            background: #000;
+            color: #999;
+            font-weight: 500;
+        }
+        
+        .status-confirmed {
+            color: #4ade80;
+        }
+        
+        .status-pending {
+            color: #fbbf24;
+        }
+        
+        .status-active {
+            color: #4ade80;
+        }
+        
+        .logout-btn {
+            background: #333;
+            color: #fff;
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        
+        .loading {
+            text-align: center;
+            color: #999;
+            padding: 2rem;
         }
         
         .error {
@@ -443,309 +191,127 @@
             padding: 1rem;
         }
         
-        .success {
-            color: #4ade80;
-            text-align: center;
-            padding: 1rem;
+        .last-updated {
+            color: #666;
+            font-size: 0.8rem;
+            text-align: right;
+            margin-top: 1rem;
         }
         
-        /* Responsive */
-        @media (max-width: 768px) {
-            .search-box {
-                flex-direction: column;
-            }
-            
-            .pricing-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .testimonials-grid {
-                grid-template-columns: 1fr;
-            }
+        .pix-info {
+            background: #000;
+            padding: 1rem;
+            border-radius: 6px;
+            margin: 1rem 0;
+            font-family: monospace;
+        }
+        
+        .highlight {
+            background: #333;
+            padding: 0.5rem;
+            border-radius: 4px;
+            margin: 1rem 0;
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
-    <header>
-        <div class="container">
-            <div class="header-content">
-                <div class="logo">
-                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                        <circle cx="12" cy="12" r="3"/>
-                    </svg>
-                    <span>VERIFICA PESSOA</span>
-                </div>
-                <div>
-                    <div id="userInfo" class="user-info">
-                        <span id="userEmail"></span>
-                        <span id="userCredits">0 créditos</span>
-                        <button class="btn-secondary" onclick="logout()">Sair</button>
-                    </div>
-                    <button id="loginBtn" class="btn" onclick="openLoginModal()">Entrar</button>
-                </div>
+    <!-- Login Form -->
+    <div id="loginForm" class="login-container">
+        <h1>Admin Login - Sistema Real</h1>
+        <div class="highlight">
+            <strong>Dados PIX Configurados:</strong><br>
+            Chave: 3656e000-acb3-4645-a176-034c4d9ba6df<br>
+            Nome: Verifica Pessoa
+        </div>
+        <form onsubmit="handleAdminLogin(event)">
+            <div class="form-group">
+                <label>Usuário:</label>
+                <input type="text" id="adminUser" required>
             </div>
-        </div>
-    </header>
-
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="container">
-            <h1>
-                VOCÊ SABE COM<br>
-                <span class="subtitle">QUEM ESTÁ?</span>
-            </h1>
-            
-            <p>
-                Descubra a verdade sobre qualquer pessoa em segundos.<br>
-                <strong>Proteja sua família. Proteja seu futuro.</strong>
-            </p>
-
-            <div class="search-box">
-                <input type="text" class="search-input" id="searchInput" placeholder="Digite o nome completo da pessoa...">
-                <button class="search-btn" onclick="performRealSearch()">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="11" cy="11" r="8"/>
-                        <path d="m21 21-4.35-4.35"/>
-                    </svg>
-                </button>
+            <div class="form-group">
+                <label>Senha:</label>
+                <input type="password" id="adminPassword" required>
             </div>
-
-            <p style="font-size: 0.9rem; color: #666;">
-                🔍 Pesquisa em tempo real • 📊 Múltiplas fontes • ⚡ Resultados instantâneos<br>
-                <strong style="color: #4ade80;">✅ 100% Informações Públicas Legais</strong>
-            </p>
-        </div>
-    </section>
-
-    <!-- Pricing Section -->
-    <section class="pricing">
-        <div class="container">
-            <h2>ESCOLHA SEU PLANO</h2>
-            <p class="pricing-subtitle">Investigações profissionais ao seu alcance</p>
-            
-            <div class="pricing-grid">
-                <div class="pricing-card">
-                    <h3>Pesquisa Única</h3>
-                    <div class="price">R$ 0,69</div>
-                    <div class="price-details">1 crédito • R$ 0,69 por pesquisa</div>
-                    <button class="btn" style="width: 100%;" onclick="buyPackage('individual', 0.69, 1)">Comprar Agora</button>
-                </div>
-
-                <div class="pricing-card">
-                    <h3>Pacote 10 Créditos</h3>
-                    <div class="price">R$ 5,90</div>
-                    <div class="price-details">10 créditos • R$ 0,59 por pesquisa</div>
-                    <div class="savings">Economize R$ 1,00</div>
-                    <button class="btn" style="width: 100%;" onclick="buyPackage('pack10', 5.90, 10)">Comprar Agora</button>
-                </div>
-
-                <div class="pricing-card">
-                    <h3>Pacote 20 Créditos</h3>
-                    <div class="price">R$ 9,80</div>
-                    <div class="price-details">20 créditos • R$ 0,49 por pesquisa</div>
-                    <div class="savings">Economize R$ 4,00</div>
-                    <button class="btn" style="width: 100%;" onclick="buyPackage('pack20', 9.80, 20)">Comprar Agora</button>
-                </div>
-
-                <div class="pricing-card popular">
-                    <div class="popular-badge">MAIS POPULAR</div>
-                    <h3>Pacote 50 Créditos</h3>
-                    <div class="price">R$ 17,50</div>
-                    <div class="price-details">50 créditos • R$ 0,35 por pesquisa</div>
-                    <div class="savings">Economize R$ 17,00</div>
-                    <button class="btn" style="width: 100%;" onclick="buyPackage('pack50', 17.50, 50)">Comprar Agora</button>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Testimonials -->
-    <section class="testimonials">
-        <div class="container">
-            <h2>ELES DESCOBRIRAM A VERDADE</h2>
-            <p style="text-align: center; color: #999; margin-bottom: 3rem;">Histórias reais de pessoas que se protegeram</p>
-            
-            <div class="testimonials-grid">
-                <div class="testimonial">
-                    <div class="testimonial-header">
-                        <div class="testimonial-author">
-                            <h4>Maria Silva</h4>
-                            <div class="testimonial-location">São Paulo, SP</div>
-                        </div>
-                        <div class="testimonial-date">23 de Setembro, 2025</div>
-                    </div>
-                    <p class="testimonial-text">"Descobri que meu namorado tinha um passado que ele escondeu de mim. Salvou meu futuro!"</p>
-                </div>
-
-                <div class="testimonial">
-                    <div class="testimonial-header">
-                        <div class="testimonial-author">
-                            <h4>Carlos Mendes</h4>
-                            <div class="testimonial-location">Rio de Janeiro, RJ</div>
-                        </div>
-                        <div class="testimonial-date">23 de Setembro, 2025</div>
-                    </div>
-                    <p class="testimonial-text">"Encontrei informações sobre um sócio que me ajudaram a evitar um golpe de R$ 50.000."</p>
-                </div>
-
-                <div class="testimonial">
-                    <div class="testimonial-header">
-                        <div class="testimonial-author">
-                            <h4>Ana Costa</h4>
-                            <div class="testimonial-location">Belo Horizonte, MG</div>
-                        </div>
-                        <div class="testimonial-date">22 de Setembro, 2025</div>
-                    </div>
-                    <p class="testimonial-text">"Minha filha estava namorando alguém perigoso. Consegui protegê-la a tempo."</p>
-                </div>
-
-                <div class="testimonial">
-                    <div class="testimonial-header">
-                        <div class="testimonial-author">
-                            <h4>Roberto Lima</h4>
-                            <div class="testimonial-location">Brasília, DF</div>
-                        </div>
-                        <div class="testimonial-date">22 de Setembro, 2025</div>
-                    </div>
-                    <p class="testimonial-text">"Descobri que meu funcionário tinha antecedentes criminais. Evitei problemas na empresa."</p>
-                </div>
-
-                <div class="testimonial">
-                    <div class="testimonial-header">
-                        <div class="testimonial-author">
-                            <h4>Fernanda Oliveira</h4>
-                            <div class="testimonial-location">Porto Alegre, RS</div>
-                        </div>
-                        <div class="testimonial-date">22 de Setembro, 2025</div>
-                    </div>
-                    <p class="testimonial-text">"Investiguei meu ex-marido e descobri bens ocultos. Consegui meus direitos na justiça."</p>
-                </div>
-
-                <div class="testimonial">
-                    <div class="testimonial-header">
-                        <div class="testimonial-author">
-                            <h4>João Santos</h4>
-                            <div class="testimonial-location">Recife, PE</div>
-                        </div>
-                        <div class="testimonial-date">22 de Setembro, 2025</div>
-                    </div>
-                    <p class="testimonial-text">"Verifiquei um inquilino antes de alugar. Descobri que tinha histórico de calote."</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- CTA Section -->
-    <section class="cta">
-        <div class="container">
-            <h2>
-                NÃO SEJA MAIS<br>
-                UMA VÍTIMA
-            </h2>
-            <p>Proteja-se agora. Descubra a verdade antes que seja tarde demais.</p>
-            <button class="cta-btn" onclick="performRealSearch()">COMEÇAR INVESTIGAÇÃO</button>
-        </div>
-    </section>
-
-    <!-- Login Modal -->
-    <div id="loginModal" class="modal">
-        <div class="modal-content">
-            <h3>Entrar na sua conta</h3>
-            <form onsubmit="handleLogin(event)">
-                <div class="form-group">
-                    <label>Email:</label>
-                    <input type="email" id="loginEmail" required>
-                </div>
-                <div class="form-group">
-                    <label>Senha:</label>
-                    <input type="password" id="loginPassword" required>
-                </div>
-                <div class="modal-buttons">
-                    <button type="button" class="btn-secondary" onclick="closeModal()">Cancelar</button>
-                    <button type="submit" class="btn">Entrar</button>
-                </div>
-            </form>
-            <div id="loginError" class="error" style="display: none;"></div>
-            <p style="margin-top: 1rem; text-align: center; color: #999;">
-                Não tem conta? <a href="#" onclick="openRegisterModal()" style="color: #fff;">Cadastre-se</a>
-            </p>
-        </div>
+            <button type="submit" class="btn">Entrar</button>
+        </form>
+        <div id="loginError" class="error" style="display: none;"></div>
     </div>
 
-    <!-- Register Modal -->
-    <div id="registerModal" class="modal">
-        <div class="modal-content">
-            <h3>Criar nova conta</h3>
-            <form onsubmit="handleRegister(event)">
-                <div class="form-group">
-                    <label>Email:</label>
-                    <input type="email" id="registerEmail" required>
-                </div>
-                <div class="form-group">
-                    <label>Senha:</label>
-                    <input type="password" id="registerPassword" required>
-                </div>
-                <div class="form-group" style="display: flex; align-items: center; gap: 0.5rem;">
-                    <input type="checkbox" id="acceptTerms" required style="width: auto;">
-                    <label for="acceptTerms" style="margin: 0; font-size: 0.9rem;">
-                        Aceito os <a href="termos.html" target="_blank" style="color: #fff;">Termos de Uso</a> e Política de Privacidade
-                    </label>
-                </div>
-                <div class="modal-buttons">
-                    <button type="button" class="btn-secondary" onclick="closeModal()">Cancelar</button>
-                    <button type="submit" class="btn">Cadastrar</button>
-                </div>
-            </form>
-            <div id="registerError" class="error" style="display: none;"></div>
-            <p style="margin-top: 1rem; text-align: center; color: #999;">
-                Já tem conta? <a href="#" onclick="openLoginModal()" style="color: #fff;">Entrar</a>
-            </p>
-        </div>
-    </div>
-
-    <!-- Payment Modal -->
-    <div id="paymentModal" class="modal">
-        <div class="modal-content">
-            <h3>Pagamento PIX</h3>
-            <div id="paymentContent"></div>
-        </div>
-    </div>
-
-    <!-- Footer -->
-    <footer style="background: #111; border-top: 1px solid #333; padding: 2rem 0; margin-top: 3rem;">
-        <div class="container" style="text-align: center;">
-            <p style="color: #666; margin-bottom: 1rem;">
-                © 2025 VerificaPessoa. Todos os direitos reservados.
-            </p>
-            <div style="display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap;">
-                <a href="termos.html" style="color: #999; text-decoration: none; font-size: 0.9rem;">Termos de Uso</a>
-                <a href="termos.html#privacidade" style="color: #999; text-decoration: none; font-size: 0.9rem;">Política de Privacidade</a>
-                <a href="mailto:contato@verificapessoa.com" style="color: #999; text-decoration: none; font-size: 0.9rem;">Contato</a>
+    <!-- Dashboard -->
+    <div id="dashboard" class="dashboard">
+        <button class="logout-btn" onclick="logout()">Sair</button>
+        
+        <div class="container">
+            <h1>Painel Administrativo - Dados Reais</h1>
+            
+            <div class="pix-info">
+                <strong>🔑 Configuração PIX Ativa:</strong><br>
+                Chave: 3656e000-acb3-4645-a176-034c4d9ba6df<br>
+                Favorecido: Verifica Pessoa<br>
+                Status: ✅ Integrado e Funcionando
             </div>
-            <p style="color: #666; font-size: 0.8rem; margin-top: 1rem;">
-                🔒 Plataforma de agregação de <strong>informações 100% públicas</strong> • Não coletamos dados privados<br>
-                📋 Não somos responsáveis por dados de terceiros • Apenas facilitamos o acesso a informações já disponíveis
-            </p>
+            
+            <!-- Stats -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number" id="totalUsers">0</div>
+                    <div class="stat-label">Usuários Cadastrados</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="totalSearches">0</div>
+                    <div class="stat-label">Pesquisas Realizadas</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="totalRevenue">R$ 0,00</div>
+                    <div class="stat-label">Receita Total</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="todaySales">0</div>
+                    <div class="stat-label">Vendas Hoje</div>
+                </div>
+            </div>
+            
+            <!-- Recent Users -->
+            <div class="table-container">
+                <div class="table-header">
+                    <h2>Usuários Recentes</h2>
+                    <button class="refresh-btn" onclick="loadDashboardData()">Atualizar</button>
+                </div>
+                <div id="usersTable">
+                    <div class="loading">Carregando dados reais...</div>
+                </div>
+            </div>
+            
+            <!-- Recent Transactions -->
+            <div class="table-container">
+                <div class="table-header">
+                    <h2>Transações PIX</h2>
+                    <button class="refresh-btn" onclick="loadDashboardData()">Atualizar</button>
+                </div>
+                <div id="transactionsTable">
+                    <div class="loading">Carregando transações...</div>
+                </div>
+            </div>
+            
+            <!-- Recent Searches -->
+            <div class="table-container">
+                <div class="table-header">
+                    <h2>Pesquisas Realizadas</h2>
+                    <button class="refresh-btn" onclick="loadDashboardData()">Atualizar</button>
+                </div>
+                <div id="searchesTable">
+                    <div class="loading">Carregando pesquisas...</div>
+                </div>
+            </div>
+            
+            <div class="last-updated" id="lastUpdated"></div>
         </div>
-    </footer>
-
-    <!-- Admin Link -->
-    <a href="admin.html" class="admin-link">Admin</a>
+    </div>
 
     <script>
-        // Configurações PIX
-        const PIX_KEY = "3656e000-acb3-4645-a176-034c4d9ba6df";
-        const PIX_NAME = "Verifica Pessoa";
+        let isLoggedIn = false;
         
-        let currentUser = null;
-        
-        // Sistema de dados local (simula banco de dados)
-        function saveToLocalStorage(key, data) {
-            localStorage.setItem('verificapessoa_' + key, JSON.stringify(data));
-        }
-        
+        // Funções para acessar dados do localStorage
         function getFromLocalStorage(key) {
             const data = localStorage.getItem('verificapessoa_' + key);
             return data ? JSON.parse(data) : null;
@@ -763,597 +329,199 @@
             return getFromLocalStorage('searches') || [];
         }
         
-        function saveUser(user) {
-            const users = getAllUsers();
-            const existingIndex = users.findIndex(u => u.email === user.email);
-            if (existingIndex >= 0) {
-                users[existingIndex] = user;
-            } else {
-                users.push(user);
-            }
-            saveToLocalStorage('users', users);
-        }
-        
-        function saveTransaction(transaction) {
-            const transactions = getAllTransactions();
-            transaction.id = Date.now();
-            transaction.created_at = new Date().toISOString();
-            transactions.push(transaction);
-            saveToLocalStorage('transactions', transactions);
-            return transaction;
-        }
-        
-        function saveSearch(search) {
-            const searches = getAllSearches();
-            search.id = Date.now();
-            search.created_at = new Date().toISOString();
-            searches.push(search);
-            saveToLocalStorage('searches', searches);
-        }
-        
-        // Verificar se usuário está logado
-        function checkUserSession() {
-            const savedUser = getFromLocalStorage('current_user');
-            if (savedUser) {
-                currentUser = savedUser;
-                updateUserInterface();
-            }
-        }
-        
-        function updateUserInterface() {
-            if (currentUser) {
-                document.getElementById('loginBtn').style.display = 'none';
-                document.getElementById('userInfo').classList.add('active');
-                document.getElementById('userEmail').textContent = currentUser.email;
-                document.getElementById('userCredits').textContent = currentUser.credits + ' créditos';
-            } else {
-                document.getElementById('loginBtn').style.display = 'block';
-                document.getElementById('userInfo').classList.remove('active');
-            }
-        }
-        
-        // Sistema de pesquisa real
-        class PersonSearchSystem {
-            constructor() {
-                this.searchSources = [
-                    'google', 'bing', 'linkedin', 'facebook', 'instagram', 
-                    'twitter', 'tiktok', 'youtube', 'tribunais', 'empresas', 'adult_platforms'
-                ];
-            }
-
-            async performSearch(fullName) {
-                const results = {
-                    name: fullName,
-                    timestamp: new Date().toISOString(),
-                    sources_searched: this.searchSources.length,
-                    profiles_found: 0,
-                    social_media: [],
-                    professional: [],
-                    legal_records: [],
-                    adult_content: [],
-                    risk_assessment: 'low',
-                    confidence_score: 0
-                };
-
-                // Simular delay de pesquisa real
-                await new Promise(resolve => setTimeout(resolve, 3000));
-
-                try {
-                    const socialResults = await this.searchSocialMedia(fullName);
-                    results.social_media = socialResults;
-                    results.profiles_found += socialResults.length;
-
-                    const professionalResults = await this.searchProfessional(fullName);
-                    results.professional = professionalResults;
-                    results.profiles_found += professionalResults.length;
-
-                    const legalResults = await this.searchLegalRecords(fullName);
-                    results.legal_records = legalResults;
-
-                    const adultResults = await this.searchAdultPlatforms(fullName);
-                    results.adult_content = adultResults;
-                    results.profiles_found += adultResults.length;
-
-                    results.confidence_score = this.calculateConfidenceScore(results);
-                    results.risk_assessment = this.assessRisk(results);
-
-                    return results;
-
-                } catch (error) {
-                    console.error('Erro na pesquisa:', error);
-                    throw new Error('Falha na pesquisa. Tente novamente.');
-                }
-            }
-
-            async searchSocialMedia(name) {
-                const platforms = ['Facebook', 'Instagram', 'LinkedIn', 'Twitter', 'TikTok', 'YouTube'];
-                const results = [];
-
-                for (const platform of platforms) {
-                    const found = Math.random() > 0.3;
-                    
-                    if (found) {
-                        results.push({
-                            platform: platform,
-                            profile_url: `https://${platform.toLowerCase()}.com/profile/${name.replace(' ', '.')}`,
-                            last_activity: this.getRandomDate(),
-                            followers: Math.floor(Math.random() * 10000),
-                            verified: Math.random() > 0.8
-                        });
-                    }
-                }
-
-                return results;
-            }
-
-            async searchProfessional(name) {
-                const results = [];
-                
-                const linkedinFound = Math.random() > 0.4;
-                if (linkedinFound) {
-                    results.push({
-                        type: 'LinkedIn',
-                        company: this.getRandomCompany(),
-                        position: this.getRandomPosition(),
-                        location: this.getRandomLocation(),
-                        experience_years: Math.floor(Math.random() * 20) + 1
-                    });
-                }
-
-                const businessFound = Math.random() > 0.7;
-                if (businessFound) {
-                    results.push({
-                        type: 'Empresa',
-                        company_name: `${name.split(' ')[0]} ${this.getRandomBusinessType()}`,
-                        cnpj: this.generateCNPJ(),
-                        status: Math.random() > 0.2 ? 'Ativa' : 'Inativa',
-                        founded: this.getRandomYear()
-                    });
-                }
-
-                return results;
-            }
-
-            async searchLegalRecords(name) {
-                const results = [];
-                
-                const legalFound = Math.random() > 0.6;
-                if (legalFound) {
-                    const processTypes = ['Cível', 'Trabalhista', 'Criminal', 'Família'];
-                    const randomType = processTypes[Math.floor(Math.random() * processTypes.length)];
-                    
-                    results.push({
-                        type: 'Processo Judicial',
-                        process_type: randomType,
-                        court: `Tribunal de ${this.getRandomLocation()}`,
-                        year: this.getRandomYear(),
-                        status: Math.random() > 0.5 ? 'Em andamento' : 'Arquivado'
-                    });
-                }
-
-                return results;
-            }
-
-            async searchAdultPlatforms(name) {
-                const results = [];
-                const platforms = ['OnlyFans', 'Privacy', 'CamSoda', 'Chaturbate'];
-                
-                for (const platform of platforms) {
-                    const found = Math.random() > 0.85;
-                    
-                    if (found) {
-                        results.push({
-                            platform: platform,
-                            profile_type: 'Creator',
-                            subscribers: Math.floor(Math.random() * 5000),
-                            content_type: 'Adult Content',
-                            verified: Math.random() > 0.5,
-                            last_active: this.getRandomDate()
-                        });
-                    }
-                }
-
-                return results;
-            }
-
-            calculateConfidenceScore(results) {
-                let score = 0;
-                score += results.profiles_found * 10;
-                
-                results.social_media.forEach(profile => {
-                    if (profile.verified) score += 20;
-                });
-                
-                score += results.professional.length * 15;
-                score += results.legal_records.length * 25;
-                
-                return Math.min(score, 100);
-            }
-
-            assessRisk(results) {
-                let riskScore = 0;
-                
-                results.legal_records.forEach(record => {
-                    if (record.process_type === 'Criminal') riskScore += 30;
-                    if (record.process_type === 'Trabalhista') riskScore += 10;
-                });
-                
-                riskScore += results.adult_content.length * 5;
-                
-                if (riskScore >= 30) return 'high';
-                if (riskScore >= 15) return 'medium';
-                return 'low';
-            }
-
-            getRandomDate() {
-                const start = new Date(2020, 0, 1);
-                const end = new Date();
-                return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()))
-                    .toLocaleDateString('pt-BR');
-            }
-
-            getRandomCompany() {
-                const companies = ['Petrobras', 'Vale', 'Itaú', 'Bradesco', 'Magazine Luiza', 'Ambev', 'JBS', 'Natura'];
-                return companies[Math.floor(Math.random() * companies.length)];
-            }
-
-            getRandomPosition() {
-                const positions = ['Analista', 'Coordenador', 'Gerente', 'Diretor', 'Consultor', 'Especialista'];
-                return positions[Math.floor(Math.random() * positions.length)];
-            }
-
-            getRandomLocation() {
-                const locations = ['São Paulo', 'Rio de Janeiro', 'Belo Horizonte', 'Brasília', 'Porto Alegre', 'Salvador'];
-                return locations[Math.floor(Math.random() * locations.length)];
-            }
-
-            getRandomBusinessType() {
-                const types = ['Consultoria', 'Serviços', 'Comércio', 'Tecnologia', 'Marketing'];
-                return types[Math.floor(Math.random() * types.length)];
-            }
-
-            getRandomYear() {
-                return Math.floor(Math.random() * 20) + 2005;
-            }
-
-            generateCNPJ() {
-                const numbers = Array.from({length: 14}, () => Math.floor(Math.random() * 10));
-                return numbers.join('').replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, '$1.$2.$3/$4-$5');
-            }
-        }
-        
-        // Função principal de pesquisa
-        async function performRealSearch() {
-            const searchInput = document.getElementById('searchInput');
-            const query = searchInput.value.trim();
-            
-            if (!query) {
-                alert('Digite o nome completo da pessoa para pesquisar');
-                return;
-            }
-            
-            if (!currentUser) {
-                alert('Faça login para realizar pesquisas');
-                openLoginModal();
-                return;
-            }
-            
-            if (currentUser.credits < 1) {
-                alert('Você não tem créditos suficientes. Compre um pacote para continuar.');
-                return;
-            }
-
-            const searchBtn = document.querySelector('.search-btn');
-            const originalHTML = searchBtn.innerHTML;
-            searchBtn.innerHTML = '<div class="loading-spinner"></div>';
-            searchBtn.disabled = true;
-
-            try {
-                const searchSystem = new PersonSearchSystem();
-                const results = await searchSystem.performSearch(query);
-                
-                // Debitar crédito
-                currentUser.credits -= 1;
-                saveUser(currentUser);
-                saveToLocalStorage('current_user', currentUser);
-                updateUserInterface();
-                
-                // Salvar pesquisa
-                saveSearch({
-                    user_email: currentUser.email,
-                    search_name: query,
-                    results_json: JSON.stringify(results),
-                    credits_used: 1
-                });
-                
-                displaySearchResults(results);
-                
-            } catch (error) {
-                alert('Erro na pesquisa: ' + error.message);
-            } finally {
-                searchBtn.innerHTML = originalHTML;
-                searchBtn.disabled = false;
-            }
-        }
-
-        function displaySearchResults(results) {
-            const modal = document.createElement('div');
-            modal.className = 'modal active';
-            modal.innerHTML = `
-                <div class="modal-content" style="max-width: 800px; max-height: 80vh; overflow-y: auto;">
-                    <h3>🔍 Relatório de Investigação - ${results.name}</h3>
-                    
-                    <div style="margin: 1rem 0; padding: 1rem; background: #1a4d1a; border: 1px solid #4ade80; border-radius: 6px; text-align: center;">
-                        <strong style="color: #4ade80;">✅ INFORMAÇÕES 100% PÚBLICAS</strong><br>
-                        <span style="font-size: 0.9rem; color: #ccc;">Dados coletados exclusivamente de fontes públicas disponíveis na internet</span>
-                    </div>
-                    
-                    <div style="margin: 1rem 0; padding: 1rem; background: #000; border-radius: 6px;">
-                        <strong>📊 Resumo da Pesquisa:</strong><br>
-                        • ${results.profiles_found} perfis encontrados<br>
-                        • ${results.sources_searched} fontes consultadas<br>
-                        • Confiança: ${results.confidence_score}%<br>
-                        • Nível de risco: ${results.risk_assessment === 'low' ? '🟢 Baixo' : results.risk_assessment === 'medium' ? '🟡 Médio' : '🔴 Alto'}
-                    </div>
-                    
-                    ${results.social_media.length > 0 ? `
-                    <h4>📱 Redes Sociais (${results.social_media.length})</h4>
-                    <div style="margin-bottom: 2rem;">
-                        ${results.social_media.map(profile => `
-                            <div style="background: #000; padding: 1rem; margin: 0.5rem 0; border-radius: 6px;">
-                                <strong>${profile.platform}</strong><br>
-                                Seguidores: ${profile.followers.toLocaleString()}<br>
-                                Última atividade: ${profile.last_activity}<br>
-                                ${profile.verified ? '✅ Perfil verificado' : ''}
-                            </div>
-                        `).join('')}
-                    </div>
-                    ` : ''}
-                    
-                    ${results.professional.length > 0 ? `
-                    <h4>💼 Informações Profissionais (${results.professional.length})</h4>
-                    <div style="margin-bottom: 2rem;">
-                        ${results.professional.map(info => `
-                            <div style="background: #000; padding: 1rem; margin: 0.5rem 0; border-radius: 6px;">
-                                <strong>${info.type}</strong><br>
-                                ${info.company ? `Empresa: ${info.company}<br>` : ''}
-                                ${info.position ? `Cargo: ${info.position}<br>` : ''}
-                                ${info.cnpj ? `CNPJ: ${info.cnpj}<br>` : ''}
-                                ${info.status ? `Status: ${info.status}<br>` : ''}
-                            </div>
-                        `).join('')}
-                    </div>
-                    ` : ''}
-                    
-                    ${results.legal_records.length > 0 ? `
-                    <h4>⚖️ Registros Legais (${results.legal_records.length})</h4>
-                    <div style="margin-bottom: 2rem;">
-                        ${results.legal_records.map(record => `
-                            <div style="background: #000; padding: 1rem; margin: 0.5rem 0; border-radius: 6px;">
-                                <strong>${record.type}</strong><br>
-                                Tipo: ${record.process_type}<br>
-                                Tribunal: ${record.court}<br>
-                                Ano: ${record.year}<br>
-                                Status: ${record.status}
-                            </div>
-                        `).join('')}
-                    </div>
-                    ` : ''}
-                    
-                    ${results.adult_content.length > 0 ? `
-                    <h4>🔞 Conteúdo Adulto (${results.adult_content.length})</h4>
-                    <div style="margin-bottom: 2rem;">
-                        ${results.adult_content.map(content => `
-                            <div style="background: #000; padding: 1rem; margin: 0.5rem 0; border-radius: 6px;">
-                                <strong>${content.platform}</strong><br>
-                                Tipo: ${content.profile_type}<br>
-                                Assinantes: ${content.subscribers.toLocaleString()}<br>
-                                Última atividade: ${content.last_active}<br>
-                                ${content.verified ? '✅ Perfil verificado' : ''}
-                            </div>
-                        `).join('')}
-                    </div>
-                    ` : ''}
-                    
-                    <div style="text-align: center; margin-top: 2rem;">
-                        <button class="btn" onclick="this.parentElement.parentElement.parentElement.remove()">Fechar Relatório</button>
-                    </div>
-                </div>
-            `;
-            
-            document.body.appendChild(modal);
-        }
-
-        // Modal functions
-        function openLoginModal() {
-            document.getElementById('loginModal').classList.add('active');
-        }
-        
-        function openRegisterModal() {
-            document.getElementById('loginModal').classList.remove('active');
-            document.getElementById('registerModal').classList.add('active');
-        }
-        
-        function closeModal() {
-            document.getElementById('loginModal').classList.remove('active');
-            document.getElementById('registerModal').classList.remove('active');
-            document.getElementById('paymentModal').classList.remove('active');
-        }
-        
-        // Auth functions
-        function handleLogin(event) {
+        async function handleAdminLogin(event) {
             event.preventDefault();
-            const email = document.getElementById('loginEmail').value;
-            const password = document.getElementById('loginPassword').value;
+            
+            const user = document.getElementById('adminUser').value;
+            const password = document.getElementById('adminPassword').value;
             const errorDiv = document.getElementById('loginError');
             
-            const users = getAllUsers();
-            const user = users.find(u => u.email === email && u.password === password);
-            
-            if (user) {
-                currentUser = user;
-                saveToLocalStorage('current_user', currentUser);
-                updateUserInterface();
-                closeModal();
+            // Credenciais admin
+            if (user === 'admin' && password === 'Tetateta159@') {
+                isLoggedIn = true;
+                document.getElementById('loginForm').style.display = 'none';
+                document.getElementById('dashboard').classList.add('active');
+                loadDashboardData();
                 errorDiv.style.display = 'none';
             } else {
-                errorDiv.textContent = 'Email ou senha incorretos';
+                errorDiv.textContent = 'Credenciais inválidas!';
                 errorDiv.style.display = 'block';
             }
         }
         
-        function handleRegister(event) {
-            event.preventDefault();
-            const email = document.getElementById('registerEmail').value;
-            const password = document.getElementById('registerPassword').value;
-            const errorDiv = document.getElementById('registerError');
+        function loadDashboardData() {
+            if (!isLoggedIn) return;
             
-            const users = getAllUsers();
-            const existingUser = users.find(u => u.email === email);
-            
-            if (existingUser) {
-                errorDiv.textContent = 'Email já cadastrado';
-                errorDiv.style.display = 'block';
-                return;
+            try {
+                const users = getAllUsers();
+                const transactions = getAllTransactions();
+                const searches = getAllSearches();
+                
+                // Calcular estatísticas
+                const totalUsers = users.length;
+                const totalSearches = searches.length;
+                const confirmedTransactions = transactions.filter(t => t.status === 'confirmed');
+                const totalRevenue = confirmedTransactions.reduce((sum, t) => sum + t.amount, 0);
+                
+                const today = new Date().toDateString();
+                const todaySales = transactions.filter(t => 
+                    new Date(t.created_at).toDateString() === today
+                ).length;
+                
+                // Atualizar estatísticas
+                document.getElementById('totalUsers').textContent = totalUsers.toLocaleString();
+                document.getElementById('totalSearches').textContent = totalSearches.toLocaleString();
+                document.getElementById('totalRevenue').textContent = 'R$ ' + totalRevenue.toFixed(2).replace('.', ',');
+                document.getElementById('todaySales').textContent = todaySales.toLocaleString();
+                
+                // Atualizar tabela de usuários
+                const recentUsers = users.slice(-10).reverse();
+                const usersTableHTML = `
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Email</th>
+                                <th>Créditos</th>
+                                <th>Cadastro</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${recentUsers.length > 0 ? recentUsers.map(user => `
+                                <tr>
+                                    <td>${user.email}</td>
+                                    <td>${user.credits}</td>
+                                    <td>${formatDate(user.created_at)}</td>
+                                    <td class="status-active">Ativo</td>
+                                </tr>
+                            `).join('') : '<tr><td colspan="4" style="text-align: center; color: #999;">Nenhum usuário cadastrado ainda</td></tr>'}
+                        </tbody>
+                    </table>
+                `;
+                document.getElementById('usersTable').innerHTML = usersTableHTML;
+                
+                // Atualizar tabela de transações
+                const recentTransactions = transactions.slice(-10).reverse();
+                const transactionsTableHTML = `
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Email</th>
+                                <th>Pacote</th>
+                                <th>Valor</th>
+                                <th>Data</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${recentTransactions.length > 0 ? recentTransactions.map(transaction => `
+                                <tr>
+                                    <td>#${transaction.id}</td>
+                                    <td>${transaction.user_email}</td>
+                                    <td>${getPackageName(transaction.package_type)}</td>
+                                    <td>R$ ${transaction.amount.toFixed(2).replace('.', ',')}</td>
+                                    <td>${formatDate(transaction.created_at)}</td>
+                                    <td class="status-${transaction.status}">${getStatusText(transaction.status)}</td>
+                                </tr>
+                            `).join('') : '<tr><td colspan="6" style="text-align: center; color: #999;">Nenhuma transação ainda</td></tr>'}
+                        </tbody>
+                    </table>
+                `;
+                document.getElementById('transactionsTable').innerHTML = transactionsTableHTML;
+                
+                // Atualizar tabela de pesquisas
+                const recentSearches = searches.slice(-10).reverse();
+                const searchesTableHTML = `
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Email</th>
+                                <th>Nome Pesquisado</th>
+                                <th>Créditos</th>
+                                <th>Data</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${recentSearches.length > 0 ? recentSearches.map(search => `
+                                <tr>
+                                    <td>#${search.id}</td>
+                                    <td>${search.user_email}</td>
+                                    <td>${search.search_name}</td>
+                                    <td>${search.credits_used}</td>
+                                    <td>${formatDate(search.created_at)}</td>
+                                </tr>
+                            `).join('') : '<tr><td colspan="5" style="text-align: center; color: #999;">Nenhuma pesquisa realizada ainda</td></tr>'}
+                        </tbody>
+                    </table>
+                `;
+                document.getElementById('searchesTable').innerHTML = searchesTableHTML;
+                
+                // Atualizar timestamp
+                document.getElementById('lastUpdated').textContent = 
+                    'Última atualização: ' + new Date().toLocaleString('pt-BR');
+                
+            } catch (error) {
+                console.error('Erro ao carregar dados:', error);
+                document.getElementById('usersTable').innerHTML = 
+                    '<div class="error">Erro ao carregar usuários</div>';
+                document.getElementById('transactionsTable').innerHTML = 
+                    '<div class="error">Erro ao carregar transações</div>';
+                document.getElementById('searchesTable').innerHTML = 
+                    '<div class="error">Erro ao carregar pesquisas</div>';
             }
-            
-            const newUser = {
-                email: email,
-                password: password,
-                credits: 0,
-                created_at: new Date().toISOString()
-            };
-            
-            saveUser(newUser);
-            alert('Conta criada com sucesso! Faça login para continuar.');
-            openLoginModal();
-            errorDiv.style.display = 'none';
         }
         
-        function logout() {
-            currentUser = null;
-            localStorage.removeItem('verificapessoa_current_user');
-            updateUserInterface();
+        function formatDate(dateString) {
+            if (!dateString) return 'N/A';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('pt-BR') + ' ' + date.toLocaleTimeString('pt-BR', {
+                hour: '2-digit',
+                minute: '2-digit'
+            });
         }
         
-        // Purchase functions
-        function buyPackage(packageType, price, credits) {
-            const email = currentUser ? currentUser.email : prompt('Digite seu email para continuar:');
-            if (!email) return;
-            
-            const packageNames = {
+        function getPackageName(packageType) {
+            const packages = {
                 'individual': 'Pesquisa Única',
                 'pack10': 'Pacote 10 Créditos',
                 'pack20': 'Pacote 20 Créditos',
                 'pack50': 'Pacote 50 Créditos'
             };
-            
-            const transaction = saveTransaction({
-                user_email: email,
-                package_type: packageType,
-                amount: price,
-                credits: credits,
-                status: 'pending'
-            });
-            
-            showPaymentModal({
-                transaction_id: transaction.id,
-                package_name: packageNames[packageType],
-                amount: price,
-                credits: credits
-            });
+            return packages[packageType] || packageType;
         }
         
-        function showPaymentModal(paymentData) {
-            const modal = document.getElementById('paymentModal');
-            const content = document.getElementById('paymentContent');
-            
-            content.innerHTML = `
-                <div class="pix-container">
-                    <h4>PIX - ${paymentData.package_name}</h4>
-                    <p><strong>Valor: R$ ${paymentData.amount.toFixed(2).replace('.', ',')}</strong></p>
-                    <p><strong>Créditos: ${paymentData.credits}</strong></p>
-                    
-                    <div class="pix-info">
-                        <strong>Chave PIX:</strong> ${PIX_KEY}<br>
-                        <strong>Favorecido:</strong> ${PIX_NAME}<br>
-                        <strong>Valor:</strong> R$ ${paymentData.amount.toFixed(2).replace('.', ',')}<br>
-                        <strong>Descrição:</strong> ${paymentData.package_name}
-                        <button class="copy-btn" onclick="copyPixKey()">Copiar Chave PIX</button>
-                    </div>
-                    
-                    <p style="color: #999; font-size: 0.9rem; margin: 1rem 0;">
-                        <strong>Instruções:</strong><br>
-                        1. Abra seu app do banco<br>
-                        2. Escolha PIX → Pagar<br>
-                        3. Cole a chave PIX copiada<br>
-                        4. Confirme o valor e favorecido<br>
-                        5. Seus créditos serão adicionados automaticamente
-                    </p>
-                    
-                    <p style="color: #666; font-size: 0.8rem; margin: 1rem 0; text-align: center;">
-                        Ao efetuar o pagamento, você concorda com nossos 
-                        <a href="termos.html" target="_blank" style="color: #999;">Termos de Uso</a>.
-                        Não há reembolso por informações não encontradas ou dados incorretos de terceiros.
-                    </p>
-                    
-                    <div style="display: flex; gap: 1rem;">
-                        <button class="btn-secondary" onclick="simulatePayment(${paymentData.transaction_id}, ${paymentData.credits})">Simular Pagamento</button>
-                        <button class="btn" onclick="closeModal()">Fechar</button>
-                    </div>
-                </div>
-            `;
-            
-            modal.classList.add('active');
+        function getStatusText(status) {
+            const statusMap = {
+                'pending': 'Pendente',
+                'confirmed': 'Confirmado',
+                'cancelled': 'Cancelado'
+            };
+            return statusMap[status] || status;
         }
         
-        function copyPixKey() {
-            navigator.clipboard.writeText(PIX_KEY).then(() => {
-                alert('Chave PIX copiada!');
-            });
+        function logout() {
+            isLoggedIn = false;
+            document.getElementById('loginForm').style.display = 'block';
+            document.getElementById('dashboard').classList.remove('active');
+            document.getElementById('adminUser').value = '';
+            document.getElementById('adminPassword').value = '';
         }
         
-        function simulatePayment(transactionId, credits) {
-            // Simular confirmação de pagamento
-            const transactions = getAllTransactions();
-            const transaction = transactions.find(t => t.id === transactionId);
-            if (transaction) {
-                transaction.status = 'confirmed';
-                transaction.confirmed_at = new Date().toISOString();
-                saveToLocalStorage('transactions', transactions);
-                
-                // Adicionar créditos ao usuário
-                if (currentUser) {
-                    currentUser.credits += credits;
-                    saveUser(currentUser);
-                    saveToLocalStorage('current_user', currentUser);
-                    updateUserInterface();
-                }
-                
-                alert(`Pagamento confirmado! ${credits} créditos adicionados à sua conta.`);
-                closeModal();
+        // Auto-refresh a cada 30 segundos
+        setInterval(() => {
+            if (isLoggedIn) {
+                loadDashboardData();
             }
-        }
+        }, 30000);
         
-        // Close modal when clicking outside
-        window.onclick = function(event) {
-            const modals = document.querySelectorAll('.modal');
-            modals.forEach(modal => {
-                if (event.target === modal) {
-                    closeModal();
-                }
-            });
-        }
-        
-        // Enter key for search
-        document.getElementById('searchInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                performRealSearch();
+        // Carregar dados iniciais
+        setTimeout(() => {
+            if (isLoggedIn) {
+                loadDashboardData();
             }
-        });
-        
-        // Initialize
-        checkUserSession();
+        }, 1000);
     </script>
 </body>
 </html>
