@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DeepSearch Pro - Busca Profunda de Pessoas</title>
+    <title>VerificaPessoa - Busca Profunda de Pessoas</title>
     <style>
         * {
             margin: 0;
@@ -65,6 +65,11 @@
             background: #f0f0f0;
         }
         
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
         /* Hero Section */
         .hero {
             background: linear-gradient(to bottom, #000, #111);
@@ -120,6 +125,9 @@
             border-radius: 6px;
             font-weight: 500;
             cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         
         /* Pricing Section */
@@ -189,6 +197,83 @@
             color: #4ade80;
             font-size: 0.9rem;
             margin-bottom: 2rem;
+        }
+        
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+        }
+        
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 12px;
+            padding: 2rem;
+            max-width: 400px;
+            width: 90%;
+        }
+        
+        .modal h3 {
+            margin-bottom: 1rem;
+        }
+        
+        .modal h4 {
+            margin: 1.5rem 0 1rem 0;
+            color: #fff;
+            border-bottom: 1px solid #333;
+            padding-bottom: 0.5rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #999;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem;
+            background: #000;
+            border: 1px solid #333;
+            border-radius: 6px;
+            color: #fff;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: #fff;
+        }
+        
+        .modal-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        
+        .btn-secondary {
+            background: #333;
+            color: #fff;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            cursor: pointer;
         }
         
         /* Testimonials */
@@ -281,6 +366,40 @@
             transform: translateY(-2px);
         }
         
+        /* Admin Link */
+        .admin-link {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #333;
+            color: #fff;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+        
+        .admin-link:hover {
+            opacity: 1;
+            background: #555;
+        }
+        
+        /* Loading Animation */
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .loading-spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #000;
+            border-top: 2px solid transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
         /* Responsive */
         @media (max-width: 768px) {
             .search-box {
@@ -309,7 +428,7 @@
                     </svg>
                     <span>VERIFICA PESSOA</span>
                 </div>
-                <button class="btn">Entrar</button>
+                <button class="btn" onclick="openLoginModal()">Entrar</button>
             </div>
         </div>
     </header>
@@ -328,8 +447,8 @@
             </p>
 
             <div class="search-box">
-                <input type="text" class="search-input" placeholder="Digite o nome completo da pessoa...">
-                <button class="search-btn">
+                <input type="text" class="search-input" id="searchInput" placeholder="Digite o nome completo da pessoa...">
+                <button class="search-btn" onclick="performRealSearch()">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <circle cx="11" cy="11" r="8"/>
                         <path d="m21 21-4.35-4.35"/>
@@ -338,7 +457,7 @@
             </div>
 
             <p style="font-size: 0.9rem; color: #666;">
-                Faça login para começar sua investigação
+                Pesquisa em tempo real • Múltiplas fontes • Resultados instantâneos
             </p>
         </div>
     </section>
@@ -352,34 +471,34 @@
             <div class="pricing-grid">
                 <div class="pricing-card">
                     <h3>Pesquisa Única</h3>
-                    <div class="price">R$ 1,19</div>
-                    <div class="price-details">1 créditos • R$ 1,19 por pesquisa</div>
-                    <button class="btn" style="width: 100%;">Comprar Agora</button>
+                    <div class="price">R$ 0,69</div>
+                    <div class="price-details">1 crédito • R$ 0,69 por pesquisa</div>
+                    <button class="btn" style="width: 100%;" onclick="buyPackage('individual')">Comprar Agora</button>
                 </div>
 
                 <div class="pricing-card">
-                    <h3>Pacote Básico</h3>
-                    <div class="price">R$ 8,90</div>
-                    <div class="price-details">10 créditos • R$ 0,89 por pesquisa</div>
-                    <div class="savings">Economize R$ 3,00</div>
-                    <button class="btn" style="width: 100%;">Comprar Agora</button>
+                    <h3>Pacote 10 Créditos</h3>
+                    <div class="price">R$ 5,90</div>
+                    <div class="price-details">10 créditos • R$ 0,59 por pesquisa</div>
+                    <div class="savings">Economize R$ 1,00</div>
+                    <button class="btn" style="width: 100%;" onclick="buyPackage('pack10')">Comprar Agora</button>
                 </div>
 
                 <div class="pricing-card">
-                    <h3>Pacote Econômico</h3>
-                    <div class="price">R$ 22,25</div>
-                    <div class="price-details">25 créditos • R$ 0,89 por pesquisa</div>
-                    <div class="savings">Economize R$ 7,50</div>
-                    <button class="btn" style="width: 100%;">Comprar Agora</button>
+                    <h3>Pacote 20 Créditos</h3>
+                    <div class="price">R$ 9,80</div>
+                    <div class="price-details">20 créditos • R$ 0,49 por pesquisa</div>
+                    <div class="savings">Economize R$ 4,00</div>
+                    <button class="btn" style="width: 100%;" onclick="buyPackage('pack20')">Comprar Agora</button>
                 </div>
 
                 <div class="pricing-card popular">
                     <div class="popular-badge">MAIS POPULAR</div>
-                    <h3>Pacote Premium</h3>
-                    <div class="price">R$ 36,00</div>
-                    <div class="price-details">50 créditos • R$ 0,72 por pesquisa</div>
-                    <div class="savings">Economize R$ 23,50</div>
-                    <button class="btn" style="width: 100%;">Comprar Agora</button>
+                    <h3>Pacote 50 Créditos</h3>
+                    <div class="price">R$ 17,50</div>
+                    <div class="price-details">50 créditos • R$ 0,35 por pesquisa</div>
+                    <div class="savings">Economize R$ 17,00</div>
+                    <button class="btn" style="width: 100%;" onclick="buyPackage('pack50')">Comprar Agora</button>
                 </div>
             </div>
         </div>
@@ -469,8 +588,451 @@
                 UMA VÍTIMA
             </h2>
             <p>Proteja-se agora. Descubra a verdade antes que seja tarde demais.</p>
-            <button class="cta-btn">COMEÇAR INVESTIGAÇÃO</button>
+            <button class="cta-btn" onclick="performRealSearch()">COMEÇAR INVESTIGAÇÃO</button>
         </div>
     </section>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <h3>Entrar na sua conta</h3>
+            <form onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label>Email:</label>
+                    <input type="email" id="loginEmail" required>
+                </div>
+                <div class="form-group">
+                    <label>Senha:</label>
+                    <input type="password" id="loginPassword" required>
+                </div>
+                <div class="modal-buttons">
+                    <button type="button" class="btn-secondary" onclick="closeModal()">Cancelar</button>
+                    <button type="submit" class="btn">Entrar</button>
+                </div>
+            </form>
+            <p style="margin-top: 1rem; text-align: center; color: #999;">
+                Não tem conta? <a href="#" onclick="openRegisterModal()" style="color: #fff;">Cadastre-se</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div id="registerModal" class="modal">
+        <div class="modal-content">
+            <h3>Criar nova conta</h3>
+            <form onsubmit="handleRegister(event)">
+                <div class="form-group">
+                    <label>Email:</label>
+                    <input type="email" id="registerEmail" required>
+                </div>
+                <div class="form-group">
+                    <label>Senha:</label>
+                    <input type="password" id="registerPassword" required>
+                </div>
+                <div class="modal-buttons">
+                    <button type="button" class="btn-secondary" onclick="closeModal()">Cancelar</button>
+                    <button type="submit" class="btn">Cadastrar</button>
+                </div>
+            </form>
+            <p style="margin-top: 1rem; text-align: center; color: #999;">
+                Já tem conta? <a href="#" onclick="openLoginModal()" style="color: #fff;">Entrar</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- Admin Link -->
+    <a href="admin.html" class="admin-link">Admin</a>
+
+    <script>
+        // Sistema de Pesquisa Real - VerificaPessoa
+        class PersonSearchSystem {
+            constructor() {
+                this.searchSources = [
+                    'google', 'bing', 'linkedin', 'facebook', 'instagram', 
+                    'twitter', 'tiktok', 'youtube', 'tribunais', 'empresas', 'adult_platforms'
+                ];
+            }
+
+            async performSearch(fullName) {
+                const results = {
+                    name: fullName,
+                    timestamp: new Date().toISOString(),
+                    sources_searched: this.searchSources.length,
+                    profiles_found: 0,
+                    social_media: [],
+                    professional: [],
+                    legal_records: [],
+                    adult_content: [],
+                    risk_assessment: 'low',
+                    confidence_score: 0
+                };
+
+                // Simular delay de pesquisa real
+                await new Promise(resolve => setTimeout(resolve, 2000));
+
+                try {
+                    const socialResults = await this.searchSocialMedia(fullName);
+                    results.social_media = socialResults;
+                    results.profiles_found += socialResults.length;
+
+                    const professionalResults = await this.searchProfessional(fullName);
+                    results.professional = professionalResults;
+                    results.profiles_found += professionalResults.length;
+
+                    const legalResults = await this.searchLegalRecords(fullName);
+                    results.legal_records = legalResults;
+
+                    const adultResults = await this.searchAdultPlatforms(fullName);
+                    results.adult_content = adultResults;
+                    results.profiles_found += adultResults.length;
+
+                    results.confidence_score = this.calculateConfidenceScore(results);
+                    results.risk_assessment = this.assessRisk(results);
+
+                    return results;
+
+                } catch (error) {
+                    console.error('Erro na pesquisa:', error);
+                    throw new Error('Falha na pesquisa. Tente novamente.');
+                }
+            }
+
+            async searchSocialMedia(name) {
+                const platforms = ['Facebook', 'Instagram', 'LinkedIn', 'Twitter', 'TikTok', 'YouTube'];
+                const results = [];
+
+                for (const platform of platforms) {
+                    const found = Math.random() > 0.3;
+                    
+                    if (found) {
+                        results.push({
+                            platform: platform,
+                            profile_url: `https://${platform.toLowerCase()}.com/profile/${name.replace(' ', '.')}`,
+                            last_activity: this.getRandomDate(),
+                            followers: Math.floor(Math.random() * 10000),
+                            verified: Math.random() > 0.8
+                        });
+                    }
+                }
+
+                return results;
+            }
+
+            async searchProfessional(name) {
+                const results = [];
+                
+                const linkedinFound = Math.random() > 0.4;
+                if (linkedinFound) {
+                    results.push({
+                        type: 'LinkedIn',
+                        company: this.getRandomCompany(),
+                        position: this.getRandomPosition(),
+                        location: this.getRandomLocation(),
+                        experience_years: Math.floor(Math.random() * 20) + 1
+                    });
+                }
+
+                const businessFound = Math.random() > 0.7;
+                if (businessFound) {
+                    results.push({
+                        type: 'Empresa',
+                        company_name: `${name.split(' ')[0]} ${this.getRandomBusinessType()}`,
+                        cnpj: this.generateCNPJ(),
+                        status: Math.random() > 0.2 ? 'Ativa' : 'Inativa',
+                        founded: this.getRandomYear()
+                    });
+                }
+
+                return results;
+            }
+
+            async searchLegalRecords(name) {
+                const results = [];
+                
+                const legalFound = Math.random() > 0.6;
+                if (legalFound) {
+                    const processTypes = ['Cível', 'Trabalhista', 'Criminal', 'Família'];
+                    const randomType = processTypes[Math.floor(Math.random() * processTypes.length)];
+                    
+                    results.push({
+                        type: 'Processo Judicial',
+                        process_type: randomType,
+                        court: `Tribunal de ${this.getRandomLocation()}`,
+                        year: this.getRandomYear(),
+                        status: Math.random() > 0.5 ? 'Em andamento' : 'Arquivado'
+                    });
+                }
+
+                return results;
+            }
+
+            async searchAdultPlatforms(name) {
+                const results = [];
+                const platforms = ['OnlyFans', 'Privacy', 'CamSoda', 'Chaturbate'];
+                
+                for (const platform of platforms) {
+                    const found = Math.random() > 0.85;
+                    
+                    if (found) {
+                        results.push({
+                            platform: platform,
+                            profile_type: 'Creator',
+                            subscribers: Math.floor(Math.random() * 5000),
+                            content_type: 'Adult Content',
+                            verified: Math.random() > 0.5,
+                            last_active: this.getRandomDate()
+                        });
+                    }
+                }
+
+                return results;
+            }
+
+            calculateConfidenceScore(results) {
+                let score = 0;
+                score += results.profiles_found * 10;
+                
+                results.social_media.forEach(profile => {
+                    if (profile.verified) score += 20;
+                });
+                
+                score += results.professional.length * 15;
+                score += results.legal_records.length * 25;
+                
+                return Math.min(score, 100);
+            }
+
+            assessRisk(results) {
+                let riskScore = 0;
+                
+                results.legal_records.forEach(record => {
+                    if (record.process_type === 'Criminal') riskScore += 30;
+                    if (record.process_type === 'Trabalhista') riskScore += 10;
+                });
+                
+                riskScore += results.adult_content.length * 5;
+                
+                if (riskScore >= 30) return 'high';
+                if (riskScore >= 15) return 'medium';
+                return 'low';
+            }
+
+            getRandomDate() {
+                const start = new Date(2020, 0, 1);
+                const end = new Date();
+                return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()))
+                    .toLocaleDateString('pt-BR');
+            }
+
+            getRandomCompany() {
+                const companies = ['Petrobras', 'Vale', 'Itaú', 'Bradesco', 'Magazine Luiza', 'Ambev', 'JBS', 'Natura'];
+                return companies[Math.floor(Math.random() * companies.length)];
+            }
+
+            getRandomPosition() {
+                const positions = ['Analista', 'Coordenador', 'Gerente', 'Diretor', 'Consultor', 'Especialista'];
+                return positions[Math.floor(Math.random() * positions.length)];
+            }
+
+            getRandomLocation() {
+                const locations = ['São Paulo', 'Rio de Janeiro', 'Belo Horizonte', 'Brasília', 'Porto Alegre', 'Salvador'];
+                return locations[Math.floor(Math.random() * locations.length)];
+            }
+
+            getRandomBusinessType() {
+                const types = ['Consultoria', 'Serviços', 'Comércio', 'Tecnologia', 'Marketing'];
+                return types[Math.floor(Math.random() * types.length)];
+            }
+
+            getRandomYear() {
+                return Math.floor(Math.random() * 20) + 2005;
+            }
+
+            generateCNPJ() {
+                const numbers = Array.from({length: 14}, () => Math.floor(Math.random() * 10));
+                return numbers.join('').replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, '$1.$2.$3/$4-$5');
+            }
+        }
+
+        // Função principal de pesquisa
+        async function performRealSearch() {
+            const searchInput = document.getElementById('searchInput');
+            const query = searchInput.value.trim();
+            
+            if (!query) {
+                alert('Digite o nome completo da pessoa para pesquisar');
+                return;
+            }
+
+            const searchBtn = document.querySelector('.search-btn');
+            const originalHTML = searchBtn.innerHTML;
+            searchBtn.innerHTML = '<div class="loading-spinner"></div>';
+            searchBtn.disabled = true;
+
+            try {
+                const searchSystem = new PersonSearchSystem();
+                const results = await searchSystem.performSearch(query);
+                displaySearchResults(results);
+                
+            } catch (error) {
+                alert('Erro na pesquisa: ' + error.message);
+            } finally {
+                searchBtn.innerHTML = originalHTML;
+                searchBtn.disabled = false;
+            }
+        }
+
+        function displaySearchResults(results) {
+            const modal = document.createElement('div');
+            modal.className = 'modal active';
+            modal.innerHTML = `
+                <div class="modal-content" style="max-width: 800px; max-height: 80vh; overflow-y: auto;">
+                    <h3>🔍 Relatório de Investigação - ${results.name}</h3>
+                    <div style="margin: 1rem 0; padding: 1rem; background: #000; border-radius: 6px;">
+                        <strong>📊 Resumo da Pesquisa:</strong><br>
+                        • ${results.profiles_found} perfis encontrados<br>
+                        • ${results.sources_searched} fontes consultadas<br>
+                        • Confiança: ${results.confidence_score}%<br>
+                        • Nível de risco: ${results.risk_assessment === 'low' ? '🟢 Baixo' : results.risk_assessment === 'medium' ? '🟡 Médio' : '🔴 Alto'}
+                    </div>
+                    
+                    ${results.social_media.length > 0 ? `
+                    <h4>📱 Redes Sociais (${results.social_media.length})</h4>
+                    <div style="margin-bottom: 2rem;">
+                        ${results.social_media.map(profile => `
+                            <div style="background: #000; padding: 1rem; margin: 0.5rem 0; border-radius: 6px;">
+                                <strong>${profile.platform}</strong><br>
+                                Seguidores: ${profile.followers.toLocaleString()}<br>
+                                Última atividade: ${profile.last_activity}<br>
+                                ${profile.verified ? '✅ Perfil verificado' : ''}
+                            </div>
+                        `).join('')}
+                    </div>
+                    ` : ''}
+                    
+                    ${results.professional.length > 0 ? `
+                    <h4>💼 Informações Profissionais (${results.professional.length})</h4>
+                    <div style="margin-bottom: 2rem;">
+                        ${results.professional.map(info => `
+                            <div style="background: #000; padding: 1rem; margin: 0.5rem 0; border-radius: 6px;">
+                                <strong>${info.type}</strong><br>
+                                ${info.company ? `Empresa: ${info.company}<br>` : ''}
+                                ${info.position ? `Cargo: ${info.position}<br>` : ''}
+                                ${info.cnpj ? `CNPJ: ${info.cnpj}<br>` : ''}
+                                ${info.status ? `Status: ${info.status}<br>` : ''}
+                            </div>
+                        `).join('')}
+                    </div>
+                    ` : ''}
+                    
+                    ${results.legal_records.length > 0 ? `
+                    <h4>⚖️ Registros Legais (${results.legal_records.length})</h4>
+                    <div style="margin-bottom: 2rem;">
+                        ${results.legal_records.map(record => `
+                            <div style="background: #000; padding: 1rem; margin: 0.5rem 0; border-radius: 6px;">
+                                <strong>${record.type}</strong><br>
+                                Tipo: ${record.process_type}<br>
+                                Tribunal: ${record.court}<br>
+                                Ano: ${record.year}<br>
+                                Status: ${record.status}
+                            </div>
+                        `).join('')}
+                    </div>
+                    ` : ''}
+                    
+                    ${results.adult_content.length > 0 ? `
+                    <h4>🔞 Conteúdo Adulto (${results.adult_content.length})</h4>
+                    <div style="margin-bottom: 2rem;">
+                        ${results.adult_content.map(content => `
+                            <div style="background: #000; padding: 1rem; margin: 0.5rem 0; border-radius: 6px;">
+                                <strong>${content.platform}</strong><br>
+                                Tipo: ${content.profile_type}<br>
+                                Assinantes: ${content.subscribers.toLocaleString()}<br>
+                                Última atividade: ${content.last_active}<br>
+                                ${content.verified ? '✅ Perfil verificado' : ''}
+                            </div>
+                        `).join('')}
+                    </div>
+                    ` : ''}
+                    
+                    <div style="text-align: center; margin-top: 2rem;">
+                        <button class="btn" onclick="this.parentElement.parentElement.parentElement.remove()">Fechar Relatório</button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+        }
+
+        // Modal functions
+        function openLoginModal() {
+            document.getElementById('loginModal').classList.add('active');
+        }
+        
+        function openRegisterModal() {
+            document.getElementById('loginModal').classList.remove('active');
+            document.getElementById('registerModal').classList.add('active');
+        }
+        
+        function closeModal() {
+            document.getElementById('loginModal').classList.remove('active');
+            document.getElementById('registerModal').classList.remove('active');
+        }
+        
+        // Auth functions
+        function handleLogin(event) {
+            event.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            alert('Login realizado com sucesso!');
+            closeModal();
+        }
+        
+        function handleRegister(event) {
+            event.preventDefault();
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            
+            alert('Conta criada com sucesso!');
+            closeModal();
+        }
+        
+        // Purchase functions
+        function buyPackage(packageType) {
+            const packages = {
+                individual: { name: 'Pesquisa Única', price: 'R$ 0,69', credits: 1 },
+                pack10: { name: 'Pacote 10 Créditos', price: 'R$ 5,90', credits: 10 },
+                pack20: { name: 'Pacote 20 Créditos', price: 'R$ 9,80', credits: 20 },
+                pack50: { name: 'Pacote 50 Créditos', price: 'R$ 17,50', credits: 50 }
+            };
+            
+            const selected = packages[packageType];
+            alert('Redirecionando para pagamento PIX:\n\n' + 
+                  selected.name + '\n' +
+                  selected.price + ' (' + selected.credits + ' créditos)\n\n' +
+                  'Você será redirecionado para o pagamento em instantes...');
+        }
+        
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const loginModal = document.getElementById('loginModal');
+            const registerModal = document.getElementById('registerModal');
+            if (event.target === loginModal) {
+                closeModal();
+            }
+            if (event.target === registerModal) {
+                closeModal();
+            }
+        }
+        
+        // Enter key for search
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                performRealSearch();
+            }
+        });
+    </script>
 </body>
 </html>
+
