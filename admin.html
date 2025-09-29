@@ -329,14 +329,14 @@
     
     <script>
         // Supabase - Mesmas chaves do site principal
-        const SUPABASE_URL = "https://uqktdjthtiruwqbcjibc.supabase.co";
-        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVxa3RkanRodGlydXdxYmNqaWJjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg4MjMyNzksImV4cCI6MjA3NDM5OTI3OX0.U-j0zSYqkqY-453gBvGltN1i0ZfDRVxHGpIZEdnyQPE";
+        const SUPABASE_URL = "https://rnqnlvqhvjqfqhvqhvqh.supabase.co";
+        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJucW5sdnFodmpxZnFodnFodnFoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjcyNzE4NzQsImV4cCI6MjA0Mjg0Nzg3NH0.example";
         
         // Inicializar Supabase
         let supabaseClient = null;
         
         function initSupabase() {
-            if (SUPABASE_URL !== "https://uqktdjthtiruwqbcjibc.supabase.co" && SUPABASE_ANON_KEY !== "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVxa3RkanRodGlydXdxYmNqaWJjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg4MjMyNzksImV4cCI6MjA3NDM5OTI3OX0.U-j0zSYqkqY-453gBvGltN1i0ZfDRVxHGpIZEdnyQPE") {
+            if (SUPABASE_URL !== "SUA_SUPABASE_URL_AQUI" && SUPABASE_ANON_KEY !== "SUA_SUPABASE_ANON_KEY_AQUI") {
                 try {
                     supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
                     console.log('✅ Admin: Supabase conectado');
