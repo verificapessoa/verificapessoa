@@ -51,53 +51,68 @@
         .logo {
             display: flex;
             align-items: center;
-            gap: 0.5rem;
-            font-size: 1.5rem;
-            font-weight: 300;
-            letter-spacing: -0.02em;
+            font-weight: bold;
+            font-size: 1.25rem;
+            color: #fff;
+            text-decoration: none;
+        }
+        
+        .logo img {
+            height: 30px;
+            margin-right: 0.5rem;
+        }
+        
+        .user-area {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .btn {
+            padding: 0.5rem 1rem;
+            background: #0066ff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 1px solid #0066ff;
+            color: #0066ff;
         }
         
         .user-info {
             display: none;
             align-items: center;
             gap: 1rem;
-            color: #999;
         }
         
         .user-info.active {
             display: flex;
         }
         
-        .btn {
-            background: #fff;
-            color: #000;
-            border: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: 6px;
+        .credits-badge {
+            background: #0066ff;
+            color: #fff;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
             font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        
-        .btn:hover {
-            background: #f0f0f0;
-        }
-        
-        .btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
         }
         
         /* Hero Section */
         .hero {
-            background: linear-gradient(to bottom, #000, #111);
-            padding: 5rem 0;
+            padding: 4rem 0;
             text-align: center;
         }
         
         .hero h1 {
-            font-size: clamp(3rem, 8vw, 6rem);
-            font-weight: 300;
+            font-size: 3.5rem;
+            font-weight: 800;
             margin-bottom: 2rem;
             letter-spacing: -0.02em;
         }
@@ -148,73 +163,157 @@
             justify-content: center;
         }
         
-        /* Pricing Section */
-        .pricing {
-            padding: 5rem 0;
-            background: #111;
+        .search-info {
+            color: #666;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
         }
         
-        .pricing h2 {
+        /* Plans Section */
+        .plans {
+            padding: 4rem 0;
             text-align: center;
+        }
+        
+        .section-title {
             font-size: 2.5rem;
-            font-weight: 300;
+            font-weight: 800;
             margin-bottom: 1rem;
+            letter-spacing: -0.02em;
         }
         
-        .pricing-subtitle {
-            text-align: center;
-            color: #999;
+        .section-subtitle {
+            color: #666;
             margin-bottom: 3rem;
         }
         
-        .pricing-grid {
+        .plans-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 2rem;
             margin-top: 3rem;
         }
         
-        .pricing-card {
-            background: #000;
+        .plan-card {
+            background: #111;
             border: 1px solid #333;
-            border-radius: 12px;
+            border-radius: 10px;
             padding: 2rem;
-            text-align: center;
             position: relative;
+            overflow: hidden;
         }
         
-        .pricing-card.popular {
-            border-color: #fff;
-        }
-        
-        .popular-badge {
+        .plan-card.popular::before {
+            content: "MAIS POPULAR";
             position: absolute;
-            top: -12px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #fff;
-            color: #000;
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
+            top: 10px;
+            right: -30px;
+            background: #0066ff;
+            color: #fff;
+            padding: 0.25rem 2rem;
+            transform: rotate(45deg);
+            font-size: 0.7rem;
+            font-weight: 500;
         }
         
-        .price {
-            font-size: 2.5rem;
-            font-weight: 300;
-            margin: 1rem 0;
-        }
-        
-        .price-details {
-            color: #999;
+        .plan-title {
+            font-size: 1.5rem;
             margin-bottom: 1rem;
         }
         
-        .savings {
-            color: #4ade80;
+        .plan-price {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+        
+        .plan-details {
+            color: #999;
+            margin-bottom: 1.5rem;
             font-size: 0.9rem;
-            margin-bottom: 2rem;
+        }
+        
+        .plan-savings {
+            color: #00cc66;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+        }
+        
+        /* Testimonials */
+        .testimonials {
+            padding: 4rem 0;
+            background: #0a0a0a;
+        }
+        
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .testimonial-card {
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 10px;
+            padding: 1.5rem;
+        }
+        
+        .testimonial-text {
+            font-style: italic;
+            margin-bottom: 1.5rem;
+            color: #ccc;
+        }
+        
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+        }
+        
+        .author-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #333;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 1rem;
+        }
+        
+        .author-info h4 {
+            margin: 0;
+            font-size: 1rem;
+        }
+        
+        .author-info p {
+            margin: 0;
+            color: #666;
+            font-size: 0.8rem;
+        }
+        
+        /* CTA Section */
+        .cta {
+            padding: 6rem 0;
+            text-align: center;
+        }
+        
+        .cta-btn {
+            padding: 1rem 2rem;
+            background: #0066ff;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            cursor: pointer;
+            margin-top: 2rem;
         }
         
         /* Modal */
@@ -225,507 +324,288 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.8);
+            background: rgba(0, 0, 0, 0.8);
             z-index: 1000;
+            align-items: center;
+            justify-content: center;
         }
         
         .modal.active {
             display: flex;
-            align-items: center;
-            justify-content: center;
         }
         
         .modal-content {
             background: #111;
             border: 1px solid #333;
-            border-radius: 12px;
+            border-radius: 10px;
             padding: 2rem;
-            max-width: 500px;
-            width: 90%;
-            max-height: 80vh;
-            overflow-y: auto;
+            width: 100%;
+            max-width: 400px;
+            position: relative;
         }
         
-        .modal h3 {
-            margin-bottom: 1rem;
+        .modal-content h3 {
+            margin-bottom: 1.5rem;
+            text-align: center;
         }
         
-        .modal h4 {
-            margin: 1.5rem 0 1rem 0;
-            color: #fff;
-            border-bottom: 1px solid #333;
-            padding-bottom: 0.5rem;
-        }
-        
-        .form-group {
-            margin-bottom: 1rem;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: #999;
-        }
-        
-        .form-group input {
+        .modal-content input {
             width: 100%;
             padding: 0.75rem;
-            background: #000;
-            border: 1px solid #333;
-            border-radius: 6px;
-            color: #fff;
-        }
-        
-        .form-group input:focus {
-            outline: none;
-            border-color: #fff;
-        }
-        
-        .modal-buttons {
-            display: flex;
-            gap: 1rem;
-            margin-top: 2rem;
-        }
-        
-        .btn-secondary {
-            background: #333;
-            color: #fff;
-            border: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: 6px;
-            cursor: pointer;
-        }
-        
-        .pix-container {
-            text-align: center;
-            padding: 1rem 0;
-        }
-        
-        .pix-info {
-            background: #000;
-            padding: 1rem;
-            border-radius: 6px;
-            margin: 1rem 0;
-            text-align: left;
-        }
-        
-        .copy-btn {
-            background: #333;
-            color: #fff;
-            border: none;
-            padding: 0.5rem 1rem;
+            margin-bottom: 1rem;
+            background: #222;
+            border: 1px solid #444;
             border-radius: 4px;
-            cursor: pointer;
+            color: #fff;
+        }
+        
+        .modal-content input:focus {
+            outline: none;
+            border-color: #0066ff;
+        }
+        
+        .modal-content .btn {
+            width: 100%;
+            margin-top: 1rem;
+        }
+        
+        .modal-content .btn-secondary {
+            background: transparent;
+            border: 1px solid #444;
+            color: #ccc;
+        }
+        
+        .error-message {
+            color: #ff4d4d;
             font-size: 0.9rem;
             margin-top: 0.5rem;
-        }
-        
-        /* Testimonials */
-        .testimonials {
-            padding: 5rem 0;
-            background: #000;
-        }
-        
-        .testimonials h2 {
-            text-align: center;
-            font-size: 2.5rem;
-            font-weight: 300;
-            margin-bottom: 3rem;
-        }
-        
-        .testimonials-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 2rem;
-        }
-        
-        .testimonial {
-            background: #111;
-            border: 1px solid #333;
-            border-radius: 12px;
-            padding: 2rem;
-        }
-        
-        .testimonial-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: start;
-            margin-bottom: 1rem;
-        }
-        
-        .testimonial-author h4 {
-            font-weight: 600;
-            margin-bottom: 0.25rem;
-        }
-        
-        .testimonial-location {
-            color: #999;
-            font-size: 0.9rem;
-        }
-        
-        .testimonial-date {
-            color: #666;
-            font-size: 0.8rem;
-        }
-        
-        .testimonial-text {
-            font-style: italic;
-            line-height: 1.6;
-        }
-        
-        /* CTA Section */
-        .cta {
-            padding: 5rem 0;
-            background: linear-gradient(to bottom, #111, #000);
-            text-align: center;
-        }
-        
-        .cta h2 {
-            font-size: clamp(2rem, 5vw, 3.5rem);
-            font-weight: 300;
-            margin-bottom: 2rem;
-            letter-spacing: -0.02em;
-        }
-        
-        .cta p {
-            font-size: 1.25rem;
-            color: #999;
-            margin-bottom: 3rem;
-        }
-        
-        .cta-btn {
-            background: #fff;
-            color: #000;
-            padding: 1rem 3rem;
-            border: none;
-            border-radius: 6px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        
-        .cta-btn:hover {
-            background: #f0f0f0;
-            transform: translateY(-2px);
+            display: none;
         }
         
         /* Admin Link */
         .admin-link {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: #333;
-            color: #fff;
-            padding: 0.5rem 1rem;
-            border-radius: 6px;
-            text-decoration: none;
+            bottom: 1rem;
+            right: 1rem;
+            color: #333;
             font-size: 0.8rem;
-            opacity: 0.7;
-        }
-        
-        .admin-link:hover {
-            opacity: 1;
-            background: #555;
-        }
-        
-        /* Loading Animation */
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        .loading-spinner {
-            width: 20px;
-            height: 20px;
-            border: 2px solid #000;
-            border-top: 2px solid transparent;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-        
-        .error {
-            color: #ef4444;
-            text-align: center;
-            padding: 1rem;
-        }
-        
-        .success {
-            color: #4ade80;
-            text-align: center;
-            padding: 1rem;
+            text-decoration: none;
         }
         
         /* Responsive */
         @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
             .search-box {
                 flex-direction: column;
             }
             
-            .pricing-grid {
-                grid-template-columns: 1fr;
+            .search-btn {
+                width: 100%;
             }
             
-            .testimonials-grid {
+            .plans-grid {
                 grid-template-columns: 1fr;
+                max-width: 350px;
+                margin-left: auto;
+                margin-right: auto;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
     <header>
         <div class="container">
             <div class="header-content">
-                <div class="logo">
-                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                        <circle cx="12" cy="12" r="3"/>
+                <a href="#" class="logo">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="24" height="24" rx="4" fill="#0066ff"/>
+                        <path d="M12 6C9.79086 6 8 7.79086 8 10C8 12.2091 9.79086 14 12 14C14.2091 14 16 12.2091 16 10C16 7.79086 14.2091 6 12 6Z" fill="white"/>
+                        <path d="M18 18H6C6 15.7909 8.68629 14 12 14C15.3137 14 18 15.7909 18 18Z" fill="white"/>
                     </svg>
-                    <span>VERIFICA PESSOA</span>
-                </div>
-                <div>
-                    <div id="userInfo" class="user-info">
-                        <span id="userEmail"></span>
-                        <span id="userCredits">0 créditos</span>
-                        <button class="btn-secondary" onclick="logout()">Sair</button>
-                    </div>
+                    VERIFICA PESSOA
+                </a>
+                
+                <div class="user-area">
                     <button id="loginBtn" class="btn" onclick="openLoginModal()">Entrar</button>
+                    <div id="userInfo" class="user-info">
+                        <div id="userCredits" class="credits-badge">0 créditos</div>
+                        <span id="userEmail"></span>
+                        <button class="btn btn-outline" onclick="handleLogout()">Sair</button>
+                    </div>
                 </div>
             </div>
         </div>
     </header>
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="container">
-            <h1>
-                VOCÊ SABE COM<br>
-                <span class="subtitle">QUEM ESTÁ?</span>
-            </h1>
-            
-            <p>
-                Descubra a verdade sobre qualquer pessoa em segundos.<br>
-                <strong>Proteja sua família. Proteja seu futuro.</strong>
+    <main>
+        <section class="hero">
+            <div class="container">
+                <h1>VOCÊ SABE COM<br>QUEM ESTÁ?</h1>
+                <p>Descubra a verdade sobre qualquer pessoa em segundos.<br>Proteja sua família. Proteja seu futuro.</p>
+                
+                <div class="search-box">
+                    <input type="text" id="searchInput" class="search-input" placeholder="Digite o nome completo da pessoa...">
+                    <button id="searchButton" class="search-btn" onclick="performRealSearch()">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M21 21L16.65 16.65M19 11C19 15.4183 15.4183 19 11 19C6.58172 19 3 15.4183 3 11C3 6.58172 6.58172 3 11 3C15.4183 3 19 6.58172 19 11Z" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                </div>
+                
+                <div class="search-info">
+                    🔍 Pesquisa em tempo real • 📊 Múltiplas fontes • ⚡ Resultados instantâneos<br>
+                    <strong>✅ 100% Informações Públicas Legais</strong>
+                </div>
+            </div>
+        </section>
+
+        <section class="plans">
+            <div class="container">
+                <h2 class="section-title">ESCOLHA SEU PLANO</h2>
+                <p class="section-subtitle">Investigações profissionais ao seu alcance</p>
+                
+                <div class="plans-grid">
+                    <div class="plan-card">
+                        <h3 class="plan-title">Pesquisa Única</h3>
+                        <div class="plan-price">R$ 0,69</div>
+                        <div class="plan-details">1 crédito • R$ 0,69 por pesquisa</div>
+                        <button class="btn" onclick="handlePurchase('individual')">Comprar Agora</button>
+                    </div>
+                    
+                    <div class="plan-card">
+                        <h3 class="plan-title">Pacote 10 Créditos</h3>
+                        <div class="plan-price">R$ 5,90</div>
+                        <div class="plan-details">10 créditos • R$ 0,59 por pesquisa</div>
+                        <div class="plan-savings">Economize R$ 1,00</div>
+                        <button class="btn" onclick="handlePurchase('pack10')">Comprar Agora</button>
+                    </div>
+                    
+                    <div class="plan-card popular">
+                        <h3 class="plan-title">Pacote 20 Créditos</h3>
+                        <div class="plan-price">R$ 9,80</div>
+                        <div class="plan-details">20 créditos • R$ 0,49 por pesquisa</div>
+                        <div class="plan-savings">Economize R$ 4,00</div>
+                        <button class="btn" onclick="handlePurchase('pack20')">Comprar Agora</button>
+                    </div>
+                    
+                    <div class="plan-card">
+                        <h3 class="plan-title">Pacote 50 Créditos</h3>
+                        <div class="plan-price">R$ 17,50</div>
+                        <div class="plan-details">50 créditos • R$ 0,35 por pesquisa</div>
+                        <div class="plan-savings">Economize R$ 17,00</div>
+                        <button class="btn" onclick="handlePurchase('pack50')">Comprar Agora</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="testimonials">
+            <div class="container">
+                <h2 class="section-title">ELES DESCOBRIRAM A VERDADE</h2>
+                <p class="section-subtitle">Histórias reais de pessoas que se protegeram</p>
+                
+                <div class="testimonials-grid">
+                    <div class="testimonial-card">
+                        <div class="testimonial-text">
+                            "Descobri que meu namorado tinha um passado que ele escondeu de mim. Salvou meu futuro!"
+                        </div>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">M</div>
+                            <div class="author-info">
+                                <h4>Maria Silva</h4>
+                                <p>São Paulo, SP</p>
+                                <p>23 de Setembro, 2025</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="testimonial-card">
+                        <div class="testimonial-text">
+                            "Encontrei informações sobre um sócio que me ajudaram a evitar um golpe de R$ 50.000."
+                        </div>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">C</div>
+                            <div class="author-info">
+                                <h4>Carlos Mendes</h4>
+                                <p>Rio de Janeiro, RJ</p>
+                                <p>23 de Setembro, 2025</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="testimonial-card">
+                        <div class="testimonial-text">
+                            "Minha filha estava namorando alguém perigoso. Consegui protegê-la a tempo."
+                        </div>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">A</div>
+                            <div class="author-info">
+                                <h4>Ana Costa</h4>
+                                <p>Belo Horizonte, MG</p>
+                                <p>22 de Setembro, 2025</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="cta">
+            <div class="container">
+                <h2 class="section-title">NÃO SEJA MAIS<br>UMA VÍTIMA</h2>
+                <p>Proteja-se agora. Descubra a verdade antes que seja tarde demais.</p>
+                <button class="cta-btn" onclick="scrollToSearch()">COMEÇAR INVESTIGAÇÃO</button>
+            </div>
+        </section>
+    </main>
+
+    <footer style="background: #111; border-top: 1px solid #333; padding: 2rem 0; margin-top: 3rem;">
+        <div class="container" style="text-align: center;">
+            <p style="color: #666; margin-bottom: 1rem;">
+                © 2025 VerificaPessoa. Todos os direitos reservados.
             </p>
-
-            <div class="search-box">
-                <input type="text" class="search-input" id="searchInput" placeholder="Digite o nome completo da pessoa...">
-                <button class="search-btn" onclick="performRealSearch()">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="11" cy="11" r="8"/>
-                        <path d="m21 21-4.35-4.35"/>
-                    </svg>
-                </button>
-            </div>
-
-            <p style="font-size: 0.9rem; color: #666;">
-                🔍 Pesquisa em tempo real • 📊 Múltiplas fontes • ⚡ Resultados instantâneos<br>
-                <strong style="color: #4ade80;">✅ 100% Informações Públicas Legais</strong>
-            </p>
-        </div>
-    </section>
-
-    <!-- Pricing Section -->
-    <section class="pricing">
-        <div class="container">
-            <h2>ESCOLHA SEU PLANO</h2>
-            <p class="pricing-subtitle">Investigações profissionais ao seu alcance</p>
-            
-            <div class="pricing-grid">
-                <div class="pricing-card">
-                    <h3>Pesquisa Única</h3>
-                    <div class="price">R$ 0,69</div>
-                    <div class="price-details">1 crédito • R$ 0,69 por pesquisa</div>
-                    <button class="btn" style="width: 100%;" onclick="buyPackage('individual', 0.69, 1)">Comprar Agora</button>
-                </div>
-
-                <div class="pricing-card">
-                    <h3>Pacote 10 Créditos</h3>
-                    <div class="price">R$ 5,90</div>
-                    <div class="price-details">10 créditos • R$ 0,59 por pesquisa</div>
-                    <div class="savings">Economize R$ 1,00</div>
-                    <button class="btn" style="width: 100%;" onclick="buyPackage('pack10', 5.90, 10)">Comprar Agora</button>
-                </div>
-
-                <div class="pricing-card">
-                    <h3>Pacote 20 Créditos</h3>
-                    <div class="price">R$ 9,80</div>
-                    <div class="price-details">20 créditos • R$ 0,49 por pesquisa</div>
-                    <div class="savings">Economize R$ 4,00</div>
-                    <button class="btn" style="width: 100%;" onclick="buyPackage('pack20', 9.80, 20)">Comprar Agora</button>
-                </div>
-
-                <div class="pricing-card popular">
-                    <div class="popular-badge">MAIS POPULAR</div>
-                    <h3>Pacote 50 Créditos</h3>
-                    <div class="price">R$ 17,50</div>
-                    <div class="price-details">50 créditos • R$ 0,35 por pesquisa</div>
-                    <div class="savings">Economize R$ 17,00</div>
-                    <button class="btn" style="width: 100%;" onclick="buyPackage('pack50', 17.50, 50)">Comprar Agora</button>
-                </div>
+            <div style="display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap;">
+                <a href="termos.html" style="color: #999; text-decoration: none; font-size: 0.9rem;">Termos de Uso</a>
+                <a href="termos.html#privacidade" style="color: #999; text-decoration: none; font-size: 0.9rem;">Política de Privacidade</a>
+                <a href="mailto:contato@verificapessoa.com" style="color: #999; text-decoration: none; font-size: 0.9rem;">Contato</a>
             </div>
         </div>
-    </section>
-
-    <!-- Testimonials -->
-    <section class="testimonials">
-        <div class="container">
-            <h2>ELES DESCOBRIRAM A VERDADE</h2>
-            <p style="text-align: center; color: #999; margin-bottom: 3rem;">Histórias reais de pessoas que se protegeram</p>
-            
-            <div class="testimonials-grid">
-                <div class="testimonial">
-                    <div class="testimonial-header">
-                        <div class="testimonial-author">
-                            <h4>Maria Silva</h4>
-                            <div class="testimonial-location">São Paulo, SP</div>
-                        </div>
-                        <div class="testimonial-date">23 de Setembro, 2025</div>
-                    </div>
-                    <p class="testimonial-text">"Descobri que meu namorado tinha um passado que ele escondeu de mim. Salvou meu futuro!"</p>
-                </div>
-
-                <div class="testimonial">
-                    <div class="testimonial-header">
-                        <div class="testimonial-author">
-                            <h4>Carlos Mendes</h4>
-                            <div class="testimonial-location">Rio de Janeiro, RJ</div>
-                        </div>
-                        <div class="testimonial-date">23 de Setembro, 2025</div>
-                    </div>
-                    <p class="testimonial-text">"Encontrei informações sobre um sócio que me ajudaram a evitar um golpe de R$ 50.000."</p>
-                </div>
-
-                <div class="testimonial">
-                    <div class="testimonial-header">
-                        <div class="testimonial-author">
-                            <h4>Ana Costa</h4>
-                            <div class="testimonial-location">Belo Horizonte, MG</div>
-                        </div>
-                        <div class="testimonial-date">22 de Setembro, 2025</div>
-                    </div>
-                    <p class="testimonial-text">"Minha filha estava namorando alguém perigoso. Consegui protegê-la a tempo."</p>
-                </div>
-
-                <div class="testimonial">
-                    <div class="testimonial-header">
-                        <div class="testimonial-author">
-                            <h4>Roberto Lima</h4>
-                            <div class="testimonial-location">Brasília, DF</div>
-                        </div>
-                        <div class="testimonial-date">22 de Setembro, 2025</div>
-                    </div>
-                    <p class="testimonial-text">"Descobri que meu funcionário tinha antecedentes criminais. Evitei problemas na empresa."</p>
-                </div>
-
-                <div class="testimonial">
-                    <div class="testimonial-header">
-                        <div class="testimonial-author">
-                            <h4>Fernanda Oliveira</h4>
-                            <div class="testimonial-location">Porto Alegre, RS</div>
-                        </div>
-                        <div class="testimonial-date">22 de Setembro, 2025</div>
-                    </div>
-                    <p class="testimonial-text">"Investiguei meu ex-marido e descobri bens ocultos. Consegui meus direitos na justiça."</p>
-                </div>
-
-                <div class="testimonial">
-                    <div class="testimonial-header">
-                        <div class="testimonial-author">
-                            <h4>João Santos</h4>
-                            <div class="testimonial-location">Recife, PE</div>
-                        </div>
-                        <div class="testimonial-date">22 de Setembro, 2025</div>
-                    </div>
-                    <p class="testimonial-text">"Verifiquei um inquilino antes de alugar. Descobri que tinha histórico de calote."</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- CTA Section -->
-    <section class="cta">
-        <div class="container">
-            <h2>
-                NÃO SEJA MAIS<br>
-                UMA VÍTIMA
-            </h2>
-            <p>Proteja-se agora. Descubra a verdade antes que seja tarde demais.</p>
-            <button class="cta-btn" onclick="performRealSearch()">COMEÇAR INVESTIGAÇÃO</button>
-        </div>
-    </section>
+    </footer>
+    
+    <a href="admin.html" class="admin-link">Admin</a>
 
     <!-- Login Modal -->
     <div id="loginModal" class="modal">
         <div class="modal-content">
-            <h3>Entrar na sua conta</h3>
+            <h3>Entrar</h3>
             <form onsubmit="handleLogin(event)">
-                <div class="form-group">
-                    <label>Email:</label>
-                    <input type="email" id="loginEmail" required>
-                </div>
-                <div class="form-group">
-                    <label>Senha:</label>
-                    <input type="password" id="loginPassword" required>
-                </div>
-                <div class="modal-buttons">
-                    <button type="button" class="btn-secondary" onclick="closeModal()">Cancelar</button>
-                    <button type="submit" class="btn">Entrar</button>
-                </div>
-            </form>
-            <div id="loginError" class="error" style="display: none;"></div>
-            <p style="text-align: center; margin-top: 1rem; color: #ccc;">
-                Não tem conta? <a href="#" onclick="openRegisterModal()" style="color: #fff;">Cadastre-se</a><br>
-                <a href="#" onclick="openForgotPasswordModal()" style="color: #4ade80; font-size: 0.9rem;">Esqueci minha senha</a>
-            </p>
-        </div>
-    </div>
-    <!-- Register Modal -->
-    <div id="registerModal" class="modal">
-        <div class="modal-content">
-            <h3>Criar Conta</h3>
-            <form onsubmit="handleRegister(event)">
-                <input type="email" id="registerEmail" placeholder="Email" required>
-                <input type="password" id="registerPassword" placeholder="Senha" required>
-                <input type="password" id="confirmPassword" placeholder="Confirmar Senha" required>
-                <div class="checkbox-container">
-                    <input type="checkbox" id="acceptTerms" required>
-                    <label for="acceptTerms">
-                        Aceito os <a href="termos.html" target="_blank">Termos de Uso</a> e Política de Privacidade
-                    </label>
-                </div>
-                <div id="registerError" class="error-message"></div>
-                <button type="submit" class="btn">Criar Conta</button>
-                <button type="button" class="btn-secondary" onclick="openLoginModal()">Já tenho conta</button>
-                <button type="button" class="btn-secondary" onclick="closeModal()">Fechar</button>
+                <input type="email" id="loginEmail" placeholder="Email" required>
+                <input type="password" id="loginPassword" placeholder="Senha" required>
+                <div id="loginError" class="error-message"></div>
+                <button type="submit" class="btn">Entrar</button>
+                <button type="button" class="btn btn-secondary" onclick="openRegisterModal()">Criar Conta</button>
+                <button type="button" class="btn btn-secondary" onclick="closeModal()">Fechar</button>
             </form>
         </div>
     </div>
 
-    <!-- Forgot Password Modal -->
-    <div id="forgotPasswordModal" class="modal">
+    <!-- Register Modal -->
+    <div id="registerModal" class="modal">
         <div class="modal-content">
-            <h3>Recuperar Senha</h3>
-            <p style="color: #ccc; margin-bottom: 1rem;">
-                Digite seu email para receber as instruções de recuperação de senha.
-            </p>
-            <form onsubmit="handleForgotPassword(event)">
-                <input type="email" id="forgotEmail" placeholder="Digite seu email" required>
-                <div id="forgotError" class="error-message"></div>
-                <div id="forgotSuccess" class="success-message" style="display: none; color: #4ade80; margin: 1rem 0;"></div>
-                <button type="submit" class="btn">Enviar Instruções</button>
-                <button type="button" class="btn-secondary" onclick="openLoginModal()">Voltar ao Login</button>
-                <button type="button" class="btn-secondary" onclick="closeModal()">Fechar</button>
+            <h3>Cadastrar</h3>
+            <form onsubmit="handleRegister(event)">
+                <input type="text" id="registerName" placeholder="Nome Completo" required>
+                <input type="email" id="registerEmail" placeholder="Email" required>
+                <input type="password" id="registerPassword" placeholder="Senha" required minlength="6">
+                <input type="password" id="registerPasswordConfirm" placeholder="Confirmar Senha" required minlength="6">
+                <div id="registerError" class="error-message"></div>
+                <button type="submit" class="btn">Cadastrar</button>
+                <button type="button" class="btn btn-secondary" onclick="openLoginModal()">Já tenho conta</button>
+                <button type="button" class="btn btn-secondary" onclick="closeModal()">Fechar</button>
             </form>
-        </div>
-    </div>e="submit" class="btn">Cadastrar</button>
-                </div>
-            </form>
-            <div id="registerError" class="error" style="display: none;"></div>
-            <p style="margin-top: 1rem; text-align: center; color: #999;">
-                Já tem conta? <a href="#" onclick="openLoginModal()" style="color: #fff;">Entrar</a>
-            </p>
         </div>
     </div>
 
@@ -737,35 +617,11 @@
         </div>
     </div>
 
-    <!-- Footer -->
-    <footer style="background: #111; border-top: 1px solid #333; padding: 2rem 0; margin-top: 3rem;">
-        <div class="container" style="text-align: center;">
-            <p style="color: #666; margin-bottom: 1rem;">
-                © 2025 VerificaPessoa. Todos os direitos reservados.
-            </p>
-            <div style="display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap;">
-                <a href="termos.html" style="color: #999; text-decoration: none; font-size: 0.9rem;">Termos de Uso</a>
-                <a href="termos.html#privacidade" style="color: #999; text-decoration: none; font-size: 0.9rem;">Política de Privacidade</a>
-                <a href="mailto:contato@verificapessoa.com" style="color: #999; text-decoration: none; font-size: 0.9rem;">Contato</a>
-            </div>
-            <p style="color: #666; font-size: 0.8rem; margin-top: 1rem;">
-                🔒 Plataforma de agregação de <strong>informações 100% públicas</strong> • Não coletamos dados privados<br>
-                📋 Não somos responsáveis por dados de terceiros • Apenas facilitamos o acesso a informações já disponíveis
-            </p>
-        </div>
-    </footer>
-
-    <!-- Admin Link -->
-    <a href="admin.html" class="admin-link">Admin</a>
-
     <script>
-            // Configurações PIX
-        const PIX_KEY = "3656e000-acb3-4645-a176-034c4d9ba6df";
-        const PIX_NAME = "Verifica Pessoa";
-        
         // Mercado Pago - Substitua pelas suas chaves reais
         const MP_PUBLIC_KEY = "APP_USR-aff32c11-93e2-4ed5-8a5a-9e2ca4405766";
         const MP_ACCESS_TOKEN = "APP_USR-6850941285056243-092512-017e23d3c41ef7b0c005df7970bf13a1-94875335";
+        const PIX_KEY = "3656e000-acb3-4645-a176-034c4d9ba6df";
         
         // Supabase - Substitua pelas suas chaves reais
         const SUPABASE_URL = "https://uqktdjthtiruwqbcjibc.supabase.co";
@@ -775,257 +631,179 @@
         let supabaseClient = null;
         
         function initSupabase() {
-            if (SUPABASE_URL !== "https://uqktdjthtiruwqbcjibc.supabase.co" && SUPABASE_ANON_KEY !== "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVxa3RkanRodGlydXdxYmNqaWJjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg4MjMyNzksImV4cCI6MjA3NDM5OTI3OX0.U-j0zSYqkqY-453gBvGltN1i0ZfDRVxHGpIZEdnyQPE") {
-                try {
-                    supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-                    console.log('✅ Supabase conectado com sucesso');
-                    return true;
-                } catch (error) {
-                    console.error('❌ Erro ao conectar Supabase:', error);
-                    return false;
-                }
-            } else {
-                console.log('⚠️ Supabase não configurado, usando localStorage');
+            try {
+                supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                console.log('✅ Supabase conectado com sucesso');
+                return true;
+            } catch (error) {
+                console.error('❌ Erro ao conectar Supabase:', error);
+                alert('Erro ao conectar ao banco de dados. Por favor, tente novamente mais tarde.');
                 return false;
             }
         }
         
-        let currentUser = null;
+        // Inicializar Mercado Pago
+        const mp = new MercadoPago(MP_PUBLIC_KEY);
         
-        // Sistema de dados local (simula banco de dados)
-        // Funções híbridas Supabase + localStorage
+        // Variáveis globais
+        let currentUser = null;
+        let paymentVerificationInterval = null;
+        
+        // Funções de utilidade
+        function generateId() {
+            return Date.now().toString(36) + Math.random().toString(36).substr(2);
+        }
+        
+        // Funções de usuário
         async function saveUser(user) {
             try {
-                if (supabaseClient) {
-                    const { data, error } = await supabaseClient
-                        .from('users')
-                        .upsert([{
-                            email: user.email,
-                            password: user.password,
-                            credits: user.credits || 0,
-                            created_at: user.created_at || new Date().toISOString()
-                        }], { 
-                            onConflict: 'email'
-                        });
-                    
-                    if (!error) {
-                        console.log('✅ Usuário salvo no Supabase:', user.email);
-                        return true;
-                    }
+                if (!supabaseClient) {
+                    alert('Erro de conexão com o banco de dados.');
+                    return false;
                 }
+                
+                const { data, error } = await supabaseClient
+                    .from('users')
+                    .insert([{
+                        id: generateId(),
+                        email: user.email,
+                        name: user.name,
+                        password: user.password,
+                        credits: user.credits || 0,
+                        created_at: new Date().toISOString()
+                    }]);
+                
+                if (error) {
+                    console.error('❌ Erro ao salvar usuário:', error);
+                    return false;
+                }
+                
+                console.log('✅ Usuário salvo com sucesso:', user.email);
+                return true;
             } catch (error) {
-                console.error('❌ Erro Supabase, usando localStorage:', error);
+                console.error('❌ Erro ao salvar usuário:', error);
+                return false;
             }
-            
-            // Fallback localStorage
-            const users = getFromLocalStorage('users') || [];
-            const existingIndex = users.findIndex(u => u.email === user.email);
-            if (existingIndex >= 0) {
-                users[existingIndex] = user;
-            } else {
-                users.push(user);
-            }
-            saveToLocalStorage('users', users);
-            console.log('💾 Usuário salvo no localStorage:', user.email);
-            return true;
         }
         
         async function getUser(email) {
             try {
-                if (supabaseClient) {
-                    const { data, error } = await supabaseClient
-                        .from('users')
-                        .select('*')
-                        .eq('email', email)
-                        .single();
-                    
-                    if (!error && data) {
-                        console.log('✅ Usuário encontrado no Supabase:', email);
-                        return data;
-                    }
+                if (!supabaseClient) {
+                    alert('Erro de conexão com o banco de dados.');
+                    return null;
                 }
+                
+                const { data, error } = await supabaseClient
+                    .from('users')
+                    .select('*')
+                    .eq('email', email)
+                    .single();
+                
+                if (error) {
+                    console.error('❌ Erro ao buscar usuário:', error);
+                    return null;
+                }
+                
+                return data;
             } catch (error) {
-                console.error('❌ Erro Supabase, usando localStorage:', error);
+                console.error('❌ Erro ao buscar usuário:', error);
+                return null;
             }
-            
-            // Fallback localStorage
-            const users = getFromLocalStorage('users') || [];
-            const user = users.find(u => u.email === email);
-            if (user) console.log('💾 Usuário encontrado no localStorage:', email);
-            return user;
         }
         
-        async function getAllUsers() {
+        async function updateUserCredits(email, credits) {
             try {
-                if (supabaseClient) {
-                    const { data, error } = await supabaseClient
-                        .from('users')
-                        .select('*')
-                        .order('created_at', { ascending: false });
-                    
-                    if (!error && data) {
-                        console.log('✅ Usuários carregados do Supabase:', data.length);
-                        return data;
-                    }
+                if (!supabaseClient) {
+                    alert('Erro de conexão com o banco de dados.');
+                    return null;
                 }
+                
+                const user = await getUser(email);
+                if (!user) {
+                    return null;
+                }
+                
+                const newCredits = (user.credits || 0) + credits;
+                
+                const { error } = await supabaseClient
+                    .from('users')
+                    .update({ credits: newCredits })
+                    .eq('email', email);
+                
+                if (error) {
+                    console.error('❌ Erro ao atualizar créditos:', error);
+                    return null;
+                }
+                
+                return newCredits;
             } catch (error) {
-                console.error('❌ Erro Supabase, usando localStorage:', error);
+                console.error('❌ Erro ao atualizar créditos:', error);
+                return null;
             }
-            
-            // Fallback localStorage
-            const users = getFromLocalStorage('users') || [];
-            console.log('💾 Usuários carregados do localStorage:', users.length);
-            return users;
         }
         
+        // Funções de transação
         async function saveTransaction(transaction) {
             try {
-                if (supabaseClient) {
-                    const { data, error } = await supabaseClient
-                        .from('transactions')
-                        .insert([{
-                            user_email: transaction.user_email,
-                            package_type: transaction.package_type,
-                            amount: transaction.amount,
-                            credits: transaction.credits,
-                            status: transaction.status || 'pending',
-                            created_at: new Date().toISOString()
-                        }])
-                        .select()
-                        .single();
-                    
-                    if (!error && data) {
-                        console.log('✅ Transação salva no Supabase:', data.id);
-                        return data;
-                    }
+                if (!supabaseClient) {
+                    alert('Erro de conexão com o banco de dados.');
+                    return false;
                 }
+                
+                const { error } = await supabaseClient
+                    .from('transactions')
+                    .insert([{
+                        id: transaction.id || generateId(),
+                        user_email: transaction.user_email,
+                        package_type: transaction.package_type,
+                        amount: transaction.amount,
+                        credits: transaction.credits,
+                        status: transaction.status,
+                        created_at: new Date().toISOString()
+                    }]);
+                
+                if (error) {
+                    console.error('❌ Erro ao salvar transação:', error);
+                    return false;
+                }
+                
+                return true;
             } catch (error) {
-                console.error('❌ Erro Supabase, usando localStorage:', error);
+                console.error('❌ Erro ao salvar transação:', error);
+                return false;
             }
-            
-            // Fallback localStorage
-            const transactions = getFromLocalStorage('transactions') || [];
-            transaction.id = Date.now();
-            transaction.created_at = new Date().toISOString();
-            transactions.push(transaction);
-            saveToLocalStorage('transactions', transactions);
-            console.log('💾 Transação salva no localStorage:', transaction.id);
-            return transaction;
         }
         
-        async function getAllTransactions() {
-            try {
-                if (supabaseClient) {
-                    const { data, error } = await supabaseClient
-                        .from('transactions')
-                        .select('*')
-                        .order('created_at', { ascending: false });
-                    
-                    if (!error && data) {
-                        console.log('✅ Transações carregadas do Supabase:', data.length);
-                        return data;
-                    }
-                }
-            } catch (error) {
-                console.error('❌ Erro Supabase, usando localStorage:', error);
-            }
-            
-            // Fallback localStorage
-            const transactions = getFromLocalStorage('transactions') || [];
-            console.log('💾 Transações carregadas do localStorage:', transactions.length);
-            return transactions;
-        }
-        
+        // Funções de busca
         async function saveSearch(search) {
             try {
-                if (supabaseClient) {
-                    const { data, error } = await supabaseClient
-                        .from('searches')
-                        .insert([{
-                            user_email: search.user_email,
-                            search_name: search.search_name,
-                            credits_used: search.credits_used || 1,
-                            results: JSON.stringify(search.results),
-                            created_at: new Date().toISOString()
-                        }])
-                        .select()
-                        .single();
-                    
-                    if (!error && data) {
-                        console.log('✅ Pesquisa salva no Supabase:', data.id);
-                        return data;
-                    }
+                if (!supabaseClient) {
+                    alert('Erro de conexão com o banco de dados.');
+                    return false;
                 }
-            } catch (error) {
-                console.error('❌ Erro Supabase, usando localStorage:', error);
-            }
-            
-            // Fallback localStorage
-            const searches = getFromLocalStorage('searches') || [];
-            search.id = Date.now();
-            search.created_at = new Date().toISOString();
-            searches.push(search);
-            saveToLocalStorage('searches', searches);
-            console.log('💾 Pesquisa salva no localStorage:', search.id);
-            return search;
-        }
-        
-        async function getAllSearches() {
-            try {
-                if (supabaseClient) {
-                    const { data, error } = await supabaseClient
-                        .from('searches')
-                        .select('*')
-                        .order('created_at', { ascending: false });
-                    
-                    if (!error && data) {
-                        // Parse results JSON
-                        data.forEach(search => {
-                            if (typeof search.results === 'string') {
-                                try {
-                                    search.results = JSON.parse(search.results);
-                                } catch (e) {
-                                    search.results = {};
-                                }
-                            }
-                        });
-                        console.log('✅ Pesquisas carregadas do Supabase:', data.length);
-                        return data;
-                    }
+                
+                const { error } = await supabaseClient
+                    .from('searches')
+                    .insert([{
+                        id: search.id || generateId(),
+                        user_email: search.user_email,
+                        search_term: search.search_term,
+                        created_at: new Date().toISOString()
+                    }]);
+                
+                if (error) {
+                    console.error('❌ Erro ao salvar busca:', error);
+                    return false;
                 }
+                
+                return true;
             } catch (error) {
-                console.error('❌ Erro Supabase, usando localStorage:', error);
-            }
-            
-            // Fallback localStorage
-            const searches = getFromLocalStorage('searches') || [];
-            console.log('💾 Pesquisas carregadas do localStorage:', searches.length);
-            return searches;
-        }
-        
-        // Funções auxiliares localStorage (fallback)
-        function saveToLocalStorage(key, data) {
-            localStorage.setItem('verificapessoa_' + key, JSON.stringify(data));
-        }
-        
-        function getFromLocalStorage(key) {
-            const data = localStorage.getItem('verificapessoa_' + key);
-            return data ? JSON.parse(data) : null;
-        }
-        
-
-        
-
-        
-        // Verificar se usuário está logado
-        function checkUserSession() {
-            const savedUser = getFromLocalStorage('current_user');
-            if (savedUser) {
-                currentUser = savedUser;
-                updateUserInterface();
+                console.error('❌ Erro ao salvar busca:', error);
+                return false;
             }
         }
         
+        // Funções de UI
         function updateUserInterface() {
             if (currentUser) {
                 document.getElementById('loginBtn').style.display = 'none';
@@ -1038,974 +816,10 @@
             }
         }
         
-        // Sistema de pesquisa REAL na internet usando APIs
-        class PersonSearchSystem {
-            constructor() {
-                this.searchSources = [
-                    'Google Search', 'LinkedIn', 'Facebook', 'Instagram', 
-                    'Tribunais', 'Receita Federal', 'Cartórios', 'Universidades'
-                ];
-                this.searchProgress = 0;
-                this.proxyUrl = 'https://api.allorigins.win/get?url=';
-                this.googleApiKey = 'AIzaSyBOti4mM-6x9WDnZIjIeyEU21OpBXqWBgw';
-                this.searchEngineId = '017576662512468239146:omuauf_lfve';
-            }
-
-            async performSearch(fullName) {
-                const results = {
-                    name: fullName,
-                    timestamp: new Date().toISOString(),
-                    sources_searched: 0,
-                    profiles_found: 0,
-                    social_media: [],
-                    professional: [],
-                    legal_records: [],
-                    family_info: [],
-                    education: [],
-                    search_queries: [],
-                    real_data_found: [],
-                    risk_assessment: 'low',
-                    confidence_score: 0
-                };
-
-                try {
-                    // 1. Busca REAL no Google
-                    this.updateSearchProgress('🔍 Buscando no Google...', 10);
-                    await this.searchGoogleReal(fullName, results);
-                    
-                    // 2. Busca REAL no LinkedIn
-                    this.updateSearchProgress('💼 Verificando LinkedIn...', 25);
-                    await this.searchLinkedInReal(fullName, results);
-                    
-                    // 3. Busca REAL no Facebook
-                    this.updateSearchProgress('📘 Procurando no Facebook...', 40);
-                    await this.searchFacebookReal(fullName, results);
-                    
-                    // 4. Busca REAL no Instagram
-                    this.updateSearchProgress('📷 Verificando Instagram...', 55);
-                    await this.searchInstagramReal(fullName, results);
-                    
-                    // 5. Busca REAL em Tribunais
-                    this.updateSearchProgress('⚖️ Consultando tribunais...', 70);
-                    await this.searchTribunaisReal(fullName, results);
-                    
-                    // 6. Busca REAL na Receita Federal
-                    this.updateSearchProgress('🏢 Verificando Receita Federal...', 85);
-                    await this.searchReceitaFederalReal(fullName, results);
-                    
-                    // 7. Análise de família
-                    this.updateSearchProgress('👨‍👩‍👧‍👦 Analisando vínculos familiares...', 95);
-                    await this.searchFamilyReal(fullName, results);
-                    
-                    // 8. Finalização
-                    results.confidence_score = this.calculateConfidenceScore(results);
-                    results.risk_assessment = this.assessRisk(results);
-                    results.sources_searched = this.searchSources.length;
-                    
-                    this.updateSearchProgress('✅ Relatório concluído!', 100);
-                    
-                    return results;
-
-                } catch (error) {
-                    console.error('Erro na pesquisa real:', error);
-                    throw new Error('Falha na busca real. Verifique sua conexão e tente novamente.');
-                }
-            }
-
-            updateSearchProgress(message, percentage) {
-                const progressElement = document.getElementById('searchProgress');
-                if (progressElement) {
-                    progressElement.innerHTML = `
-                        <div style="text-align: center; padding: 1rem;">
-                            <div style="margin-bottom: 1rem;">${message}</div>
-                            <div style="background: #333; border-radius: 10px; overflow: hidden; height: 20px;">
-                                <div style="background: #4ade80; height: 100%; width: ${percentage}%; transition: width 0.5s;"></div>
-                            </div>
-                            <div style="margin-top: 0.5rem; color: #999;">${percentage}% concluído</div>
-                        </div>
-                    `;
-                }
-            }
-
-            async searchGoogleReal(fullName, results) {
-                try {
-                    const queries = [
-                        `"${fullName}"`,
-                        `"${fullName}" LinkedIn`,
-                        `"${fullName}" Facebook`,
-                        `"${fullName}" empresa`,
-                        `"${fullName}" universidade`,
-                        `"${fullName}" processo judicial`
-                    ];
-                    
-                    results.search_queries = queries;
-                    
-                    // Busca real no Google Custom Search API
-                    for (let i = 0; i < 3; i++) {
-                        const query = queries[i];
-                        const googleUrl = `https://www.googleapis.com/customsearch/v1?key=${this.googleApiKey}&cx=${this.searchEngineId}&q=${encodeURIComponent(query)}&num=10`;
-                        
-                        try {
-                            const response = await fetch(googleUrl);
-                            const data = await response.json();
-                            
-                            if (data.items) {
-                                results.profiles_found += data.items.length;
-                                
-                                // Analisar resultados reais
-                                data.items.forEach(item => {
-                                    const title = item.title.toLowerCase();
-                                    const snippet = item.snippet.toLowerCase();
-                                    const url = item.link.toLowerCase();
-                                    
-                                    // Detectar LinkedIn
-                                    if (url.includes('linkedin.com')) {
-                                        results.social_media.push({
-                                            platform: 'LinkedIn',
-                                            title: item.title,
-                                            url: item.link,
-                                            snippet: item.snippet,
-                                            source: 'Google Search',
-                                            confidence: 'Alta'
-                                        });
-                                    }
-                                    
-                                    // Detectar Facebook
-                                    if (url.includes('facebook.com')) {
-                                        results.social_media.push({
-                                            platform: 'Facebook',
-                                            title: item.title,
-                                            url: item.link,
-                                            snippet: item.snippet,
-                                            source: 'Google Search',
-                                            confidence: 'Alta'
-                                        });
-                                    }
-                                    
-                                    // Detectar universidades
-                                    if (title.includes('universidade') || title.includes('faculdade') || 
-                                        snippet.includes('universidade') || snippet.includes('faculdade')) {
-                                        results.education.push({
-                                            institution: this.extractUniversity(title + ' ' + snippet),
-                                            source: 'Google Search',
-                                            url: item.link,
-                                            confidence: 'Média'
-                                        });
-                                    }
-                                    
-                                    // Detectar empresas
-                                    if (title.includes('empresa') || snippet.includes('trabalha') || 
-                                        snippet.includes('diretor') || snippet.includes('gerente')) {
-                                        results.professional.push({
-                                            type: 'Informação Profissional',
-                                            description: item.snippet,
-                                            source: 'Google Search',
-                                            url: item.link,
-                                            confidence: 'Média'
-                                        });
-                                    }
-                                });
-                            }
-                            
-                            // Delay entre requisições
-                            await new Promise(resolve => setTimeout(resolve, 1000));
-                            
-                        } catch (error) {
-                            console.log(`Erro na busca Google: ${error.message}`);
-                        }
-                    }
-                    
-                    results.sources_searched += 1;
-                    
-                } catch (error) {
-                    console.log('Erro geral no Google:', error);
-                }
-            }
-
-            async searchLinkedInReal(fullName, results) {
-                try {
-                    // Busca real no LinkedIn via proxy
-                    const firstName = fullName.split(' ')[0];
-                    const lastName = fullName.split(' ').slice(-1)[0];
-                    const searchUrl = `https://www.linkedin.com/pub/dir/${firstName}/${lastName}`;
-                    
-                    try {
-                        const proxyResponse = await fetch(`${this.proxyUrl}${encodeURIComponent(searchUrl)}`);
-                        const data = await proxyResponse.json();
-                        
-                        if (data.contents && data.contents.includes(fullName)) {
-                            results.social_media.push({
-                                platform: 'LinkedIn',
-                                status: 'Perfil encontrado',
-                                url: searchUrl,
-                                source: 'Busca direta',
-                                confidence: 'Alta',
-                                note: 'Perfil público identificado'
-                            });
-                        }
-                    } catch (error) {
-                        console.log('LinkedIn direto falhou, tentando Google...');
-                    }
-                    
-                    await new Promise(resolve => setTimeout(resolve, 2000));
-                    
-                } catch (error) {
-                    console.log('Erro LinkedIn:', error);
-                }
-            }
-
-            async searchFacebookReal(fullName, results) {
-                try {
-                    // Busca real no Facebook via Google
-                    const facebookQuery = `site:facebook.com "${fullName}"`;
-                    const googleUrl = `https://www.googleapis.com/customsearch/v1?key=${this.googleApiKey}&cx=${this.searchEngineId}&q=${encodeURIComponent(facebookQuery)}&num=5`;
-                    
-                    try {
-                        const response = await fetch(googleUrl);
-                        const data = await response.json();
-                        
-                        if (data.items && data.items.length > 0) {
-                            data.items.forEach(item => {
-                                if (item.link.includes('facebook.com')) {
-                                    results.social_media.push({
-                                        platform: 'Facebook',
-                                        title: item.title,
-                                        url: item.link,
-                                        snippet: item.snippet,
-                                        source: 'Google + Facebook',
-                                        confidence: 'Alta'
-                                    });
-                                    
-                                    // Extrair informações do snippet
-                                    const snippet = item.snippet.toLowerCase();
-                                    if (snippet.includes('universidade') || snippet.includes('faculdade')) {
-                                        const university = this.extractUniversity(item.snippet);
-                                        if (university) {
-                                            results.education.push({
-                                                institution: university,
-                                                source: 'Facebook (via Google)',
-                                                confidence: 'Alta'
-                                            });
-                                        }
-                                    }
-                                }
-                            });
-                        }
-                    } catch (error) {
-                        console.log('Erro Facebook:', error);
-                    }
-                    
-                    await new Promise(resolve => setTimeout(resolve, 3000));
-                    
-                } catch (error) {
-                    console.log('Erro geral Facebook:', error);
-                }
-            }
-
-            async searchInstagramReal(fullName, results) {
-                try {
-                    // Busca real no Instagram via Google
-                    const instagramQuery = `site:instagram.com "${fullName}"`;
-                    const googleUrl = `https://www.googleapis.com/customsearch/v1?key=${this.googleApiKey}&cx=${this.searchEngineId}&q=${encodeURIComponent(instagramQuery)}&num=5`;
-                    
-                    try {
-                        const response = await fetch(googleUrl);
-                        const data = await response.json();
-                        
-                        if (data.items && data.items.length > 0) {
-                            data.items.forEach(item => {
-                                if (item.link.includes('instagram.com')) {
-                                    results.social_media.push({
-                                        platform: 'Instagram',
-                                        title: item.title,
-                                        url: item.link,
-                                        snippet: item.snippet,
-                                        source: 'Google + Instagram',
-                                        confidence: 'Alta'
-                                    });
-                                }
-                            });
-                        }
-                    } catch (error) {
-                        console.log('Erro Instagram:', error);
-                    }
-                    
-                    await new Promise(resolve => setTimeout(resolve, 2500));
-                    
-                } catch (error) {
-                    console.log('Erro geral Instagram:', error);
-                }
-            }
-
-            async searchTribunaisReal(fullName, results) {
-                try {
-                    // Busca real em tribunais via Google
-                    const tribunalQueries = [
-                        `site:tjsp.jus.br "${fullName}"`,
-                        `site:tjrj.jus.br "${fullName}"`,
-                        `site:tjmg.jus.br "${fullName}"`,
-                        `"${fullName}" processo judicial tribunal`
-                    ];
-                    
-                    for (const query of tribunalQueries) {
-                        try {
-                            const googleUrl = `https://www.googleapis.com/customsearch/v1?key=${this.googleApiKey}&cx=${this.searchEngineId}&q=${encodeURIComponent(query)}&num=3`;
-                            const response = await fetch(googleUrl);
-                            const data = await response.json();
-                            
-                            if (data.items && data.items.length > 0) {
-                                data.items.forEach(item => {
-                                    if (item.link.includes('jus.br') || item.snippet.toLowerCase().includes('processo')) {
-                                        results.legal_records.push({
-                                            type: 'Processo Judicial',
-                                            title: item.title,
-                                            url: item.link,
-                                            snippet: item.snippet,
-                                            source: 'Tribunal (via Google)',
-                                            confidence: 'Alta',
-                                            note: 'Processo identificado em base pública'
-                                        });
-                                    }
-                                });
-                            }
-                            
-                            await new Promise(resolve => setTimeout(resolve, 1500));
-                            
-                        } catch (error) {
-                            console.log('Erro tribunal query:', error);
-                        }
-                    }
-                    
-                } catch (error) {
-                    console.log('Erro geral tribunais:', error);
-                }
-            }
-
-            async searchReceitaFederalReal(fullName, results) {
-                try {
-                    // Busca real na Receita Federal via Google
-                    const receitaQueries = [
-                        `site:receita.fazenda.gov.br "${fullName}"`,
-                        `"${fullName}" CNPJ empresa`,
-                        `"${fullName}" razão social`
-                    ];
-                    
-                    for (const query of receitaQueries) {
-                        try {
-                            const googleUrl = `https://www.googleapis.com/customsearch/v1?key=${this.googleApiKey}&cx=${this.searchEngineId}&q=${encodeURIComponent(query)}&num=3`;
-                            const response = await fetch(googleUrl);
-                            const data = await response.json();
-                            
-                            if (data.items && data.items.length > 0) {
-                                data.items.forEach(item => {
-                                    const snippet = item.snippet.toLowerCase();
-                                    if (snippet.includes('cnpj') || snippet.includes('empresa') || snippet.includes('razão social')) {
-                                        results.professional.push({
-                                            type: 'Registro Empresarial',
-                                            title: item.title,
-                                            url: item.link,
-                                            snippet: item.snippet,
-                                            source: 'Receita Federal (via Google)',
-                                            confidence: 'Alta'
-                                        });
-                                    }
-                                });
-                            }
-                            
-                            await new Promise(resolve => setTimeout(resolve, 1000));
-                            
-                        } catch (error) {
-                            console.log('Erro Receita query:', error);
-                        }
-                    }
-                    
-                } catch (error) {
-                    console.log('Erro geral Receita:', error);
-                }
-            }
-
-            async searchFamilyReal(fullName, results) {
-                try {
-                    const lastName = fullName.split(' ').slice(-1)[0];
-                    
-                    // Busca real por familiares
-                    const familyQuery = `"${lastName}" família parente irmão irmã`;
-                    const googleUrl = `https://www.googleapis.com/customsearch/v1?key=${this.googleApiKey}&cx=${this.searchEngineId}&q=${encodeURIComponent(familyQuery)}&num=5`;
-                    
-                    try {
-                        const response = await fetch(googleUrl);
-                        const data = await response.json();
-                        
-                        if (data.items && data.items.length > 0) {
-                            data.items.forEach(item => {
-                                const text = (item.title + ' ' + item.snippet).toLowerCase();
-                                
-                                // Procurar nomes com mesmo sobrenome
-                                const namePattern = new RegExp(`\\b\\w+\\s+${lastName}\\b`, 'gi');
-                                const matches = text.match(namePattern);
-                                
-                                if (matches) {
-                                    matches.forEach(match => {
-                                        if (match.toLowerCase() !== fullName.toLowerCase()) {
-                                            results.family_info.push({
-                                                relation: 'Possível parente',
-                                                name: match,
-                                                source: 'Google Search',
-                                                url: item.link,
-                                                confidence: 'Média'
-                                            });
-                                        }
-                                    });
-                                }
-                            });
-                        }
-                    } catch (error) {
-                        console.log('Erro família:', error);
-                    }
-                    
-                    await new Promise(resolve => setTimeout(resolve, 2000));
-                    
-                } catch (error) {
-                    console.log('Erro geral família:', error);
-                }
-            }
-
-            extractUniversity(text) {
-                const universities = [
-                    'USP', 'UFRJ', 'UFMG', 'UNICAMP', 'UNESP', 'PUC', 'UnB', 'UFSC',
-                    'Universidade de São Paulo', 'Universidade Federal', 'Pontifícia Universidade'
-                ];
-                
-                for (const uni of universities) {
-                    if (text.toLowerCase().includes(uni.toLowerCase())) {
-                        return uni;
-                    }
-                }
-                
-                // Tentar extrair nome da universidade do texto
-                const uniMatch = text.match(/universidade\s+[\w\s]+/gi);
-                if (uniMatch) {
-                    return uniMatch[0];
-                }
-                
-                return null;
-            }
-
-            async searchSocialMedia(fullName, results) {
-                await new Promise(resolve => setTimeout(resolve, 2000));
-                
-                const firstName = fullName.split(' ')[0];
-                const lastName = fullName.split(' ').slice(-1)[0];
-                
-                // Facebook - busca por nome público
-                if (Math.random() > 0.4) {
-                    results.social_media.push({
-                        platform: 'Facebook',
-                        profile_url: `facebook.com/search/people/?q=${encodeURIComponent(fullName)}`,
-                        found_via: 'Busca pública',
-                        privacy: 'Perfil com privacidade limitada',
-                        confidence: 'Média',
-                        note: 'Múltiplos perfis encontrados - verificação necessária'
-                    });
-                }
-                
-                // Instagram - busca por username comum
-                const possibleUsernames = [
-                    `${firstName.toLowerCase()}${lastName.toLowerCase()}`,
-                    `${firstName.toLowerCase()}_${lastName.toLowerCase()}`,
-                    `${firstName.toLowerCase()}${lastName.toLowerCase()}${Math.floor(Math.random() * 99)}`
-                ];
-                
-                if (Math.random() > 0.6) {
-                    results.social_media.push({
-                        platform: 'Instagram',
-                        possible_username: possibleUsernames[0],
-                        found_via: 'Padrão de username',
-                        status: 'Possível perfil encontrado',
-                        confidence: 'Baixa',
-                        note: 'Requer verificação manual'
-                    });
-                }
-            }
-
-            async searchLegalRecords(fullName, results) {
-                await new Promise(resolve => setTimeout(resolve, 2500));
-                
-                // Busca em tribunais públicos (simulando consulta real)
-                // Na implementação real, consultaria APIs dos tribunais
-                
-                const tribunals = [
-                    'TJSP - Tribunal de Justiça de São Paulo',
-                    'TJRJ - Tribunal de Justiça do Rio de Janeiro',
-                    'TJMG - Tribunal de Justiça de Minas Gerais',
-                    'TST - Tribunal Superior do Trabalho',
-                    'STJ - Superior Tribunal de Justiça'
-                ];
-                
-                // Probabilidade baixa de processos (realístico)
-                if (Math.random() > 0.85) {
-                    results.legal_records.push({
-                        type: 'Consulta Processual',
-                        tribunal: tribunals[Math.floor(Math.random() * tribunals.length)],
-                        status: 'Processo encontrado',
-                        nature: 'Dados sigilosos - consulta restrita',
-                        access: 'Requer advogado para detalhes',
-                        confidence: 'Alta',
-                        note: 'Processo identificado em base pública'
-                    });
-                }
-            }
-
-            async searchBusinessRecords(fullName, results) {
-                await new Promise(resolve => setTimeout(resolve, 1500));
-                
-                // Busca na Receita Federal e Juntas Comerciais
-                const firstName = fullName.split(' ')[0];
-                
-                // Probabilidade de ter empresa
-                if (Math.random() > 0.7) {
-                    results.professional.push({
-                        type: 'Registro Empresarial',
-                        source: 'Receita Federal / Junta Comercial',
-                        company_name: `${firstName} - Atividade Empresarial`,
-                        status: 'Empresa identificada',
-                        details: 'Dados completos requerem consulta oficial',
-                        confidence: 'Alta',
-                        note: 'CNPJ encontrado em base pública'
-                    });
-                }
-                
-                // Busca por vínculos empregatícios (RAIS/CAGED)
-                if (Math.random() > 0.5) {
-                    results.professional.push({
-                        type: 'Vínculo Empregatício',
-                        source: 'RAIS/CAGED (dados públicos)',
-                        status: 'Histórico profissional identificado',
-                        details: 'Informações limitadas por privacidade',
-                        confidence: 'Média',
-                        note: 'Dados encontrados em registros trabalhistas'
-                    });
-                }
-            }
-
-            isCommonName(fullName) {
-                const commonFirstNames = [
-                    'João', 'Maria', 'José', 'Ana', 'Carlos', 'Francisca', 'Paulo', 'Antônio',
-                    'Pedro', 'Luiz', 'Marcos', 'Raimundo', 'Francisco', 'Manoel'
-                ];
-                const firstName = fullName.split(' ')[0];
-                return commonFirstNames.includes(firstName);
-            }
-
-            isProfessionalName(fullName) {
-                // Nomes que soam profissionais têm maior chance de estar no LinkedIn
-                const parts = fullName.split(' ');
-                return parts.length >= 2 && parts.every(part => part.length >= 3);
-            }
-
-            async performRealWebSearch(fullName, results) {
-                // Simular busca real com base no nome
-                const searchQueries = [
-                    `"${fullName}"`,
-                    `"${fullName}" LinkedIn`,
-                    `"${fullName}" empresa`,
-                    `"${fullName}" Facebook`,
-                    `"${fullName}" Instagram`,
-                    `"${fullName}" processo judicial`,
-                    `"${fullName}" CNPJ`,
-                    `"${fullName}" família`
-                ];
-
-                // Para demonstração, vou usar dados mais realísticos baseados no nome
-                const firstName = fullName.split(' ')[0];
-                const lastName = fullName.split(' ').slice(-1)[0];
-                
-                // Busca em redes sociais (mais realística)
-                if (Math.random() > 0.2) {
-                    results.social_media.push({
-                        platform: 'LinkedIn',
-                        profile_url: `https://linkedin.com/in/${firstName.toLowerCase()}-${lastName.toLowerCase()}`,
-                        last_activity: this.getRecentDate(),
-                        connections: Math.floor(Math.random() * 500) + 50,
-                        verified: Math.random() > 0.7,
-                        position: this.getRealisticPosition(),
-                        company: this.getRealisticCompany()
-                    });
-                }
-
-                if (Math.random() > 0.4) {
-                    results.social_media.push({
-                        platform: 'Facebook',
-                        profile_url: `https://facebook.com/${firstName.toLowerCase()}.${lastName.toLowerCase()}`,
-                        last_activity: this.getRecentDate(),
-                        friends_visible: Math.random() > 0.5,
-                        location_visible: Math.random() > 0.6
-                    });
-                }
-
-                // Informações profissionais mais realísticas
-                if (Math.random() > 0.3) {
-                    const company = this.getRealisticCompany();
-                    results.professional.push({
-                        type: 'Emprego Atual',
-                        company: company,
-                        position: this.getRealisticPosition(),
-                        location: this.getRealisticLocation(),
-                        duration: `${Math.floor(Math.random() * 5) + 1} anos`,
-                        source: 'LinkedIn'
-                    });
-                }
-
-                // Busca por registros empresariais
-                if (Math.random() > 0.7) {
-                    results.professional.push({
-                        type: 'Empresa Própria',
-                        company_name: `${firstName} ${this.getBusinessType()}`,
-                        cnpj: this.generateRealisticCNPJ(),
-                        status: Math.random() > 0.8 ? 'Ativa' : 'Baixada',
-                        founded: this.getRealisticYear(),
-                        capital: `R$ ${(Math.random() * 100000 + 10000).toFixed(2).replace('.', ',')}`
-                    });
-                }
-
-                // Informações familiares (mais cuidadoso)
-                if (Math.random() > 0.6) {
-                    const familyMembers = this.generateFamilyInfo(firstName, lastName);
-                    results.family_info = familyMembers;
-                }
-
-                // Registros legais (mais conservador)
-                if (Math.random() > 0.8) {
-                    results.legal_records.push({
-                        type: 'Processo Civil',
-                        process_type: 'Cível',
-                        court: `Tribunal de Justiça de ${this.getRealisticLocation()}`,
-                        year: this.getRealisticYear(),
-                        status: 'Arquivado',
-                        nature: 'Cobrança'
-                    });
-                }
-
-                // Conteúdo adulto (muito raro e cuidadoso)
-                if (Math.random() > 0.95) {
-                    results.adult_content.push({
-                        platform: 'Plataforma de Conteúdo',
-                        type: 'Possível perfil encontrado',
-                        confidence: 'Baixa - Verificação necessária',
-                        note: 'Pode ser homonímia'
-                    });
-                }
-
-                results.profiles_found = results.social_media.length + results.professional.length + results.family_info.length;
-            }
-
-            generateFamilyInfo(firstName, lastName) {
-                const family = [];
-                
-                // Possíveis parentes (baseado em padrões comuns)
-                if (Math.random() > 0.5) {
-                    const siblingNames = ['Ana', 'Carlos', 'Maria', 'João', 'Paula', 'Pedro', 'Fernanda', 'Ricardo'];
-                    const siblingName = siblingNames[Math.floor(Math.random() * siblingNames.length)];
-                    
-                    family.push({
-                        relation: 'Possível irmã/irmão',
-                        name: `${siblingName} ${lastName}`,
-                        source: 'Redes sociais',
-                        confidence: 'Média'
-                    });
-                }
-
-                return family;
-            }
-
-            getRealisticCompany() {
-                const companies = [
-                    'Petrobras', 'Vale', 'Itaú Unibanco', 'Bradesco', 'Banco do Brasil',
-                    'Magazine Luiza', 'Via Varejo', 'JBS', 'BRF', 'Ambev',
-                    'Natura', 'Localiza', 'WEG', 'Suzano', 'Klabin',
-                    'Consultoria Empresarial', 'Serviços de TI', 'Comércio Local',
-                    'Escritório de Advocacia', 'Clínica Médica', 'Empresa Familiar'
-                ];
-                return companies[Math.floor(Math.random() * companies.length)];
-            }
-
-            getRealisticPosition() {
-                const positions = [
-                    'Analista', 'Coordenador', 'Supervisor', 'Gerente', 'Diretor',
-                    'Consultor', 'Especialista', 'Assistente', 'Técnico', 'Engenheiro',
-                    'Advogado', 'Médico', 'Professor', 'Contador', 'Vendedor',
-                    'Empresário', 'Autônomo', 'Freelancer'
-                ];
-                return positions[Math.floor(Math.random() * positions.length)];
-            }
-
-            getRealisticLocation() {
-                const locations = [
-                    'São Paulo - SP', 'Rio de Janeiro - RJ', 'Belo Horizonte - MG',
-                    'Brasília - DF', 'Porto Alegre - RS', 'Salvador - BA',
-                    'Fortaleza - CE', 'Curitiba - PR', 'Recife - PE', 'Goiânia - GO',
-                    'Belém - PA', 'Manaus - AM', 'Campo Grande - MS', 'Vitória - ES'
-                ];
-                return locations[Math.floor(Math.random() * locations.length)];
-            }
-
-            getBusinessType() {
-                const types = ['Consultoria', 'Serviços', 'Comércio', 'Tecnologia', 'Marketing', 'Advocacia', 'Contabilidade'];
-                return types[Math.floor(Math.random() * types.length)];
-            }
-
-            getRecentDate() {
-                const days = Math.floor(Math.random() * 30) + 1;
-                const date = new Date();
-                date.setDate(date.getDate() - days);
-                return date.toLocaleDateString('pt-BR');
-            }
-
-            getRealisticYear() {
-                return Math.floor(Math.random() * 10) + 2015;
-            }
-
-            generateRealisticCNPJ() {
-                // Gerar CNPJ mais realístico
-                const numbers = Array.from({length: 14}, () => Math.floor(Math.random() * 10));
-                return numbers.join('').replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, '$1.$2.$3/$4-$5');
-            }
-
-            calculateConfidenceScore(results) {
-                let score = 0;
-                
-                // Pontuação baseada em dados encontrados
-                score += results.social_media.length * 15;
-                score += results.professional.length * 20;
-                score += results.family_info.length * 10;
-                score += results.legal_records.length * 5;
-                
-                // Bonus por verificação
-                results.social_media.forEach(profile => {
-                    if (profile.verified) score += 15;
-                });
-                
-                return Math.min(score, 100);
-            }
-
-            assessRisk(results) {
-                let riskScore = 0;
-                
-                // Avaliar risco baseado em dados encontrados
-                results.legal_records.forEach(record => {
-                    if (record.process_type === 'Criminal') riskScore += 40;
-                    if (record.process_type === 'Trabalhista') riskScore += 15;
-                    if (record.process_type === 'Cível') riskScore += 5;
-                });
-                
-                riskScore += results.adult_content.length * 10;
-                
-                if (riskScore >= 30) return 'high';
-                if (riskScore >= 10) return 'medium';
-                return 'low';
-            }
-        }
-        
-        // Função principal de pesquisa
-        async function performRealSearch() {
-            const searchInput = document.getElementById('searchInput');
-            const query = searchInput.value.trim();
-            
-            if (!query) {
-                alert('Digite o nome completo da pessoa para pesquisar');
-                return;
-            }
-            
-            if (!currentUser) {
-                alert('Faça login para realizar pesquisas');
-                openLoginModal();
-                return;
-            }
-            
-            if (currentUser.credits < 1) {
-                alert('Você não tem créditos suficientes. Compre um pacote para continuar.');
-                return;
-            }
-
-            // Mostrar modal de progresso
-            showSearchProgressModal(query);
-
-            try {
-                const searchSystem = new PersonSearchSystem();
-                const results = await searchSystem.performSearch(query);
-                
-                // Debitar crédito
-                currentUser.credits -= 1;
-                saveUser(currentUser);
-                saveToLocalStorage('current_user', currentUser);
-                updateUserInterface();
-                
-                // Salvar pesquisa
-                saveSearch({
-                    user_email: currentUser.email,
-                    search_name: query,
-                    results_json: JSON.stringify(results),
-                    credits_used: 1
-                });
-                
-                // Fechar modal de progresso e mostrar resultados
-                closeProgressModal();
-                displaySearchResults(results);
-                
-            } catch (error) {
-                closeProgressModal();
-                alert('Erro na pesquisa: ' + error.message);
-            }
-        }
-
-        function showSearchProgressModal(searchName) {
-            const modal = document.createElement('div');
-            modal.className = 'modal active';
-            modal.id = 'progressModal';
-            modal.innerHTML = `
-                <div class="modal-content" style="max-width: 500px;">
-                    <h3>🔍 Pesquisando: ${searchName}</h3>
-                    <div id="searchProgress">
-                        <div style="text-align: center; padding: 2rem;">
-                            <div class="loading-spinner" style="margin: 0 auto 1rem auto;"></div>
-                            <div>Iniciando busca real...</div>
-                        </div>
-                    </div>
-                    <p style="color: #666; font-size: 0.9rem; text-align: center; margin-top: 1rem;">
-                        Esta é uma busca real na internet. Pode levar até 60 segundos.
-                    </p>
-                </div>
-            `;
-            document.body.appendChild(modal);
-        }
-
-        function closeProgressModal() {
-            const modal = document.getElementById('progressModal');
-            if (modal) {
-                modal.remove();
-            }
-        }
-
-        function displaySearchResults(results) {
-            const modal = document.createElement('div');
-            modal.className = 'modal active';
-            modal.innerHTML = `
-                <div class="modal-content" style="max-width: 800px; max-height: 80vh; overflow-y: auto;">
-                    <h3>🔍 Relatório de Investigação - ${results.name}</h3>
-                    
-                    <div style="margin: 1rem 0; padding: 1rem; background: #1a4d1a; border: 1px solid #4ade80; border-radius: 6px; text-align: center;">
-                        <strong style="color: #4ade80;">✅ INFORMAÇÕES 100% PÚBLICAS</strong><br>
-                        <span style="font-size: 0.9rem; color: #ccc;">Dados coletados exclusivamente de fontes públicas disponíveis na internet</span>
-                    </div>
-                    
-                    <div style="margin: 1rem 0; padding: 1rem; background: #000; border-radius: 6px;">
-                        <strong>📊 Resumo da Pesquisa:</strong><br>
-                        • ${results.profiles_found} perfis encontrados<br>
-                        • ${results.sources_searched} fontes consultadas<br>
-                        • Confiança: ${results.confidence_score}%<br>
-                        • Nível de risco: ${results.risk_assessment === 'low' ? '🟢 Baixo' : results.risk_assessment === 'medium' ? '🟡 Médio' : '🔴 Alto'}
-                    </div>
-                    
-                    ${results.social_media.length > 0 ? `
-                    <h4>📱 Redes Sociais (${results.social_media.length})</h4>
-                    <div style="margin-bottom: 2rem;">
-                        ${results.social_media.map(profile => `
-                            <div style="background: #000; padding: 1rem; margin: 0.5rem 0; border-radius: 6px;">
-                                <strong>${profile.platform}</strong><br>
-                                Seguidores: ${profile.followers.toLocaleString()}<br>
-                                Última atividade: ${profile.last_activity}<br>
-                                ${profile.verified ? '✅ Perfil verificado' : ''}
-                            </div>
-                        `).join('')}
-                    </div>
-                    ` : ''}
-                    
-                    ${results.professional.length > 0 ? `
-                    <h4>💼 Informações Profissionais (${results.professional.length})</h4>
-                    <div style="margin-bottom: 2rem;">
-                        ${results.professional.map(info => `
-                            <div style="background: #000; padding: 1rem; margin: 0.5rem 0; border-radius: 6px;">
-                                <strong>${info.type}</strong><br>
-                                ${info.company ? `Empresa: ${info.company}<br>` : ''}
-                                ${info.position ? `Cargo: ${info.position}<br>` : ''}
-                                ${info.cnpj ? `CNPJ: ${info.cnpj}<br>` : ''}
-                                ${info.status ? `Status: ${info.status}<br>` : ''}
-                            </div>
-                        `).join('')}
-                    </div>
-                    ` : ''}
-                    
-                    ${results.legal_records.length > 0 ? `
-                    <h4>⚖️ Registros Legais (${results.legal_records.length})</h4>
-                    <div style="margin-bottom: 2rem;">
-                        ${results.legal_records.map(record => `
-                            <div style="background: #000; padding: 1rem; margin: 0.5rem 0; border-radius: 6px;">
-                                <strong>${record.type}</strong><br>
-                                Tipo: ${record.process_type}<br>
-                                Tribunal: ${record.court}<br>
-                                Ano: ${record.year}<br>
-                                Status: ${record.status}
-                            </div>
-                        `).join('')}
-                    </div>
-                    ` : ''}
-                    
-                    ${results.education.length > 0 ? `
-                    <h4>🎓 Educação (${results.education.length})</h4>
-                    <div style="margin-bottom: 2rem;">
-                        ${results.education.map(edu => `
-                            <div style="background: #000; padding: 1rem; margin: 0.5rem 0; border-radius: 6px;">
-                                <strong>${edu.institution}</strong><br>
-                                Fonte: ${edu.source}<br>
-                                Confiança: ${edu.confidence}<br>
-                                ${edu.url ? `<a href="${edu.url}" target="_blank" style="color: #4ade80;">Ver fonte</a>` : ''}
-                            </div>
-                        `).join('')}
-                    </div>
-                    ` : ''}
-                    
-                    ${results.family_info.length > 0 ? `
-                    <h4>👨‍👩‍👧‍👦 Informações Familiares (${results.family_info.length})</h4>
-                    <div style="margin-bottom: 2rem;">
-                        ${results.family_info.map(family => `
-                            <div style="background: #000; padding: 1rem; margin: 0.5rem 0; border-radius: 6px;">
-                                <strong>${family.relation}</strong><br>
-                                Nome: ${family.name}<br>
-                                Fonte: ${family.source}<br>
-                                Confiança: ${family.confidence}<br>
-                                ${family.url ? `<a href="${family.url}" target="_blank" style="color: #4ade80;">Ver fonte</a>` : ''}
-                            </div>
-                        `).join('')}
-                    </div>
-                    ` : ''}
-                    
-                    ${results.adult_content.length > 0 ? `
-                    <h4>🔞 Conteúdo Adulto (${results.adult_content.length})</h4>
-                    <div style="margin-bottom: 2rem;">
-                        ${results.adult_content.map(content => `
-                            <div style="background: #000; padding: 1rem; margin: 0.5rem 0; border-radius: 6px;">
-                                <strong>${content.platform}</strong><br>
-                                Tipo: ${content.type}<br>
-                                Confiança: ${content.confidence}<br>
-                                Observação: ${content.note}
-                            </div>
-                        `).join('')}
-                    </div>
-                    ` : ''}
-                    
-                    <div style="text-align: center; margin-top: 2rem; display: flex; gap: 1rem; justify-content: center;">
-                        <button class="btn-secondary" onclick="printReport('${results.name}')">🖨️ Imprimir Relatório</button>
-                        <button class="btn" onclick="this.parentElement.parentElement.parentElement.remove()">Fechar Relatório</button>
-                    </div>
-                </div>
-            `;
-            
-            document.body.appendChild(modal);
-        }
-
         // Modal functions
         function openLoginModal() {
             document.getElementById('loginModal').classList.add('active');
+            document.getElementById('registerModal').classList.remove('active');
         }
         
         function openRegisterModal() {
@@ -2013,32 +827,32 @@
             document.getElementById('registerModal').classList.add('active');
         }
         
-        function openForgotPasswordModal() {
-            document.getElementById('loginModal').classList.remove('active');
-            document.getElementById('registerModal').classList.remove('active');
-            document.getElementById('forgotPasswordModal').classList.add('active');
-        }
-        
         function closeModal() {
             document.getElementById('loginModal').classList.remove('active');
             document.getElementById('registerModal').classList.remove('active');
-            document.getElementById('forgotPasswordModal').classList.remove('active');
             document.getElementById('paymentModal').classList.remove('active');
         }
         
+        function scrollToSearch() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+            document.getElementById('searchInput').focus();
+        }
+        
         // Auth functions
-        function handleLogin(event) {
+        async function handleLogin(event) {
             event.preventDefault();
+            
             const email = document.getElementById('loginEmail').value;
             const password = document.getElementById('loginPassword').value;
             const errorDiv = document.getElementById('loginError');
             
-            const users = getAllUsers();
-            const user = users.find(u => u.email === email && u.password === password);
+            const user = await getUser(email);
             
-            if (user) {
+            if (user && user.password === password) {
                 currentUser = user;
-                saveToLocalStorage('current_user', currentUser);
                 updateUserInterface();
                 closeModal();
                 errorDiv.style.display = 'none';
@@ -2048,388 +862,157 @@
             }
         }
         
-        function handleRegister(event) {
+        function handleLogout() {
+            currentUser = null;
+            updateUserInterface();
+        }
+        
+        async function handleRegister(event) {
             event.preventDefault();
+            
+            const name = document.getElementById('registerName').value;
             const email = document.getElementById('registerEmail').value;
             const password = document.getElementById('registerPassword').value;
+            const passwordConfirm = document.getElementById('registerPasswordConfirm').value;
             const errorDiv = document.getElementById('registerError');
             
-            const users = getAllUsers();
-            const existingUser = users.find(u => u.email === email);
+            if (password !== passwordConfirm) {
+                errorDiv.textContent = 'As senhas não coincidem';
+                errorDiv.style.display = 'block';
+                return;
+            }
             
+            const existingUser = await getUser(email);
             if (existingUser) {
-                errorDiv.textContent = 'Email já cadastrado';
+                errorDiv.textContent = 'Este email já está cadastrado';
                 errorDiv.style.display = 'block';
                 return;
             }
             
             const newUser = {
-                email: email,
-                password: password,
-                credits: 0,
-                created_at: new Date().toISOString()
+                name,
+                email,
+                password,
+                credits: 0
             };
             
-            saveUser(newUser);
-            alert('Conta criada com sucesso! Faça login para continuar.');
-            openLoginModal();
-            errorDiv.style.display = 'none';
-        }
-        
-        function logout() {
-            currentUser = null;
-            localStorage.removeItem('verificapessoa_current_user');
-            updateUserInterface();
-        }
-        
-        function handleForgotPassword(event) {
-            event.preventDefault();
-            const email = document.getElementById('forgotEmail').value;
-            const errorDiv = document.getElementById('forgotError');
-            const successDiv = document.getElementById('forgotSuccess');
+            const saved = await saveUser(newUser);
             
-            // Verificar se o email existe
-            const users = getAllUsers();
-            const user = users.find(u => u.email === email);
-            
-            if (!user) {
-                errorDiv.textContent = 'Email não encontrado em nossa base de dados';
+            if (saved) {
+                currentUser = await getUser(email);
+                updateUserInterface();
+                closeModal();
+                alert('Cadastro realizado com sucesso!');
+            } else {
+                errorDiv.textContent = 'Erro ao cadastrar. Tente novamente.';
                 errorDiv.style.display = 'block';
-                successDiv.style.display = 'none';
+            }
+        }
+        
+        // Search functions
+        async function performRealSearch() {
+            const searchTerm = document.getElementById('searchInput').value.trim();
+            
+            if (!searchTerm) {
+                alert('Digite um nome para pesquisar!');
                 return;
             }
             
-            // Simular envio de email (em produção seria real)
-            errorDiv.style.display = 'none';
-            successDiv.textContent = `Instruções de recuperação enviadas para ${email}. Verifique sua caixa de entrada e spam.`;
-            successDiv.style.display = 'block';
+            if (!currentUser) {
+                alert('Faça login para realizar uma pesquisa!');
+                openLoginModal();
+                return;
+            }
             
-            // Gerar token de recuperação (salvar localmente para simulação)
-            const resetToken = Math.random().toString(36).substring(2, 15);
-            const resetData = {
-                email: email,
-                token: resetToken,
-                expires: Date.now() + (60 * 60 * 1000) // 1 hora
+            if (!currentUser.credits || currentUser.credits <= 0) {
+                alert('Você não tem créditos suficientes! Compre um pacote para continuar.');
+                return;
+            }
+            
+            // Salvar busca
+            const search = {
+                user_email: currentUser.email,
+                search_term: searchTerm
             };
             
-            saveToLocalStorage('password_reset_token', resetData);
+            await saveSearch(search);
             
-            // Em produção, aqui seria enviado um email real com link de recuperação
-            console.log(`Token de recuperação para ${email}: ${resetToken}`);
+            // Atualizar créditos
+            const newCredits = await updateUserCredits(currentUser.email, -1);
+            if (newCredits !== null) {
+                currentUser.credits = newCredits;
+                updateUserInterface();
+            }
             
-            // Mostrar instruções adicionais
-            setTimeout(() => {
-                successDiv.innerHTML = `
-                    Instruções enviadas para ${email}!<br>
-                    <small style="color: #999;">
-                        Para demonstração: Entre em contato com o suporte informando seu email para recuperar a senha.
-                    </small>
-                `;
-            }, 2000);
+            alert(`Pesquisa realizada com sucesso! Resultados para "${searchTerm}" serão enviados para seu email.`);
         }
         
-        // Purchase functions
-        function buyPackage(packageType, price, credits) {
-            const email = currentUser ? currentUser.email : prompt('Digite seu email para continuar:');
-            if (!email) return;
+        // Payment functions
+        function handlePurchase(packageType) {
+            if (!currentUser) {
+                alert('Faça login para comprar créditos!');
+                openLoginModal();
+                return;
+            }
             
-            const packageNames = {
-                'individual': 'Pesquisa Única',
-                'pack10': 'Pacote 10 Créditos',
-                'pack20': 'Pacote 20 Créditos',
-                'pack50': 'Pacote 50 Créditos'
+            let packageDetails = {
+                individual: { name: 'Pesquisa Única', credits: 1, price: 0.69 },
+                pack10: { name: 'Pacote 10 Créditos', credits: 10, price: 5.90 },
+                pack20: { name: 'Pacote 20 Créditos', credits: 20, price: 9.80 },
+                pack50: { name: 'Pacote 50 Créditos', credits: 50, price: 17.50 }
             };
             
-            const transaction = saveTransaction({
-                user_email: email,
+            const selected = packageDetails[packageType];
+            
+            // Criar dados da transação
+            const transactionId = generateId();
+            const paymentData = {
+                transaction_id: transactionId,
                 package_type: packageType,
-                amount: price,
-                credits: credits,
+                credits: selected.credits,
+                price: selected.price,
+                user_email: currentUser.email
+            };
+            
+            // Salvar transação como pendente
+            saveTransaction({
+                id: transactionId,
+                user_email: currentUser.email,
+                package_type: packageType,
+                amount: selected.price,
+                credits: selected.credits,
                 status: 'pending'
             });
             
-            showPaymentModal({
-                transaction_id: transaction.id,
-                package_name: packageNames[packageType],
-                amount: price,
-                credits: credits
-            });
+            // Mostrar modal de pagamento
+            document.getElementById('paymentModal').classList.add('active');
+            
+            // Inicializar checkout do Mercado Pago
+            initMercadoPagoCheckout(paymentData);
         }
         
-        function showPaymentModal(paymentData) {
-            const modal = document.getElementById('paymentModal');
-            const content = document.getElementById('paymentContent');
-            
-            content.innerHTML = `
-                <div class="pix-container">
-                    <h4>💳 Pagamento Mercado Pago</h4>
-                    <p><strong>Valor: R$ ${paymentData.amount.toFixed(2).replace('.', ',')}</strong></p>
-                    <p><strong>Créditos: ${paymentData.credits}</strong></p>
-                    
-                    <div style="background: #0a4d0a; padding: 1rem; border-radius: 6px; margin: 1rem 0;">
-                        <strong>✅ INFORMAÇÕES 100% PÚBLICAS</strong><br>
-                        Dados coletados exclusivamente de fontes públicas disponíveis na internet.
-                    </div>
-                    
-                    <!-- Container para o Checkout Bricks do Mercado Pago -->
-                    <div id="mercadopago-checkout" style="margin: 2rem 0; min-height: 300px;"></div>
-                    
-                    <p style="color: #666; font-size: 0.8rem; margin: 1rem 0; text-align: center;">
-                        Ao efetuar o pagamento, você concorda com nossos 
-                        <a href="termos.html" target="_blank" style="color: #999;">Termos de Uso</a>.
-                        Não há reembolso por informações não encontradas ou dados incorretos de terceiros.
-                    </p>
-                    
-                    <div style="display: flex; gap: 1rem; justify-content: center;">
-                        ${currentUser && currentUser.email === 'admin@verificapessoa.com' ? 
-                            `<button class="btn-secondary" onclick="adminSimulatePayment(${paymentData.transaction_id}, ${paymentData.credits})">Simular Pagamento (Admin)</button>` : 
-                            ''
-                        }
-                        <button class="btn" onclick="closeModal()">Fechar</button>
-                    </div>
-                </div>
-            `;
-            
-            modal.classList.add('active');
-            
-            // Inicializar Mercado Pago Checkout após o modal aparecer
-            setTimeout(() => {
-                initMercadoPagoCheckout(paymentData);
-            }, 100);
-        }
-        
-        function copyPixKey() {
-            navigator.clipboard.writeText(PIX_KEY).then(() => {
-                alert('Chave PIX copiada!');
-            });
-        }
-        
-        function simulatePayment(transactionId, credits) {
-            // Simular confirmação de pagamento
-            const transactions = getAllTransactions();
-            const transaction = transactions.find(t => t.id === transactionId);
-            if (transaction) {
-                transaction.status = 'confirmed';
-                transaction.confirmed_at = new Date().toISOString();
-                saveToLocalStorage('transactions', transactions);
-                
-                // Adicionar créditos ao usuário
-                if (currentUser) {
-                    currentUser.credits += credits;
-                    saveUser(currentUser);
-                    saveToLocalStorage('current_user', currentUser);
-                    updateUserInterface();
-                }
-                
-                alert(`Pagamento confirmado! ${credits} créditos adicionados à sua conta.`);
-                closeModal();
-            }
-        }
-        
-        // Close modal when clicking outside
-        window.onclick = function(event) {
-            const modals = document.querySelectorAll('.modal');
-            modals.forEach(modal => {
-                if (event.target === modal) {
-                    closeModal();
-                }
-            });
-        }
-        
-        // Enter key for search
-        document.getElementById('searchInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                performRealSearch();
-            }
-        });
-        
-        // Função para imprimir relatório
-        function printReport(personName) {
-            // Criar uma nova janela para impressão
-            const printWindow = window.open('', '_blank');
-            
-            // Obter o conteúdo do relatório atual
-            const reportContent = document.querySelector('.modal.active .modal-content');
-            
-            if (!reportContent) {
-                alert('Erro ao preparar relatório para impressão');
-                return;
-            }
-            
-            // HTML para impressão
-            const printHTML = `
-                <!DOCTYPE html>
-                <html>
-                <head>
-                    <title>Relatório de Investigação - ${personName}</title>
-                    <style>
-                        body {
-                            font-family: Arial, sans-serif;
-                            line-height: 1.6;
-                            color: #000;
-                            background: #fff;
-                            margin: 20px;
-                        }
-                        h1, h2, h3, h4 {
-                            color: #000;
-                            margin-bottom: 10px;
-                        }
-                        .header {
-                            text-align: center;
-                            border-bottom: 2px solid #000;
-                            padding-bottom: 20px;
-                            margin-bottom: 30px;
-                        }
-                        .section {
-                            margin-bottom: 25px;
-                            padding: 15px;
-                            border: 1px solid #ccc;
-                            border-radius: 5px;
-                        }
-                        .info-box {
-                            background: #f5f5f5;
-                            padding: 15px;
-                            border-radius: 5px;
-                            margin: 10px 0;
-                        }
-                        .footer {
-                            margin-top: 40px;
-                            padding-top: 20px;
-                            border-top: 1px solid #ccc;
-                            font-size: 12px;
-                            color: #666;
-                            text-align: center;
-                        }
-                        button {
-                            display: none !important;
-                        }
-                        @media print {
-                            body { margin: 0; }
-                            .no-print { display: none !important; }
-                        }
-                    </style>
-                </head>
-                <body>
-                    <div class="header">
-                        <h1>RELATÓRIO DE INVESTIGAÇÃO</h1>
-                        <h2>${personName}</h2>
-                        <p><strong>Data:</strong> ${new Date().toLocaleDateString('pt-BR')} às ${new Date().toLocaleTimeString('pt-BR')}</p>
-                        <p><strong>Gerado por:</strong> VerificaPessoa.com</p>
-                    </div>
-                    
-                    <div class="info-box">
-                        <strong>⚠️ IMPORTANTE:</strong><br>
-                        Este relatório contém informações coletadas de fontes públicas disponíveis na internet. 
-                        As informações devem ser verificadas independentemente antes de qualquer tomada de decisão.
-                        O VerificaPessoa atua apenas como facilitador de buscas e não se responsabiliza pela veracidade dos dados de terceiros.
-                    </div>
-                    
-                    ${reportContent.innerHTML.replace(/style="[^"]*"/g, '').replace(/onclick="[^"]*"/g, '')}
-                    
-                    <div class="footer">
-                        <p><strong>VerificaPessoa.com</strong> - Plataforma de agregação de informações públicas</p>
-                        <p>Este relatório é confidencial e destinado exclusivamente ao solicitante.</p>
-                        <p>Gerado em ${new Date().toLocaleString('pt-BR')}</p>
-                    </div>
-                </body>
-                </html>
-            `;
-            
-            // Escrever conteúdo na nova janela
-            printWindow.document.write(printHTML);
-            printWindow.document.close();
-            
-            // Aguardar carregamento e imprimir
-            printWindow.onload = function() {
-                setTimeout(() => {
-                    printWindow.print();
-                    printWindow.close();
-                }, 500);
-            };
-        }
-        
-        // Mercado Pago Integration
-        let mp = null;
-        
-        function initMercadoPago() {
-            // Inicializar Mercado Pago com Public Key
-            if (typeof MercadoPago !== 'undefined' && MP_PUBLIC_KEY) {
-                mp = new MercadoPago(MP_PUBLIC_KEY);
-                console.log('Mercado Pago inicializado com sucesso');
-            } else {
-                console.error('Mercado Pago SDK não carregado ou chave não configurada');
-            }
-        }
-        
-        async function initMercadoPagoCheckout(paymentData) {
-            if (!mp) {
-                initMercadoPago();
-            }
-            
-            if (!mp) {
-                console.error('Mercado Pago não inicializado');
-                return;
-            }
-            
+        function initMercadoPagoCheckout(paymentData) {
             try {
-                // Criar preferência de pagamento
+                // Em ambiente de produção, isso seria uma chamada para seu backend
+                // que criaria a preferência no Mercado Pago
+                
                 const preference = {
-                    items: [{
-                        title: paymentData.package_name,
-                        quantity: 1,
-                        unit_price: paymentData.amount,
-                        currency_id: 'BRL'
-                    }],
-                    payer: {
-                        email: currentUser.email
-                    },
-                    payment_methods: {
-                        excluded_payment_types: [
-                            { id: 'credit_card' },
-                            { id: 'debit_card' },
-                            { id: 'ticket' }
-                        ],
-                        installments: 1
-                    },
-                    external_reference: paymentData.transaction_id.toString(),
-                    notification_url: window.location.origin + '/webhook',
-                    back_urls: {
-                        success: window.location.origin,
-                        failure: window.location.origin,
-                        pending: window.location.origin
-                    }
-                };
-                
-                // Criar checkout usando Bricks
-                const bricksBuilder = mp.bricks();
-                
-                const renderComponent = async () => {
-                    await bricksBuilder.create('wallet', 'mercadopago-checkout', {
-                        initialization: {
-                            preferenceId: await createPreference(preference)
-                        },
-                        customization: {
-                            texts: {
-                                valueProp: 'smart_option'
-                            }
-                        },
-                        callbacks: {
-                            onReady: () => {
-                                console.log('Checkout pronto');
-                            },
-                            onSubmit: ({ selectedPaymentMethod, formData }) => {
-                                console.log('Pagamento iniciado:', selectedPaymentMethod);
-                                // Iniciar verificação automática
-                                startPaymentVerification(paymentData.transaction_id);
-                            },
-                            onError: (error) => {
-                                console.error('Erro no checkout:', error);
-                            }
+                    items: [
+                        {
+                            title: `VerificaPessoa - ${paymentData.credits} créditos`,
+                            quantity: 1,
+                            currency_id: 'BRL',
+                            unit_price: paymentData.price
                         }
-                    });
+                    ],
+                    payer: {
+                        email: paymentData.user_email
+                    },
+                    external_reference: paymentData.transaction_id
                 };
                 
-                renderComponent();
+                // Para fins de demonstração, mostrar o QR code PIX
+                showPixFallback(paymentData);
                 
             } catch (error) {
                 console.error('Erro ao inicializar checkout:', error);
@@ -2438,66 +1021,72 @@
             }
         }
         
-        async function createPreference(preferenceData) {
+        function showPixFallback(paymentData) {
+            const paymentContent = document.getElementById('paymentContent');
+            
+            paymentContent.innerHTML = `
+                <div style="text-align: center;">
+                    <p style="margin-bottom: 1rem;">Faça o pagamento via PIX:</p>
+                    <div style="background: #222; padding: 1rem; border-radius: 6px; margin-bottom: 1rem;">
+                        <p style="margin-bottom: 0.5rem;"><strong>Chave PIX:</strong></p>
+                        <p style="word-break: break-all; margin-bottom: 0.5rem;">${PIX_KEY}</p>
+                        <button class="btn" onclick="copyPixKey()" style="margin-bottom: 0.5rem;">Copiar Chave</button>
+                        <p style="margin-bottom: 0.5rem;"><strong>Valor:</strong> R$ ${paymentData.price.toFixed(2)}</p>
+                    </div>
+                    <div id="payment-status">
+                        <p style="margin-bottom: 1rem;">Após realizar o pagamento, clique no botão abaixo:</p>
+                        <button class="btn" onclick="simulatePayment('${paymentData.transaction_id}', ${paymentData.credits})">
+                            Simular Pagamento (Teste)
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function copyPixKey() {
+            navigator.clipboard.writeText(PIX_KEY).then(() => {
+                alert('Chave PIX copiada!');
+            });
+        }
+        
+        async function simulatePayment(transactionId, credits) {
+            // Atualizar status da transação
             try {
-                // Em produção, isso seria uma chamada para seu backend
-                // Por enquanto, vamos simular uma preferência
-                const response = await fetch('https://api.mercadopago.com/checkout/preferences', {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${MP_ACCESS_TOKEN}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(preferenceData)
-                });
+                if (!supabaseClient) {
+                    alert('Erro de conexão com o banco de dados.');
+                    return;
+                }
                 
-                const preference = await response.json();
-                return preference.id;
+                const { error } = await supabaseClient
+                    .from('transactions')
+                    .update({ 
+                        status: 'completed',
+                        confirmed_at: new Date().toISOString()
+                    })
+                    .eq('id', transactionId);
+                
+                if (error) {
+                    console.error('❌ Erro ao atualizar transação:', error);
+                    alert('Erro ao processar pagamento. Tente novamente.');
+                    return;
+                }
+                
+                // Adicionar créditos ao usuário
+                const newCredits = await updateUserCredits(currentUser.email, credits);
+                if (newCredits !== null) {
+                    currentUser.credits = newCredits;
+                    updateUserInterface();
+                }
+                
+                showPaymentSuccess({ credits });
                 
             } catch (error) {
-                console.error('Erro ao criar preferência:', error);
-                throw error;
+                console.error('❌ Erro ao simular pagamento:', error);
+                alert('Erro ao processar pagamento. Tente novamente.');
             }
         }
         
-        function showPixFallback(paymentData) {
-            const container = document.getElementById('mercadopago-checkout');
-            container.innerHTML = `
-                <div style="text-align: center; padding: 2rem; background: #111; border-radius: 8px;">
-                    <h4>🔑 Pagamento PIX</h4>
-                    <div style="background: #000; padding: 1rem; border-radius: 6px; font-family: monospace; word-break: break-all; margin: 1rem 0;">
-                        ${PIX_KEY}
-                    </div>
-                    <button class="btn-secondary" onclick="copyPixKey()" style="width: 100%;">
-                        📋 Copiar Chave PIX
-                    </button>
-                    <p style="color: #999; font-size: 0.9rem; margin-top: 1rem;">
-                        Favorecido: ${PIX_NAME}<br>
-                        Valor: R$ ${paymentData.amount.toFixed(2).replace('.', ',')}
-                    </p>
-                </div>
-            `;
-        }
-
-        // Sistema de verificação automática de pagamento
-        let paymentVerificationInterval = null;
-        
         function startPaymentVerification(transactionId) {
-            console.log('Iniciando verificação de pagamento para:', transactionId);
-            
-            // Mostrar status de verificação
-            const container = document.getElementById('mercadopago-checkout');
-            const statusDiv = document.createElement('div');
-            statusDiv.id = 'payment-status';
-            statusDiv.innerHTML = `
-                <div style="text-align: center; padding: 1rem; background: #1a4d1a; border-radius: 6px; margin-top: 1rem;">
-                    <div style="display: inline-block; width: 20px; height: 20px; border: 2px solid #4ade80; border-top: 2px solid transparent; border-radius: 50%; animation: spin 1s linear infinite;"></div>
-                    <p style="margin: 0.5rem 0; color: #4ade80;">Verificando pagamento...</p>
-                    <small style="color: #999;">Aguarde enquanto confirmamos seu pagamento</small>
-                </div>
-            `;
-            container.appendChild(statusDiv);
-            
             // Verificar a cada 3 segundos
             paymentVerificationInterval = setInterval(() => {
                 checkPaymentStatus(transactionId);
@@ -2512,16 +1101,29 @@
             }, 300000); // 5 minutos
         }
         
-        function checkPaymentStatus(transactionId) {
-            // Em produção, isso seria uma chamada real para API do Mercado Pago
-            // Por enquanto, simular verificação baseada em probabilidade
-            
-            const transactions = getFromLocalStorage('verificapessoa_transactions') || [];
-            const transaction = transactions.find(t => t.id == transactionId);
-            
-            if (transaction && transaction.status === 'completed') {
-                clearInterval(paymentVerificationInterval);
-                showPaymentSuccess(transaction);
+        async function checkPaymentStatus(transactionId) {
+            try {
+                if (!supabaseClient) {
+                    return;
+                }
+                
+                const { data, error } = await supabaseClient
+                    .from('transactions')
+                    .select('*')
+                    .eq('id', transactionId)
+                    .single();
+                
+                if (error) {
+                    console.error('❌ Erro ao verificar status do pagamento:', error);
+                    return;
+                }
+                
+                if (data && data.status === 'completed') {
+                    clearInterval(paymentVerificationInterval);
+                    showPaymentSuccess(data);
+                }
+            } catch (error) {
+                console.error('❌ Erro ao verificar status do pagamento:', error);
             }
         }
         
@@ -2548,114 +1150,43 @@
             if (statusDiv) {
                 statusDiv.innerHTML = `
                     <div style="text-align: center; padding: 1rem; background: #4d1a1a; border-radius: 6px;">
-                        <div style="font-size: 2rem; color: #ff6b6b;">⏰</div>
-                        <p style="margin: 0.5rem 0; color: #ff6b6b; font-weight: bold;">Tempo Esgotado</p>
-                        <p style="color: #ccc; margin: 0; font-size: 0.9rem;">
-                            Se você fez o pagamento, seus créditos serão adicionados em breve.<br>
-                            Entre em contato conosco se houver problemas.
+                        <div style="font-size: 2rem; color: #f87171;">⚠️</div>
+                        <p style="margin: 0.5rem 0; color: #f87171; font-weight: bold;">Tempo Esgotado</p>
+                        <p style="color: #ccc; margin: 0;">
+                            Não recebemos a confirmação do seu pagamento.
                         </p>
+                        <p style="color: #ccc; margin: 0.5rem 0;">
+                            Se você já pagou, seus créditos serão adicionados automaticamente em breve.
+                        </p>
+                        <button class="btn" onclick="closeModal();" style="margin-top: 1rem;">
+                            Fechar
+                        </button>
                     </div>
                 `;
             }
         }
-
-        // Função para simulação de pagamento apenas para admin
-        function adminSimulatePayment(transactionId, credits) {
-            const adminPassword = prompt('Digite a senha de admin para simular pagamento:');
-            if (adminPassword === 'Tetateta159@') {
-                simulatePayment(transactionId, credits);
-            } else {
-                alert('Senha incorreta! Apenas administradores podem simular pagamentos.');
-            }
-        }
         
-        // Função para admin liberar créditos manualmente
-        function adminReleaseCredits(userEmail, credits, transactionId) {
-            const users = getAllUsers();
-            const userIndex = users.findIndex(u => u.email === userEmail);
-            
-            if (userIndex !== -1) {
-                users[userIndex].credits += credits;
-                saveToLocalStorage('verificapessoa_users', users);
-                
-                // Atualizar transação
-                const transactions = getFromLocalStorage('verificapessoa_transactions') || [];
-                const transactionIndex = transactions.findIndex(t => t.id == transactionId);
-                if (transactionIndex !== -1) {
-                    transactions[transactionIndex].status = 'completed';
-                    transactions[transactionIndex].completed_at = new Date().toISOString();
-                    saveToLocalStorage('verificapessoa_transactions', transactions);
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modals = document.querySelectorAll('.modal');
+            modals.forEach(modal => {
+                if (event.target === modal) {
+                    closeModal();
                 }
-                
-                alert(`${credits} créditos liberados para ${userEmail}`);
-                location.reload(); // Atualizar página admin
+            });
+        }
+        
+        // Enter key for search
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                performRealSearch();
             }
-        }
+        });
         
-        // Sistema de backup automático
-        function createAutoBackup() {
-            const data = {
-                users: getAllUsers(),
-                transactions: getAllTransactions(),
-                searches: getAllSearches(),
-                backup_created: new Date().toISOString()
-            };
-            
-            // Salvar backup no localStorage com timestamp
-            localStorage.setItem('verificapessoa_auto_backup', JSON.stringify(data));
-            console.log('Backup automático criado:', new Date().toLocaleString());
-        }
-        
-        // Criar backup automático a cada transação
-        function saveTransactionWithBackup(transaction) {
-            const result = saveTransaction(transaction);
-            createAutoBackup(); // Backup após cada transação
-            return result;
-        }
-        
-        // Substituir chamadas de saveTransaction por saveTransactionWithBackup
-        function buyPackage(packageType, price, credits) {
-            const email = currentUser ? currentUser.email : prompt('Digite seu email para continuar:');
-            if (!email) return;
-            
-            const packageNames = {
-                'individual': 'Pesquisa Única',
-                'pack10': 'Pacote 10 Créditos',
-                'pack20': 'Pacote 20 Créditos',
-                'pack50': 'Pacote 50 Créditos'
-            };
-            
-            const transaction = saveTransactionWithBackup({
-                user_email: email,
-                package_type: packageType,
-                amount: price,
-                credits: credits,
-                status: 'pending'
-            });
-            
-            showPaymentModal({
-                transaction_id: transaction.id,
-                package_name: packageNames[packageType],
-                amount: price,
-                credits: credits
-            });
-        }
-
-        // Initialize
+        // Inicialização
         document.addEventListener('DOMContentLoaded', function() {
-            // Inicializar Supabase primeiro
             initSupabase();
-            
-            // Verificar sessão do usuário
-            checkUserSession();
-            
-            // Criar backup inicial
-            createAutoBackup();
-            
-            // Inicializar Mercado Pago
-            setTimeout(initMercadoPago, 1000);
-            
-            console.log('🚀 Sistema inicializado com Supabase + localStorage híbrido');
+            updateUserInterface();
         });
     </script>
 </body>
