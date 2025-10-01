@@ -3,24 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin - Verifica Pessoa</title>
+    <title>Admin - VerificaPessoa</title>
     
     <!-- Supabase SDK -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.3/dist/umd/supabase.min.js"></script>
     
     <style>
-        body {
+        * {
             margin: 0;
             padding: 0;
-            font-family: Arial, sans-serif;
-            background-color: #000;
-            color: #fff;
+            box-sizing: border-box;
         }
         
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #000;
+            color: #fff;
+            line-height: 1.6;
+        }
+        
+        /* Login Form */
         .login-container {
             max-width: 400px;
             margin: 100px auto;
-            background-color: #111;
+            background: #111;
             border: 1px solid #333;
             border-radius: 8px;
             padding: 30px;
@@ -30,13 +36,7 @@
             font-size: 24px;
             margin-bottom: 20px;
             text-align: center;
-        }
-        
-        .pix-info {
-            background-color: #222;
-            border-radius: 4px;
-            padding: 15px;
-            margin-bottom: 20px;
+            font-weight: normal;
         }
         
         .form-group {
@@ -46,37 +46,34 @@
         .form-group label {
             display: block;
             margin-bottom: 5px;
-            color: #ccc;
+            color: #999;
         }
         
-        .form-control {
+        .form-group input {
             width: 100%;
             padding: 10px;
-            background-color: #222;
+            background: #222;
             border: 1px solid #444;
             border-radius: 4px;
             color: #fff;
         }
         
         .btn {
-            width: 100%;
-            background-color: #0066ff;
-            color: white;
+            background: #0066ff;
+            color: #fff;
             border: none;
             padding: 10px;
             border-radius: 4px;
             cursor: pointer;
-            font-size: 16px;
-        }
-        
-        .btn:hover {
-            background-color: #0052cc;
+            width: 100%;
         }
         
         /* Dashboard */
         .dashboard {
             display: none;
             padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
         }
         
         .dashboard.active {
@@ -88,12 +85,13 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 30px;
-            padding-bottom: 20px;
+            padding-bottom: 15px;
             border-bottom: 1px solid #333;
         }
         
         .dashboard-title {
             font-size: 24px;
+            font-weight: normal;
         }
         
         .stats-grid {
@@ -104,7 +102,7 @@
         }
         
         .stat-card {
-            background-color: #111;
+            background: #111;
             border: 1px solid #333;
             border-radius: 8px;
             padding: 20px;
@@ -113,7 +111,7 @@
         
         .stat-value {
             font-size: 36px;
-            font-weight: 300;
+            font-weight: normal;
             margin-bottom: 10px;
         }
         
@@ -123,7 +121,7 @@
         }
         
         .section {
-            background-color: #111;
+            background: #111;
             border: 1px solid #333;
             border-radius: 8px;
             padding: 20px;
@@ -132,6 +130,7 @@
         
         .section-title {
             font-size: 18px;
+            font-weight: normal;
             margin-bottom: 20px;
             padding-bottom: 10px;
             border-bottom: 1px solid #333;
@@ -146,16 +145,12 @@
         .table td {
             padding: 10px;
             text-align: left;
-            border-bottom: 1px solid #333;
+            border-bottom: 1px solid #222;
         }
         
         .table th {
             color: #999;
             font-weight: normal;
-        }
-        
-        .table tr:last-child td {
-            border-bottom: none;
         }
         
         .badge {
@@ -166,34 +161,34 @@
         }
         
         .badge-success {
-            background-color: rgba(0, 204, 102, 0.2);
+            background: rgba(0, 204, 102, 0.2);
             color: #00cc66;
         }
         
         .badge-warning {
-            background-color: rgba(255, 153, 0, 0.2);
+            background: rgba(255, 153, 0, 0.2);
             color: #ff9900;
         }
         
         .badge-danger {
-            background-color: rgba(255, 51, 51, 0.2);
+            background: rgba(255, 51, 51, 0.2);
             color: #ff3333;
         }
         
         .btn-sm {
-            width: auto;
             padding: 5px 10px;
             font-size: 12px;
+            width: auto;
         }
         
         .btn-outline {
-            background-color: transparent;
+            background: transparent;
             border: 1px solid #0066ff;
             color: #0066ff;
         }
         
         .btn-danger {
-            background-color: #ff3333;
+            background: #ff3333;
         }
         
         .actions {
@@ -201,7 +196,7 @@
             gap: 5px;
         }
         
-        /* Responsividade */
+        /* Responsive */
         @media (max-width: 768px) {
             .stats-grid {
                 grid-template-columns: 1fr;
@@ -215,28 +210,25 @@
             .table td {
                 padding: 8px;
             }
+            
+            .actions {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
 <body>
     <!-- Login Form -->
     <div class="login-container" id="loginContainer">
-        <h1 class="login-title">Admin Login - Verifica Pessoa</h1>
-        
-        <div class="pix-info">
-            <p><strong>Dados PIX Configurados:</strong></p>
-            <p>Chave: 3656e000-acb3-4645-a176-034c4d9ba6df</p>
-            <p>Nome: Verifica Pessoa</p>
-        </div>
-        
+        <h1 class="login-title">Admin Login - VerificaPessoa</h1>
         <form id="loginForm" onsubmit="handleLogin(event)">
             <div class="form-group">
-                <label for="username">Usuário:</label>
-                <input type="text" id="username" class="form-control" required>
+                <label>Usuário:</label>
+                <input type="text" id="username" required>
             </div>
             <div class="form-group">
-                <label for="password">Senha:</label>
-                <input type="password" id="password" class="form-control" required>
+                <label>Senha:</label>
+                <input type="password" id="password" required>
             </div>
             <button type="submit" class="btn">Entrar</button>
         </form>
@@ -245,15 +237,8 @@
     <!-- Dashboard -->
     <div class="dashboard" id="dashboard">
         <div class="dashboard-header">
-            <h1 class="dashboard-title">Painel Administrativo - Verifica Pessoa</h1>
+            <h1 class="dashboard-title">Painel Administrativo - VerificaPessoa</h1>
             <button class="btn" style="width: auto;" onclick="handleLogout()">Sair</button>
-        </div>
-        
-        <div class="pix-info" style="margin-bottom: 30px;">
-            <p><strong>🔑 Configuração PIX Ativa:</strong></p>
-            <p>Chave: 3656e000-acb3-4645-a176-034c4d9ba6df</p>
-            <p>Favorecido: Verifica Pessoa</p>
-            <p>Status: ✅ Integrado e Funcionando</p>
         </div>
         
         <div class="stats-grid">
@@ -296,7 +281,7 @@
         </div>
         
         <div class="section">
-            <h2 class="section-title">Transações PIX</h2>
+            <h2 class="section-title">Transações</h2>
             <table class="table" id="transactionsTable">
                 <thead>
                     <tr>
@@ -310,7 +295,7 @@
                 </thead>
                 <tbody id="transactionsTableBody">
                     <tr>
-                        <td colspan="6" style="text-align: center;">Carregando transações...</td>
+                        <td colspan="6" style="text-align: center;">Carregando dados...</td>
                     </tr>
                 </tbody>
             </table>
@@ -329,13 +314,13 @@
                 </thead>
                 <tbody id="searchesTableBody">
                     <tr>
-                        <td colspan="4" style="text-align: center;">Carregando pesquisas...</td>
+                        <td colspan="4" style="text-align: center;">Carregando dados...</td>
                     </tr>
                 </tbody>
             </table>
         </div>
     </div>
-    
+
     <script>
         // Supabase - Credenciais reais
         const SUPABASE_URL = "https://uqktdjthtiruwqbcjibc.supabase.co";
