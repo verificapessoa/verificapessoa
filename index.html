@@ -9,7 +9,7 @@
     <script src="https://sdk.mercadopago.com/js/v2"></script>
     
     <!-- Supabase SDK -->
-    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.3/dist/umd/supabase.min.js"></script>
     
     <style>
         * {
@@ -379,7 +379,6 @@
             color: #ff4d4d;
             font-size: 0.9rem;
             margin-top: 0.5rem;
-            display: none;
         }
         
         /* Admin Link */
@@ -571,11 +570,10 @@
                 <a href="termos.html" style="color: #999; text-decoration: none; font-size: 0.9rem;">Termos de Uso</a>
                 <a href="termos.html#privacidade" style="color: #999; text-decoration: none; font-size: 0.9rem;">Política de Privacidade</a>
                 <a href="mailto:contato@verificapessoa.com" style="color: #999; text-decoration: none; font-size: 0.9rem;">Contato</a>
+                <a href="admin.html" style="color: #999; text-decoration: none; font-size: 0.9rem;">Admin</a>
             </div>
         </div>
     </footer>
-    
-    <a href="admin.html" class="admin-link">Admin</a>
 
     <!-- Login Modal -->
     <div id="loginModal" class="modal">
@@ -623,7 +621,7 @@
         const MP_ACCESS_TOKEN = "APP_USR-6850941285056243-092512-017e23d3c41ef7b0c005df7970bf13a1-94875335";
         const PIX_KEY = "3656e000-acb3-4645-a176-034c4d9ba6df";
         
-        // Supabase - Substitua pelas suas chaves reais
+        // Supabase - Credenciais reais
         const SUPABASE_URL = "https://uqktdjthtiruwqbcjibc.supabase.co";
         const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVxa3RkanRodGlydXdxYmNqaWJjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg4MjMyNzksImV4cCI6MjA3NDM5OTI3OX0.U-j0zSYqkqY-453gBvGltN1i0ZfDRVxHGpIZEdnyQPE";
         
@@ -643,7 +641,12 @@
         }
         
         // Inicializar Mercado Pago
-        const mp = new MercadoPago(MP_PUBLIC_KEY);
+        let mp = null;
+        try {
+            mp = new MercadoPago(MP_PUBLIC_KEY);
+        } catch (error) {
+            console.error('❌ Erro ao inicializar Mercado Pago:', error);
+        }
         
         // Variáveis globais
         let currentUser = null;
@@ -658,14 +661,14 @@
         async function saveUser(user) {
             try {
                 if (!supabaseClient) {
-                    alert('Erro de conexão com o banco de dados.');
+                    console.error('❌ Supabase não inicializado');
                     return false;
                 }
                 
                 const { data, error } = await supabaseClient
                     .from('users')
                     .insert([{
-                        id: generateId(),
+                        id: user.id || generateId(),
                         email: user.email,
                         name: user.name,
                         password: user.password,
@@ -689,7 +692,7 @@
         async function getUser(email) {
             try {
                 if (!supabaseClient) {
-                    alert('Erro de conexão com o banco de dados.');
+                    console.error('❌ Supabase não inicializado');
                     return null;
                 }
                 
@@ -714,7 +717,7 @@
         async function updateUserCredits(email, credits) {
             try {
                 if (!supabaseClient) {
-                    alert('Erro de conexão com o banco de dados.');
+                    console.error('❌ Supabase não inicializado');
                     return null;
                 }
                 
@@ -746,7 +749,7 @@
         async function saveTransaction(transaction) {
             try {
                 if (!supabaseClient) {
-                    alert('Erro de conexão com o banco de dados.');
+                    console.error('❌ Supabase não inicializado');
                     return false;
                 }
                 
@@ -778,7 +781,7 @@
         async function saveSearch(search) {
             try {
                 if (!supabaseClient) {
-                    alert('Erro de conexão com o banco de dados.');
+                    console.error('❌ Supabase não inicializado');
                     return false;
                 }
                 
@@ -849,15 +852,21 @@
             const password = document.getElementById('loginPassword').value;
             const errorDiv = document.getElementById('loginError');
             
-            const user = await getUser(email);
-            
-            if (user && user.password === password) {
-                currentUser = user;
-                updateUserInterface();
-                closeModal();
-                errorDiv.style.display = 'none';
-            } else {
-                errorDiv.textContent = 'Email ou senha incorretos';
+            try {
+                const user = await getUser(email);
+                
+                if (user && user.password === password) {
+                    currentUser = user;
+                    updateUserInterface();
+                    closeModal();
+                    errorDiv.style.display = 'none';
+                } else {
+                    errorDiv.textContent = 'Email ou senha incorretos';
+                    errorDiv.style.display = 'block';
+                }
+            } catch (error) {
+                console.error('❌ Erro ao fazer login:', error);
+                errorDiv.textContent = 'Erro ao fazer login. Tente novamente.';
                 errorDiv.style.display = 'block';
             }
         }
@@ -882,28 +891,38 @@
                 return;
             }
             
-            const existingUser = await getUser(email);
-            if (existingUser) {
-                errorDiv.textContent = 'Este email já está cadastrado';
-                errorDiv.style.display = 'block';
-                return;
-            }
-            
-            const newUser = {
-                name,
-                email,
-                password,
-                credits: 0
-            };
-            
-            const saved = await saveUser(newUser);
-            
-            if (saved) {
-                currentUser = await getUser(email);
-                updateUserInterface();
-                closeModal();
-                alert('Cadastro realizado com sucesso!');
-            } else {
+            try {
+                // Verificar se o usuário já existe
+                const existingUser = await getUser(email);
+                if (existingUser) {
+                    errorDiv.textContent = 'Este email já está cadastrado';
+                    errorDiv.style.display = 'block';
+                    return;
+                }
+                
+                // Criar novo usuário
+                const newUser = {
+                    id: generateId(),
+                    name,
+                    email,
+                    password,
+                    credits: 0,
+                    created_at: new Date().toISOString()
+                };
+                
+                const saved = await saveUser(newUser);
+                
+                if (saved) {
+                    currentUser = await getUser(email);
+                    updateUserInterface();
+                    closeModal();
+                    alert('Cadastro realizado com sucesso!');
+                } else {
+                    errorDiv.textContent = 'Erro ao cadastrar. Tente novamente.';
+                    errorDiv.style.display = 'block';
+                }
+            } catch (error) {
+                console.error('❌ Erro ao cadastrar:', error);
                 errorDiv.textContent = 'Erro ao cadastrar. Tente novamente.';
                 errorDiv.style.display = 'block';
             }
@@ -929,22 +948,29 @@
                 return;
             }
             
-            // Salvar busca
-            const search = {
-                user_email: currentUser.email,
-                search_term: searchTerm
-            };
-            
-            await saveSearch(search);
-            
-            // Atualizar créditos
-            const newCredits = await updateUserCredits(currentUser.email, -1);
-            if (newCredits !== null) {
-                currentUser.credits = newCredits;
-                updateUserInterface();
+            try {
+                // Salvar busca
+                const search = {
+                    id: generateId(),
+                    user_email: currentUser.email,
+                    search_term: searchTerm,
+                    created_at: new Date().toISOString()
+                };
+                
+                await saveSearch(search);
+                
+                // Atualizar créditos
+                const newCredits = await updateUserCredits(currentUser.email, -1);
+                if (newCredits !== null) {
+                    currentUser.credits = newCredits;
+                    updateUserInterface();
+                }
+                
+                alert(`Pesquisa realizada com sucesso! Resultados para "${searchTerm}" serão enviados para seu email.`);
+            } catch (error) {
+                console.error('❌ Erro ao realizar pesquisa:', error);
+                alert('Erro ao realizar pesquisa. Tente novamente.');
             }
-            
-            alert(`Pesquisa realizada com sucesso! Resultados para "${searchTerm}" serão enviados para seu email.`);
         }
         
         // Payment functions
@@ -993,6 +1019,12 @@
         
         function initMercadoPagoCheckout(paymentData) {
             try {
+                if (!mp) {
+                    console.error('❌ Mercado Pago não inicializado');
+                    showPixFallback(paymentData);
+                    return;
+                }
+                
                 // Em ambiente de produção, isso seria uma chamada para seu backend
                 // que criaria a preferência no Mercado Pago
                 
@@ -1015,7 +1047,7 @@
                 showPixFallback(paymentData);
                 
             } catch (error) {
-                console.error('Erro ao inicializar checkout:', error);
+                console.error('❌ Erro ao inicializar checkout:', error);
                 // Fallback para PIX manual
                 showPixFallback(paymentData);
             }
@@ -1053,7 +1085,8 @@
             // Atualizar status da transação
             try {
                 if (!supabaseClient) {
-                    alert('Erro de conexão com o banco de dados.');
+                    console.error('❌ Supabase não inicializado');
+                    alert('Erro ao processar pagamento. Tente novamente.');
                     return;
                 }
                 
