@@ -25,184 +25,118 @@
             line-height: 1.6;
         }
         
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-        
         /* Header */
         header {
-            background: rgba(0,0,0,0.95);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid #333;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-        
-        .header-content {
+            padding: 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1rem 0;
+            border-bottom: 1px solid #222;
         }
         
         .logo {
             display: flex;
             align-items: center;
-            font-weight: bold;
-            font-size: 1.25rem;
+            gap: 10px;
+            font-size: 18px;
+            font-weight: normal;
             color: #fff;
             text-decoration: none;
         }
         
-        .logo img {
-            height: 30px;
-            margin-right: 0.5rem;
-        }
-        
-        .user-area {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-        
         .btn {
-            padding: 0.5rem 1rem;
             background: #0066ff;
             color: #fff;
             border: none;
+            padding: 8px 16px;
             border-radius: 4px;
             cursor: pointer;
-            font-size: 0.9rem;
-            font-weight: 500;
-        }
-        
-        .btn-outline {
-            background: transparent;
-            border: 1px solid #0066ff;
-            color: #0066ff;
+            font-size: 14px;
         }
         
         .user-info {
             display: none;
             align-items: center;
-            gap: 1rem;
+            gap: 15px;
         }
         
         .user-info.active {
             display: flex;
         }
         
-        .credits-badge {
-            background: #0066ff;
-            color: #fff;
-            padding: 0.25rem 0.75rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 500;
-        }
-        
         /* Hero Section */
         .hero {
-            padding: 4rem 0;
             text-align: center;
+            padding: 80px 20px;
         }
         
         .hero h1 {
-            font-size: 3.5rem;
-            font-weight: 800;
-            margin-bottom: 2rem;
-            letter-spacing: -0.02em;
-        }
-        
-        .hero .subtitle {
-            color: #666;
+            font-size: 48px;
+            font-weight: normal;
+            margin-bottom: 20px;
         }
         
         .hero p {
-            font-size: 1.25rem;
             color: #999;
-            margin-bottom: 3rem;
-            font-weight: 300;
+            margin-bottom: 40px;
         }
         
-        .search-box {
+        /* Search Box */
+        .search-container {
             max-width: 600px;
-            margin: 0 auto 2rem;
+            margin: 0 auto 30px;
             display: flex;
-            gap: 0.5rem;
         }
         
         .search-input {
             flex: 1;
-            padding: 1rem;
+            padding: 12px;
             background: #111;
             border: 1px solid #333;
-            border-radius: 6px;
+            border-right: none;
             color: #fff;
-            font-size: 1rem;
-        }
-        
-        .search-input:focus {
-            outline: none;
-            border-color: #fff;
+            border-radius: 4px 0 0 4px;
         }
         
         .search-btn {
-            padding: 1rem 2rem;
             background: #fff;
             color: #000;
             border: none;
-            border-radius: 6px;
-            font-weight: 500;
+            padding: 12px;
+            border-radius: 0 4px 4px 0;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
         
         .search-info {
             color: #666;
-            font-size: 0.9rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            flex-wrap: wrap;
+            font-size: 14px;
         }
         
         /* Plans Section */
         .plans {
-            padding: 4rem 0;
+            padding: 60px 20px;
             text-align: center;
         }
         
-        .section-title {
-            font-size: 2.5rem;
-            font-weight: 800;
-            margin-bottom: 1rem;
-            letter-spacing: -0.02em;
-        }
-        
-        .section-subtitle {
-            color: #666;
-            margin-bottom: 3rem;
+        .plans h2 {
+            font-size: 36px;
+            font-weight: normal;
+            margin-bottom: 40px;
         }
         
         .plans-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            margin-top: 3rem;
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
         }
         
         .plan-card {
             background: #111;
             border: 1px solid #333;
-            border-radius: 10px;
-            padding: 2rem;
+            border-radius: 8px;
+            padding: 30px;
             position: relative;
             overflow: hidden;
         }
@@ -210,110 +144,34 @@
         .plan-card.popular::before {
             content: "MAIS POPULAR";
             position: absolute;
-            top: 10px;
-            right: -30px;
+            top: 15px;
+            right: -35px;
             background: #0066ff;
             color: #fff;
-            padding: 0.25rem 2rem;
+            padding: 5px 40px;
             transform: rotate(45deg);
-            font-size: 0.7rem;
-            font-weight: 500;
+            font-size: 12px;
         }
         
         .plan-title {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
+            font-size: 24px;
+            margin-bottom: 15px;
         }
         
         .plan-price {
-            font-size: 2.5rem;
-            font-weight: 800;
-            margin-bottom: 0.5rem;
+            font-size: 36px;
+            margin-bottom: 10px;
         }
         
         .plan-details {
             color: #999;
-            margin-bottom: 1.5rem;
-            font-size: 0.9rem;
+            margin-bottom: 20px;
         }
         
         .plan-savings {
             color: #00cc66;
-            margin-bottom: 1.5rem;
-            font-size: 0.9rem;
-        }
-        
-        /* Testimonials */
-        .testimonials {
-            padding: 4rem 0;
-            background: #0a0a0a;
-        }
-        
-        .testimonials-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-top: 3rem;
-        }
-        
-        .testimonial-card {
-            background: #111;
-            border: 1px solid #333;
-            border-radius: 10px;
-            padding: 1.5rem;
-        }
-        
-        .testimonial-text {
-            font-style: italic;
-            margin-bottom: 1.5rem;
-            color: #ccc;
-        }
-        
-        .testimonial-author {
-            display: flex;
-            align-items: center;
-        }
-        
-        .author-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: #333;
-            color: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            margin-right: 1rem;
-        }
-        
-        .author-info h4 {
-            margin: 0;
-            font-size: 1rem;
-        }
-        
-        .author-info p {
-            margin: 0;
-            color: #666;
-            font-size: 0.8rem;
-        }
-        
-        /* CTA Section */
-        .cta {
-            padding: 6rem 0;
-            text-align: center;
-        }
-        
-        .cta-btn {
-            padding: 1rem 2rem;
-            background: #0066ff;
-            color: #fff;
-            border: none;
-            border-radius: 6px;
-            font-size: 1.1rem;
-            font-weight: 500;
-            cursor: pointer;
-            margin-top: 2rem;
+            margin-bottom: 20px;
+            font-size: 14px;
         }
         
         /* Modal */
@@ -337,243 +195,175 @@
         .modal-content {
             background: #111;
             border: 1px solid #333;
-            border-radius: 10px;
-            padding: 2rem;
+            border-radius: 8px;
+            padding: 30px;
             width: 100%;
             max-width: 400px;
-            position: relative;
         }
         
         .modal-content h3 {
-            margin-bottom: 1.5rem;
+            margin-bottom: 20px;
             text-align: center;
         }
         
         .modal-content input {
             width: 100%;
-            padding: 0.75rem;
-            margin-bottom: 1rem;
+            padding: 12px;
+            margin-bottom: 15px;
             background: #222;
             border: 1px solid #444;
             border-radius: 4px;
             color: #fff;
         }
         
-        .modal-content input:focus {
-            outline: none;
-            border-color: #0066ff;
-        }
-        
         .modal-content .btn {
             width: 100%;
-            margin-top: 1rem;
+            margin-top: 10px;
         }
         
         .modal-content .btn-secondary {
-            background: transparent;
-            border: 1px solid #444;
-            color: #ccc;
+            background: #333;
+            color: #fff;
         }
         
         .error-message {
             color: #ff4d4d;
-            font-size: 0.9rem;
-            margin-top: 0.5rem;
+            font-size: 14px;
+            margin-top: 10px;
+            text-align: center;
+        }
+        
+        /* Footer */
+        footer {
+            padding: 30px 20px;
+            text-align: center;
+            border-top: 1px solid #222;
+            margin-top: 60px;
+        }
+        
+        footer a {
+            color: #666;
+            text-decoration: none;
+            margin: 0 10px;
+            font-size: 14px;
         }
         
         /* Admin Link */
         .admin-link {
-            position: fixed;
-            bottom: 1rem;
-            right: 1rem;
-            color: #333;
-            font-size: 0.8rem;
+            color: #444;
+            font-size: 12px;
             text-decoration: none;
         }
         
         /* Responsive */
         @media (max-width: 768px) {
             .hero h1 {
-                font-size: 2.5rem;
+                font-size: 36px;
             }
             
-            .search-box {
+            .search-container {
                 flex-direction: column;
             }
             
+            .search-input {
+                border-right: 1px solid #333;
+                border-radius: 4px;
+                margin-bottom: 10px;
+            }
+            
             .search-btn {
-                width: 100%;
+                border-radius: 4px;
             }
             
             .plans-grid {
                 grid-template-columns: 1fr;
                 max-width: 350px;
-                margin-left: auto;
-                margin-right: auto;
             }
         }
     </style>
 </head>
 <body>
     <header>
-        <div class="container">
-            <div class="header-content">
-                <a href="#" class="logo">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect width="24" height="24" rx="4" fill="#0066ff"/>
-                        <path d="M12 6C9.79086 6 8 7.79086 8 10C8 12.2091 9.79086 14 12 14C14.2091 14 16 12.2091 16 10C16 7.79086 14.2091 6 12 6Z" fill="white"/>
-                        <path d="M18 18H6C6 15.7909 8.68629 14 12 14C15.3137 14 18 15.7909 18 18Z" fill="white"/>
-                    </svg>
-                    VERIFICA PESSOA
-                </a>
-                
-                <div class="user-area">
-                    <button id="loginBtn" class="btn" onclick="openLoginModal()">Entrar</button>
-                    <div id="userInfo" class="user-info">
-                        <div id="userCredits" class="credits-badge">0 créditos</div>
-                        <span id="userEmail"></span>
-                        <button class="btn btn-outline" onclick="handleLogout()">Sair</button>
-                    </div>
-                </div>
+        <a href="#" class="logo">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M12 8v8M8 12h8"/>
+            </svg>
+            VERIFICA PESSOA
+        </a>
+        <div>
+            <div id="userInfo" class="user-info">
+                <span id="userEmail"></span>
+                <span id="userCredits">0 créditos</span>
+                <button class="btn" onclick="logout()">Sair</button>
             </div>
+            <button id="loginBtn" class="btn" onclick="openLoginModal()">Entrar</button>
         </div>
     </header>
 
-    <main>
-        <section class="hero">
-            <div class="container">
-                <h1>VOCÊ SABE COM<br>QUEM ESTÁ?</h1>
-                <p>Descubra a verdade sobre qualquer pessoa em segundos.<br>Proteja sua família. Proteja seu futuro.</p>
-                
-                <div class="search-box">
-                    <input type="text" id="searchInput" class="search-input" placeholder="Digite o nome completo da pessoa...">
-                    <button id="searchButton" class="search-btn" onclick="performRealSearch()">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M21 21L16.65 16.65M19 11C19 15.4183 15.4183 19 11 19C6.58172 19 3 15.4183 3 11C3 6.58172 6.58172 3 11 3C15.4183 3 19 6.58172 19 11Z" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </button>
-                </div>
-                
-                <div class="search-info">
-                    🔍 Pesquisa em tempo real • 📊 Múltiplas fontes • ⚡ Resultados instantâneos<br>
-                    <strong>✅ 100% Informações Públicas Legais</strong>
-                </div>
-            </div>
-        </section>
+    <section class="hero">
+        <h1>
+            VOCÊ SABE COM<br>
+            QUEM ESTÁ?
+        </h1>
+        <p>
+            Descubra a verdade sobre qualquer pessoa em segundos.<br>
+            Proteja sua família. Proteja seu futuro.
+        </p>
+        
+        <div class="search-container">
+            <input type="text" id="searchInput" class="search-input" placeholder="Digite o nome completo da pessoa...">
+            <button class="search-btn" onclick="performRealSearch()">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"/>
+                    <path d="m21 21-4.35-4.35"/>
+                </svg>
+            </button>
+        </div>
+        
+        <div class="search-info">
+            🔍 Pesquisa em tempo real • 📊 Múltiplas fontes • ⚡ Resultados instantâneos<br>
+            ✅ 100% Informações Públicas Legais
+        </div>
+    </section>
 
-        <section class="plans">
-            <div class="container">
-                <h2 class="section-title">ESCOLHA SEU PLANO</h2>
-                <p class="section-subtitle">Investigações profissionais ao seu alcance</p>
-                
-                <div class="plans-grid">
-                    <div class="plan-card">
-                        <h3 class="plan-title">Pesquisa Única</h3>
-                        <div class="plan-price">R$ 0,69</div>
-                        <div class="plan-details">1 crédito • R$ 0,69 por pesquisa</div>
-                        <button class="btn" onclick="handlePurchase('individual')">Comprar Agora</button>
-                    </div>
-                    
-                    <div class="plan-card">
-                        <h3 class="plan-title">Pacote 10 Créditos</h3>
-                        <div class="plan-price">R$ 5,90</div>
-                        <div class="plan-details">10 créditos • R$ 0,59 por pesquisa</div>
-                        <div class="plan-savings">Economize R$ 1,00</div>
-                        <button class="btn" onclick="handlePurchase('pack10')">Comprar Agora</button>
-                    </div>
-                    
-                    <div class="plan-card popular">
-                        <h3 class="plan-title">Pacote 20 Créditos</h3>
-                        <div class="plan-price">R$ 9,80</div>
-                        <div class="plan-details">20 créditos • R$ 0,49 por pesquisa</div>
-                        <div class="plan-savings">Economize R$ 4,00</div>
-                        <button class="btn" onclick="handlePurchase('pack20')">Comprar Agora</button>
-                    </div>
-                    
-                    <div class="plan-card">
-                        <h3 class="plan-title">Pacote 50 Créditos</h3>
-                        <div class="plan-price">R$ 17,50</div>
-                        <div class="plan-details">50 créditos • R$ 0,35 por pesquisa</div>
-                        <div class="plan-savings">Economize R$ 17,00</div>
-                        <button class="btn" onclick="handlePurchase('pack50')">Comprar Agora</button>
-                    </div>
-                </div>
+    <section class="plans">
+        <h2>ESCOLHA SEU PLANO</h2>
+        <p style="color: #999; margin-bottom: 30px;">Investigações profissionais ao seu alcance</p>
+        
+        <div class="plans-grid">
+            <div class="plan-card">
+                <h3 class="plan-title">Pesquisa Única</h3>
+                <div class="plan-price">R$ 0,69</div>
+                <div class="plan-details">1 crédito • R$ 0,69 por pesquisa</div>
+                <button class="btn" onclick="buyPackage('individual', 0.69, 1)">Comprar Agora</button>
             </div>
-        </section>
-
-        <section class="testimonials">
-            <div class="container">
-                <h2 class="section-title">ELES DESCOBRIRAM A VERDADE</h2>
-                <p class="section-subtitle">Histórias reais de pessoas que se protegeram</p>
-                
-                <div class="testimonials-grid">
-                    <div class="testimonial-card">
-                        <div class="testimonial-text">
-                            "Descobri que meu namorado tinha um passado que ele escondeu de mim. Salvou meu futuro!"
-                        </div>
-                        <div class="testimonial-author">
-                            <div class="author-avatar">M</div>
-                            <div class="author-info">
-                                <h4>Maria Silva</h4>
-                                <p>São Paulo, SP</p>
-                                <p>23 de Setembro, 2025</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="testimonial-card">
-                        <div class="testimonial-text">
-                            "Encontrei informações sobre um sócio que me ajudaram a evitar um golpe de R$ 50.000."
-                        </div>
-                        <div class="testimonial-author">
-                            <div class="author-avatar">C</div>
-                            <div class="author-info">
-                                <h4>Carlos Mendes</h4>
-                                <p>Rio de Janeiro, RJ</p>
-                                <p>23 de Setembro, 2025</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="testimonial-card">
-                        <div class="testimonial-text">
-                            "Minha filha estava namorando alguém perigoso. Consegui protegê-la a tempo."
-                        </div>
-                        <div class="testimonial-author">
-                            <div class="author-avatar">A</div>
-                            <div class="author-info">
-                                <h4>Ana Costa</h4>
-                                <p>Belo Horizonte, MG</p>
-                                <p>22 de Setembro, 2025</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            
+            <div class="plan-card">
+                <h3 class="plan-title">Pacote 10 Créditos</h3>
+                <div class="plan-price">R$ 5,90</div>
+                <div class="plan-details">10 créditos • R$ 0,59 por pesquisa</div>
+                <div class="plan-savings">Economize R$ 1,00</div>
+                <button class="btn" onclick="buyPackage('pack10', 5.90, 10)">Comprar Agora</button>
             </div>
-        </section>
-
-        <section class="cta">
-            <div class="container">
-                <h2 class="section-title">NÃO SEJA MAIS<br>UMA VÍTIMA</h2>
-                <p>Proteja-se agora. Descubra a verdade antes que seja tarde demais.</p>
-                <button class="cta-btn" onclick="scrollToSearch()">COMEÇAR INVESTIGAÇÃO</button>
+            
+            <div class="plan-card popular">
+                <h3 class="plan-title">Pacote 20 Créditos</h3>
+                <div class="plan-price">R$ 9,80</div>
+                <div class="plan-details">20 créditos • R$ 0,49 por pesquisa</div>
+                <div class="plan-savings">Economize R$ 4,00</div>
+                <button class="btn" onclick="buyPackage('pack20', 9.80, 20)">Comprar Agora</button>
             </div>
-        </section>
-    </main>
-
-    <footer style="background: #111; border-top: 1px solid #333; padding: 2rem 0; margin-top: 3rem;">
-        <div class="container" style="text-align: center;">
-            <p style="color: #666; margin-bottom: 1rem;">
-                © 2025 VerificaPessoa. Todos os direitos reservados.
-            </p>
-            <div style="display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap;">
-                <a href="termos.html" style="color: #999; text-decoration: none; font-size: 0.9rem;">Termos de Uso</a>
-                <a href="termos.html#privacidade" style="color: #999; text-decoration: none; font-size: 0.9rem;">Política de Privacidade</a>
-                <a href="mailto:contato@verificapessoa.com" style="color: #999; text-decoration: none; font-size: 0.9rem;">Contato</a>
-                <a href="admin.html" style="color: #999; text-decoration: none; font-size: 0.9rem;">Admin</a>
+            
+            <div class="plan-card">
+                <h3 class="plan-title">Pacote 50 Créditos</h3>
+                <div class="plan-price">R$ 17,50</div>
+                <div class="plan-details">50 créditos • R$ 0,35 por pesquisa</div>
+                <div class="plan-savings">Economize R$ 17,00</div>
+                <button class="btn" onclick="buyPackage('pack50', 17.50, 50)">Comprar Agora</button>
             </div>
         </div>
-    </footer>
+    </section>
 
     <!-- Login Modal -->
     <div id="loginModal" class="modal">
@@ -598,7 +388,7 @@
                 <input type="text" id="registerName" placeholder="Nome Completo" required>
                 <input type="email" id="registerEmail" placeholder="Email" required>
                 <input type="password" id="registerPassword" placeholder="Senha" required minlength="6">
-                <input type="password" id="registerPasswordConfirm" placeholder="Confirmar Senha" required minlength="6">
+                <input type="password" id="confirmPassword" placeholder="Confirmar Senha" required minlength="6">
                 <div id="registerError" class="error-message"></div>
                 <button type="submit" class="btn">Cadastrar</button>
                 <button type="button" class="btn btn-secondary" onclick="openLoginModal()">Já tenho conta</button>
@@ -615,11 +405,24 @@
         </div>
     </div>
 
+    <footer>
+        <p style="color: #666; margin-bottom: 15px;">© 2025 VerificaPessoa. Todos os direitos reservados.</p>
+        <div>
+            <a href="termos.html">Termos de Uso</a>
+            <a href="termos.html#privacidade">Política de Privacidade</a>
+            <a href="mailto:contato@verificapessoa.com">Contato</a>
+            <a href="admin.html" class="admin-link">Admin</a>
+        </div>
+    </footer>
+
     <script>
+        // Configurações PIX
+        const PIX_KEY = "3656e000-acb3-4645-a176-034c4d9ba6df";
+        const PIX_NAME = "Verifica Pessoa";
+        
         // Mercado Pago - Substitua pelas suas chaves reais
         const MP_PUBLIC_KEY = "APP_USR-aff32c11-93e2-4ed5-8a5a-9e2ca4405766";
         const MP_ACCESS_TOKEN = "APP_USR-6850941285056243-092512-017e23d3c41ef7b0c005df7970bf13a1-94875335";
-        const PIX_KEY = "3656e000-acb3-4645-a176-034c4d9ba6df";
         
         // Supabase - Credenciais reais
         const SUPABASE_URL = "https://uqktdjthtiruwqbcjibc.supabase.co";
@@ -635,7 +438,6 @@
                 return true;
             } catch (error) {
                 console.error('❌ Erro ao conectar Supabase:', error);
-                alert('Erro ao conectar ao banco de dados. Por favor, tente novamente mais tarde.');
                 return false;
             }
         }
@@ -823,25 +625,19 @@
         function openLoginModal() {
             document.getElementById('loginModal').classList.add('active');
             document.getElementById('registerModal').classList.remove('active');
+            document.getElementById('paymentModal').classList.remove('active');
         }
         
         function openRegisterModal() {
             document.getElementById('loginModal').classList.remove('active');
             document.getElementById('registerModal').classList.add('active');
+            document.getElementById('paymentModal').classList.remove('active');
         }
         
         function closeModal() {
             document.getElementById('loginModal').classList.remove('active');
             document.getElementById('registerModal').classList.remove('active');
             document.getElementById('paymentModal').classList.remove('active');
-        }
-        
-        function scrollToSearch() {
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
-            document.getElementById('searchInput').focus();
         }
         
         // Auth functions
@@ -859,19 +655,17 @@
                     currentUser = user;
                     updateUserInterface();
                     closeModal();
-                    errorDiv.style.display = 'none';
+                    errorDiv.textContent = '';
                 } else {
                     errorDiv.textContent = 'Email ou senha incorretos';
-                    errorDiv.style.display = 'block';
                 }
             } catch (error) {
                 console.error('❌ Erro ao fazer login:', error);
                 errorDiv.textContent = 'Erro ao fazer login. Tente novamente.';
-                errorDiv.style.display = 'block';
             }
         }
         
-        function handleLogout() {
+        function logout() {
             currentUser = null;
             updateUserInterface();
         }
@@ -882,12 +676,11 @@
             const name = document.getElementById('registerName').value;
             const email = document.getElementById('registerEmail').value;
             const password = document.getElementById('registerPassword').value;
-            const passwordConfirm = document.getElementById('registerPasswordConfirm').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
             const errorDiv = document.getElementById('registerError');
             
-            if (password !== passwordConfirm) {
+            if (password !== confirmPassword) {
                 errorDiv.textContent = 'As senhas não coincidem';
-                errorDiv.style.display = 'block';
                 return;
             }
             
@@ -896,7 +689,6 @@
                 const existingUser = await getUser(email);
                 if (existingUser) {
                     errorDiv.textContent = 'Este email já está cadastrado';
-                    errorDiv.style.display = 'block';
                     return;
                 }
                 
@@ -919,12 +711,10 @@
                     alert('Cadastro realizado com sucesso!');
                 } else {
                     errorDiv.textContent = 'Erro ao cadastrar. Tente novamente.';
-                    errorDiv.style.display = 'block';
                 }
             } catch (error) {
                 console.error('❌ Erro ao cadastrar:', error);
                 errorDiv.textContent = 'Erro ao cadastrar. Tente novamente.';
-                errorDiv.style.display = 'block';
             }
         }
         
@@ -974,103 +764,65 @@
         }
         
         // Payment functions
-        function handlePurchase(packageType) {
+        async function buyPackage(packageType, price, credits) {
             if (!currentUser) {
                 alert('Faça login para comprar créditos!');
                 openLoginModal();
                 return;
             }
             
-            let packageDetails = {
-                individual: { name: 'Pesquisa Única', credits: 1, price: 0.69 },
-                pack10: { name: 'Pacote 10 Créditos', credits: 10, price: 5.90 },
-                pack20: { name: 'Pacote 20 Créditos', credits: 20, price: 9.80 },
-                pack50: { name: 'Pacote 50 Créditos', credits: 50, price: 17.50 }
+            const packageNames = {
+                'individual': 'Pesquisa Única',
+                'pack10': 'Pacote 10 Créditos',
+                'pack20': 'Pacote 20 Créditos',
+                'pack50': 'Pacote 50 Créditos'
             };
-            
-            const selected = packageDetails[packageType];
             
             // Criar dados da transação
             const transactionId = generateId();
-            const paymentData = {
-                transaction_id: transactionId,
-                package_type: packageType,
-                credits: selected.credits,
-                price: selected.price,
-                user_email: currentUser.email
-            };
-            
-            // Salvar transação como pendente
-            saveTransaction({
+            const transaction = {
                 id: transactionId,
                 user_email: currentUser.email,
                 package_type: packageType,
-                amount: selected.price,
-                credits: selected.credits,
-                status: 'pending'
-            });
+                amount: price,
+                credits: credits,
+                status: 'pending',
+                created_at: new Date().toISOString()
+            };
+            
+            // Salvar transação como pendente
+            await saveTransaction(transaction);
             
             // Mostrar modal de pagamento
             document.getElementById('paymentModal').classList.add('active');
             
-            // Inicializar checkout do Mercado Pago
-            initMercadoPagoCheckout(paymentData);
-        }
-        
-        function initMercadoPagoCheckout(paymentData) {
-            try {
-                if (!mp) {
-                    console.error('❌ Mercado Pago não inicializado');
-                    showPixFallback(paymentData);
-                    return;
-                }
-                
-                // Em ambiente de produção, isso seria uma chamada para seu backend
-                // que criaria a preferência no Mercado Pago
-                
-                const preference = {
-                    items: [
-                        {
-                            title: `VerificaPessoa - ${paymentData.credits} créditos`,
-                            quantity: 1,
-                            currency_id: 'BRL',
-                            unit_price: paymentData.price
-                        }
-                    ],
-                    payer: {
-                        email: paymentData.user_email
-                    },
-                    external_reference: paymentData.transaction_id
-                };
-                
-                // Para fins de demonstração, mostrar o QR code PIX
-                showPixFallback(paymentData);
-                
-            } catch (error) {
-                console.error('❌ Erro ao inicializar checkout:', error);
-                // Fallback para PIX manual
-                showPixFallback(paymentData);
-            }
-        }
-        
-        function showPixFallback(paymentData) {
+            // Mostrar informações de pagamento
             const paymentContent = document.getElementById('paymentContent');
-            
             paymentContent.innerHTML = `
                 <div style="text-align: center;">
-                    <p style="margin-bottom: 1rem;">Faça o pagamento via PIX:</p>
-                    <div style="background: #222; padding: 1rem; border-radius: 6px; margin-bottom: 1rem;">
-                        <p style="margin-bottom: 0.5rem;"><strong>Chave PIX:</strong></p>
-                        <p style="word-break: break-all; margin-bottom: 0.5rem;">${PIX_KEY}</p>
-                        <button class="btn" onclick="copyPixKey()" style="margin-bottom: 0.5rem;">Copiar Chave</button>
-                        <p style="margin-bottom: 0.5rem;"><strong>Valor:</strong> R$ ${paymentData.price.toFixed(2)}</p>
+                    <p style="margin-bottom: 15px;">
+                        <strong>Pacote:</strong> ${packageNames[packageType]}<br>
+                        <strong>Valor:</strong> R$ ${price.toFixed(2)}<br>
+                        <strong>Créditos:</strong> ${credits}
+                    </p>
+                    
+                    <div style="background: #222; padding: 15px; border-radius: 8px; margin-bottom: 20px; text-align: left;">
+                        <p style="margin-bottom: 10px;"><strong>Chave PIX:</strong> ${PIX_KEY}</p>
+                        <p style="margin-bottom: 10px;"><strong>Favorecido:</strong> ${PIX_NAME}</p>
+                        <button class="btn" style="width: auto;" onclick="copyPixKey()">Copiar Chave</button>
                     </div>
-                    <div id="payment-status">
-                        <p style="margin-bottom: 1rem;">Após realizar o pagamento, clique no botão abaixo:</p>
-                        <button class="btn" onclick="simulatePayment('${paymentData.transaction_id}', ${paymentData.credits})">
-                            Simular Pagamento (Teste)
-                        </button>
-                    </div>
+                    
+                    <p style="margin-bottom: 20px; color: #999;">
+                        Após realizar o pagamento, clique no botão abaixo:
+                    </p>
+                    
+                    <button class="btn" onclick="simulatePayment('${transactionId}', ${credits})">
+                        Simular Pagamento (Teste)
+                    </button>
+                    
+                    <button class="btn btn-secondary" style="margin-top: 10px;" onclick="closeModal()">
+                        Fechar
+                    </button>
                 </div>
             `;
         }
@@ -1082,8 +834,8 @@
         }
         
         async function simulatePayment(transactionId, credits) {
-            // Atualizar status da transação
             try {
+                // Atualizar status da transação
                 if (!supabaseClient) {
                     console.error('❌ Supabase não inicializado');
                     alert('Erro ao processar pagamento. Tente novamente.');
@@ -1111,110 +863,13 @@
                     updateUserInterface();
                 }
                 
-                showPaymentSuccess({ credits });
-                
+                alert(`Pagamento confirmado! ${credits} créditos adicionados à sua conta.`);
+                closeModal();
             } catch (error) {
                 console.error('❌ Erro ao simular pagamento:', error);
                 alert('Erro ao processar pagamento. Tente novamente.');
             }
         }
-        
-        function startPaymentVerification(transactionId) {
-            // Verificar a cada 3 segundos
-            paymentVerificationInterval = setInterval(() => {
-                checkPaymentStatus(transactionId);
-            }, 3000);
-            
-            // Parar verificação após 5 minutos
-            setTimeout(() => {
-                if (paymentVerificationInterval) {
-                    clearInterval(paymentVerificationInterval);
-                    showPaymentTimeout();
-                }
-            }, 300000); // 5 minutos
-        }
-        
-        async function checkPaymentStatus(transactionId) {
-            try {
-                if (!supabaseClient) {
-                    return;
-                }
-                
-                const { data, error } = await supabaseClient
-                    .from('transactions')
-                    .select('*')
-                    .eq('id', transactionId)
-                    .single();
-                
-                if (error) {
-                    console.error('❌ Erro ao verificar status do pagamento:', error);
-                    return;
-                }
-                
-                if (data && data.status === 'completed') {
-                    clearInterval(paymentVerificationInterval);
-                    showPaymentSuccess(data);
-                }
-            } catch (error) {
-                console.error('❌ Erro ao verificar status do pagamento:', error);
-            }
-        }
-        
-        function showPaymentSuccess(transaction) {
-            const statusDiv = document.getElementById('payment-status');
-            if (statusDiv) {
-                statusDiv.innerHTML = `
-                    <div style="text-align: center; padding: 1rem; background: #0a4d0a; border-radius: 6px;">
-                        <div style="font-size: 2rem; color: #4ade80;">✅</div>
-                        <p style="margin: 0.5rem 0; color: #4ade80; font-weight: bold;">Pagamento Confirmado!</p>
-                        <p style="color: #ccc; margin: 0;">
-                            ${transaction.credits} ${transaction.credits === 1 ? 'crédito adicionado' : 'créditos adicionados'} à sua conta
-                        </p>
-                        <button class="btn" onclick="closeModal(); location.reload();" style="margin-top: 1rem;">
-                            Continuar
-                        </button>
-                    </div>
-                `;
-            }
-        }
-        
-        function showPaymentTimeout() {
-            const statusDiv = document.getElementById('payment-status');
-            if (statusDiv) {
-                statusDiv.innerHTML = `
-                    <div style="text-align: center; padding: 1rem; background: #4d1a1a; border-radius: 6px;">
-                        <div style="font-size: 2rem; color: #f87171;">⚠️</div>
-                        <p style="margin: 0.5rem 0; color: #f87171; font-weight: bold;">Tempo Esgotado</p>
-                        <p style="color: #ccc; margin: 0;">
-                            Não recebemos a confirmação do seu pagamento.
-                        </p>
-                        <p style="color: #ccc; margin: 0.5rem 0;">
-                            Se você já pagou, seus créditos serão adicionados automaticamente em breve.
-                        </p>
-                        <button class="btn" onclick="closeModal();" style="margin-top: 1rem;">
-                            Fechar
-                        </button>
-                    </div>
-                `;
-            }
-        }
-        
-        // Close modal when clicking outside
-        window.onclick = function(event) {
-            const modals = document.querySelectorAll('.modal');
-            modals.forEach(modal => {
-                if (event.target === modal) {
-                    closeModal();
-                }
-            });
-        }
-        
-        // Enter key for search
-        document.getElementById('searchInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                performRealSearch();
-            }
-        });
         
         // Inicialização
         document.addEventListener('DOMContentLoaded', function() {
