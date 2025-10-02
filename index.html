@@ -3,879 +3,183 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VerificaPessoa - Busca Profunda de Pessoas</title>
-    
-    <!-- Mercado Pago SDK -->
-    <script src="https://sdk.mercadopago.com/js/v2"></script>
-    
-    <!-- Supabase SDK -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.3/dist/umd/supabase.min.js"></script>
-    
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #000;
-            color: #fff;
-            line-height: 1.6;
-        }
-        
-        /* Header */
-        header {
-            padding: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #222;
-        }
-        
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 18px;
-            font-weight: normal;
-            color: #fff;
-            text-decoration: none;
-        }
-        
-        .btn {
-            background: #0066ff;
-            color: #fff;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 14px;
-        }
-        
-        .user-info {
-            display: none;
-            align-items: center;
-            gap: 15px;
-        }
-        
-        .user-info.active {
-            display: flex;
-        }
-        
-        /* Hero Section */
-        .hero {
-            text-align: center;
-            padding: 80px 20px;
-        }
-        
-        .hero h1 {
-            font-size: 48px;
-            font-weight: normal;
-            margin-bottom: 20px;
-        }
-        
-        .hero p {
-            color: #999;
-            margin-bottom: 40px;
-        }
-        
-        /* Search Box */
-        .search-container {
-            max-width: 600px;
-            margin: 0 auto 30px;
-            display: flex;
-        }
-        
-        .search-input {
-            flex: 1;
-            padding: 12px;
-            background: #111;
-            border: 1px solid #333;
-            border-right: none;
-            color: #fff;
-            border-radius: 4px 0 0 4px;
-        }
-        
-        .search-btn {
-            background: #fff;
-            color: #000;
-            border: none;
-            padding: 12px;
-            border-radius: 0 4px 4px 0;
-            cursor: pointer;
-        }
-        
-        .search-info {
-            color: #666;
-            font-size: 14px;
-        }
-        
-        /* Plans Section */
-        .plans {
-            padding: 60px 20px;
-            text-align: center;
-        }
-        
-        .plans h2 {
-            font-size: 36px;
-            font-weight: normal;
-            margin-bottom: 40px;
-        }
-        
-        .plans-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        
-        .plan-card {
-            background: #111;
-            border: 1px solid #333;
-            border-radius: 8px;
-            padding: 30px;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .plan-card.popular::before {
-            content: "MAIS POPULAR";
-            position: absolute;
-            top: 15px;
-            right: -35px;
-            background: #0066ff;
-            color: #fff;
-            padding: 5px 40px;
-            transform: rotate(45deg);
-            font-size: 12px;
-        }
-        
-        .plan-title {
-            font-size: 24px;
-            margin-bottom: 15px;
-        }
-        
-        .plan-price {
-            font-size: 36px;
-            margin-bottom: 10px;
-        }
-        
-        .plan-details {
-            color: #999;
-            margin-bottom: 20px;
-        }
-        
-        .plan-savings {
-            color: #00cc66;
-            margin-bottom: 20px;
-            font-size: 14px;
-        }
-        
-        /* Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .modal.active {
-            display: flex;
-        }
-        
-        .modal-content {
-            background: #111;
-            border: 1px solid #333;
-            border-radius: 8px;
-            padding: 30px;
-            width: 100%;
-            max-width: 400px;
-        }
-        
-        .modal-content h3 {
-            margin-bottom: 20px;
-            text-align: center;
-        }
-        
-        .modal-content input {
-            width: 100%;
-            padding: 12px;
-            margin-bottom: 15px;
-            background: #222;
-            border: 1px solid #444;
-            border-radius: 4px;
-            color: #fff;
-        }
-        
-        .modal-content .btn {
-            width: 100%;
-            margin-top: 10px;
-        }
-        
-        .modal-content .btn-secondary {
-            background: #333;
-            color: #fff;
-        }
-        
-        .error-message {
-            color: #ff4d4d;
-            font-size: 14px;
-            margin-top: 10px;
-            text-align: center;
-        }
-        
-        /* Footer */
-        footer {
-            padding: 30px 20px;
-            text-align: center;
-            border-top: 1px solid #222;
-            margin-top: 60px;
-        }
-        
-        footer a {
-            color: #666;
-            text-decoration: none;
-            margin: 0 10px;
-            font-size: 14px;
-        }
-        
-        /* Admin Link */
-        .admin-link {
-            color: #444;
-            font-size: 12px;
-            text-decoration: none;
-        }
-        
-        /* Responsive */
-        @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 36px;
-            }
-            
-            .search-container {
-                flex-direction: column;
-            }
-            
-            .search-input {
-                border-right: 1px solid #333;
-                border-radius: 4px;
-                margin-bottom: 10px;
-            }
-            
-            .search-btn {
-                border-radius: 4px;
-            }
-            
-            .plans-grid {
-                grid-template-columns: 1fr;
-                max-width: 350px;
-            }
-        }
-    </style>
+    <title>VerificaPessoa - Investigação de Pessoas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header>
-        <a href="#" class="logo">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <circle cx="12" cy="12" r="10"/>
-                <path d="M12 8v8M8 12h8"/>
-            </svg>
-            VERIFICA PESSOA
-        </a>
-        <div>
-            <div id="userInfo" class="user-info">
-                <span id="userEmail"></span>
-                <span id="userCredits">0 créditos</span>
-                <button class="btn" onclick="logout()">Sair</button>
-            </div>
-            <button id="loginBtn" class="btn" onclick="openLoginModal()">Entrar</button>
-        </div>
-    </header>
-
-    <section class="hero">
-        <h1>
-            VOCÊ SABE COM<br>
-            QUEM ESTÁ?
-        </h1>
-        <p>
-            Descubra a verdade sobre qualquer pessoa em segundos.<br>
-            Proteja sua família. Proteja seu futuro.
-        </p>
-        
-        <div class="search-container">
-            <input type="text" id="searchInput" class="search-input" placeholder="Digite o nome completo da pessoa...">
-            <button class="search-btn" onclick="performRealSearch()">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <circle cx="11" cy="11" r="8"/>
-                    <path d="m21 21-4.35-4.35"/>
-                </svg>
-            </button>
-        </div>
-        
-        <div class="search-info">
-            🔍 Pesquisa em tempo real • 📊 Múltiplas fontes • ⚡ Resultados instantâneos<br>
-            ✅ 100% Informações Públicas Legais
-        </div>
-    </section>
-
-    <section class="plans">
-        <h2>ESCOLHA SEU PLANO</h2>
-        <p style="color: #999; margin-bottom: 30px;">Investigações profissionais ao seu alcance</p>
-        
-        <div class="plans-grid">
-            <div class="plan-card">
-                <h3 class="plan-title">Pesquisa Única</h3>
-                <div class="plan-price">R$ 0,69</div>
-                <div class="plan-details">1 crédito • R$ 0,69 por pesquisa</div>
-                <button class="btn" onclick="buyPackage('individual', 0.69, 1)">Comprar Agora</button>
-            </div>
-            
-            <div class="plan-card">
-                <h3 class="plan-title">Pacote 10 Créditos</h3>
-                <div class="plan-price">R$ 5,90</div>
-                <div class="plan-details">10 créditos • R$ 0,59 por pesquisa</div>
-                <div class="plan-savings">Economize R$ 1,00</div>
-                <button class="btn" onclick="buyPackage('pack10', 5.90, 10)">Comprar Agora</button>
-            </div>
-            
-            <div class="plan-card popular">
-                <h3 class="plan-title">Pacote 20 Créditos</h3>
-                <div class="plan-price">R$ 9,80</div>
-                <div class="plan-details">20 créditos • R$ 0,49 por pesquisa</div>
-                <div class="plan-savings">Economize R$ 4,00</div>
-                <button class="btn" onclick="buyPackage('pack20', 9.80, 20)">Comprar Agora</button>
-            </div>
-            
-            <div class="plan-card">
-                <h3 class="plan-title">Pacote 50 Créditos</h3>
-                <div class="plan-price">R$ 17,50</div>
-                <div class="plan-details">50 créditos • R$ 0,35 por pesquisa</div>
-                <div class="plan-savings">Economize R$ 17,00</div>
-                <button class="btn" onclick="buyPackage('pack50', 17.50, 50)">Comprar Agora</button>
-            </div>
-        </div>
-    </section>
-
-    <!-- Login Modal -->
-    <div id="loginModal" class="modal">
-        <div class="modal-content">
-            <h3>Entrar</h3>
-            <form onsubmit="handleLogin(event)">
-                <input type="email" id="loginEmail" placeholder="Email" required>
-                <input type="password" id="loginPassword" placeholder="Senha" required>
-                <div id="loginError" class="error-message"></div>
-                <button type="submit" class="btn">Entrar</button>
-                <button type="button" class="btn btn-secondary" onclick="openRegisterModal()">Criar Conta</button>
-                <button type="button" class="btn btn-secondary" onclick="closeModal()">Fechar</button>
-            </form>
-        </div>
-    </div>
-
-    <!-- Register Modal -->
-    <div id="registerModal" class="modal">
-        <div class="modal-content">
-            <h3>Cadastrar</h3>
-            <form onsubmit="handleRegister(event)">
-                <input type="text" id="registerName" placeholder="Nome Completo" required>
-                <input type="email" id="registerEmail" placeholder="Email" required>
-                <input type="password" id="registerPassword" placeholder="Senha" required minlength="6">
-                <input type="password" id="confirmPassword" placeholder="Confirmar Senha" required minlength="6">
-                <div id="registerError" class="error-message"></div>
-                <button type="submit" class="btn">Cadastrar</button>
-                <button type="button" class="btn btn-secondary" onclick="openLoginModal()">Já tenho conta</button>
-                <button type="button" class="btn btn-secondary" onclick="closeModal()">Fechar</button>
-            </form>
-        </div>
-    </div>
-
-    <!-- Payment Modal -->
-    <div id="paymentModal" class="modal">
-        <div class="modal-content">
-            <h3>Pagamento PIX</h3>
-            <div id="paymentContent"></div>
-        </div>
-    </div>
-
-    <footer>
-        <p style="color: #666; margin-bottom: 15px;">© 2025 VerificaPessoa. Todos os direitos reservados.</p>
-        <div>
-            <a href="termos.html">Termos de Uso</a>
-            <a href="termos.html#privacidade">Política de Privacidade</a>
-            <a href="mailto:contato@verificapessoa.com">Contato</a>
-            <a href="admin.html" class="admin-link">Admin</a>
-        </div>
-    </footer>
-
-    <script>
-        // Configurações PIX
-        const PIX_KEY = "3656e000-acb3-4645-a176-034c4d9ba6df";
-        const PIX_NAME = "Verifica Pessoa";
-        
-        // Mercado Pago - Substitua pelas suas chaves reais
-        const MP_PUBLIC_KEY = "APP_USR-aff32c11-93e2-4ed5-8a5a-9e2ca4405766";
-        const MP_ACCESS_TOKEN = "APP_USR-6850941285056243-092512-017e23d3c41ef7b0c005df7970bf13a1-94875335";
-        
-        // Supabase - Credenciais reais
-        const SUPABASE_URL = "https://uqktdjthtiruwqbcjibc.supabase.co";
-        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVxa3RkanRodGlydXdxYmNqaWJjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg4MjMyNzksImV4cCI6MjA3NDM5OTI3OX0.U-j0zSYqkqY-453gBvGltN1i0ZfDRVxHGpIZEdnyQPE";
-        
-        // Inicializar Supabase
-        let supabaseClient = null;
-        
-        function initSupabase() {
-            try {
-                supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-                console.log('✅ Supabase conectado com sucesso');
-                return true;
-            } catch (error) {
-                console.error('❌ Erro ao conectar Supabase:', error);
-                return false;
-            }
-        }
-        
-        // Inicializar Mercado Pago
-        let mp = null;
-        try {
-            mp = new MercadoPago(MP_PUBLIC_KEY);
-        } catch (error) {
-            console.error('❌ Erro ao inicializar Mercado Pago:', error);
-        }
-        
-        // Variáveis globais
-        let currentUser = null;
-        let paymentVerificationInterval = null;
-        
-        // Funções de utilidade
-        function generateId() {
-            return Date.now().toString(36) + Math.random().toString(36).substr(2);
-        }
-        
-        // Funções de usuário
-        async function saveUser(user) {
-            try {
-                if (!supabaseClient) {
-                    console.error('❌ Supabase não inicializado');
-                    return false;
-                }
-                
-                const { data, error } = await supabaseClient
-                    .from('users')
-                    .insert([{
-                        id: user.id || generateId(),
-                        email: user.email,
-                        name: user.name,
-                        password: user.password,
-                        credits: user.credits || 0,
-                        created_at: new Date().toISOString()
-                    }]);
-                
-                if (error) {
-                    console.error('❌ Erro ao salvar usuário:', error);
-                    return false;
-                }
-                
-                console.log('✅ Usuário salvo com sucesso:', user.email);
-                return true;
-            } catch (error) {
-                console.error('❌ Erro ao salvar usuário:', error);
-                return false;
-            }
-        }
-        
-        async function getUser(email) {
-            try {
-                if (!supabaseClient) {
-                    console.error('❌ Supabase não inicializado');
-                    return null;
-                }
-                
-                const { data, error } = await supabaseClient
-                    .from('users')
-                    .select('*')
-                    .eq('email', email)
-                    .single();
-                
-                if (error) {
-                    console.error('❌ Erro ao buscar usuário:', error);
-                    return null;
-                }
-                
-                return data;
-            } catch (error) {
-                console.error('❌ Erro ao buscar usuário:', error);
-                return null;
-            }
-        }
-        
-        async function updateUserCredits(email, credits) {
-            try {
-                if (!supabaseClient) {
-                    console.error('❌ Supabase não inicializado');
-                    return null;
-                }
-                
-                const user = await getUser(email);
-                if (!user) {
-                    return null;
-                }
-                
-                const newCredits = (user.credits || 0) + credits;
-                
-                const { error } = await supabaseClient
-                    .from('users')
-                    .update({ credits: newCredits })
-                    .eq('email', email);
-                
-                if (error) {
-                    console.error('❌ Erro ao atualizar créditos:', error);
-                    return null;
-                }
-                
-                return newCredits;
-            } catch (error) {
-                console.error('❌ Erro ao atualizar créditos:', error);
-                return null;
-            }
-        }
-        
-        // Funções de transação
-        async function saveTransaction(transaction) {
-            try {
-                if (!supabaseClient) {
-                    console.error('❌ Supabase não inicializado');
-                    return false;
-                }
-                
-                const { error } = await supabaseClient
-                    .from('transactions')
-                    .insert([{
-                        id: transaction.id || generateId(),
-                        user_email: transaction.user_email,
-                        package_type: transaction.package_type,
-                        amount: transaction.amount,
-                        credits: transaction.credits,
-                        status: transaction.status,
-                        created_at: new Date().toISOString()
-                    }]);
-                
-                if (error) {
-                    console.error('❌ Erro ao salvar transação:', error);
-                    return false;
-                }
-                
-                return true;
-            } catch (error) {
-                console.error('❌ Erro ao salvar transação:', error);
-                return false;
-            }
-        }
-        
-        // Funções de busca
-        async function saveSearch(search) {
-            try {
-                if (!supabaseClient) {
-                    console.error('❌ Supabase não inicializado');
-                    return false;
-                }
-                
-                const { error } = await supabaseClient
-                    .from('searches')
-                    .insert([{
-                        id: search.id || generateId(),
-                        user_email: search.user_email,
-                        search_term: search.search_term,
-                        created_at: new Date().toISOString()
-                    }]);
-                
-                if (error) {
-                    console.error('❌ Erro ao salvar busca:', error);
-                    return false;
-                }
-                
-                return true;
-            } catch (error) {
-                console.error('❌ Erro ao salvar busca:', error);
-                return false;
-            }
-        }
-        
-        // Funções de UI
-        function updateUserInterface() {
-            if (currentUser) {
-                document.getElementById('loginBtn').style.display = 'none';
-                document.getElementById('userInfo').classList.add('active');
-                document.getElementById('userEmail').textContent = currentUser.email;
-                document.getElementById('userCredits').textContent = currentUser.credits + ' créditos';
-            } else {
-                document.getElementById('loginBtn').style.display = 'block';
-                document.getElementById('userInfo').classList.remove('active');
-            }
-        }
-        
-        // Modal functions
-        function openLoginModal() {
-            document.getElementById('loginModal').classList.add('active');
-            document.getElementById('registerModal').classList.remove('active');
-            document.getElementById('paymentModal').classList.remove('active');
-        }
-        
-        function openRegisterModal() {
-            document.getElementById('loginModal').classList.remove('active');
-            document.getElementById('registerModal').classList.add('active');
-            document.getElementById('paymentModal').classList.remove('active');
-        }
-        
-        function closeModal() {
-            document.getElementById('loginModal').classList.remove('active');
-            document.getElementById('registerModal').classList.remove('active');
-            document.getElementById('paymentModal').classList.remove('active');
-        }
-        
-        // Auth functions
-        async function handleLogin(event) {
-            event.preventDefault();
-            
-            const email = document.getElementById('loginEmail').value;
-            const password = document.getElementById('loginPassword').value;
-            const errorDiv = document.getElementById('loginError');
-            
-            try {
-                const user = await getUser(email);
-                
-                if (user && user.password === password) {
-                    currentUser = user;
-                    updateUserInterface();
-                    closeModal();
-                    errorDiv.textContent = '';
-                } else {
-                    errorDiv.textContent = 'Email ou senha incorretos';
-                }
-            } catch (error) {
-                console.error('❌ Erro ao fazer login:', error);
-                errorDiv.textContent = 'Erro ao fazer login. Tente novamente.';
-            }
-        }
-        
-        function logout() {
-            currentUser = null;
-            updateUserInterface();
-        }
-        
-        async function handleRegister(event) {
-            event.preventDefault();
-            
-            const name = document.getElementById('registerName').value;
-            const email = document.getElementById('registerEmail').value;
-            const password = document.getElementById('registerPassword').value;
-            const confirmPassword = document.getElementById('confirmPassword').value;
-            const errorDiv = document.getElementById('registerError');
-            
-            if (password !== confirmPassword) {
-                errorDiv.textContent = 'As senhas não coincidem';
-                return;
-            }
-            
-            try {
-                // Verificar se o usuário já existe
-                const existingUser = await getUser(email);
-                if (existingUser) {
-                    errorDiv.textContent = 'Este email já está cadastrado';
-                    return;
-                }
-                
-                // Criar novo usuário
-                const newUser = {
-                    id: generateId(),
-                    name,
-                    email,
-                    password,
-                    credits: 0,
-                    created_at: new Date().toISOString()
-                };
-                
-                const saved = await saveUser(newUser);
-                
-                if (saved) {
-                    currentUser = await getUser(email);
-                    updateUserInterface();
-                    closeModal();
-                    alert('Cadastro realizado com sucesso!');
-                } else {
-                    errorDiv.textContent = 'Erro ao cadastrar. Tente novamente.';
-                }
-            } catch (error) {
-                console.error('❌ Erro ao cadastrar:', error);
-                errorDiv.textContent = 'Erro ao cadastrar. Tente novamente.';
-            }
-        }
-        
-        // Search functions
-        async function performRealSearch() {
-            const searchTerm = document.getElementById('searchInput').value.trim();
-            
-            if (!searchTerm) {
-                alert('Digite um nome para pesquisar!');
-                return;
-            }
-            
-            if (!currentUser) {
-                alert('Faça login para realizar uma pesquisa!');
-                openLoginModal();
-                return;
-            }
-            
-            if (!currentUser.credits || currentUser.credits <= 0) {
-                alert('Você não tem créditos suficientes! Compre um pacote para continuar.');
-                return;
-            }
-            
-            try {
-                // Salvar busca
-                const search = {
-                    id: generateId(),
-                    user_email: currentUser.email,
-                    search_term: searchTerm,
-                    created_at: new Date().toISOString()
-                };
-                
-                await saveSearch(search);
-                
-                // Atualizar créditos
-                const newCredits = await updateUserCredits(currentUser.email, -1);
-                if (newCredits !== null) {
-                    currentUser.credits = newCredits;
-                    updateUserInterface();
-                }
-                
-                alert(`Pesquisa realizada com sucesso! Resultados para "${searchTerm}" serão enviados para seu email.`);
-            } catch (error) {
-                console.error('❌ Erro ao realizar pesquisa:', error);
-                alert('Erro ao realizar pesquisa. Tente novamente.');
-            }
-        }
-        
-        // Payment functions
-        async function buyPackage(packageType, price, credits) {
-            if (!currentUser) {
-                alert('Faça login para comprar créditos!');
-                openLoginModal();
-                return;
-            }
-            
-            const packageNames = {
-                'individual': 'Pesquisa Única',
-                'pack10': 'Pacote 10 Créditos',
-                'pack20': 'Pacote 20 Créditos',
-                'pack50': 'Pacote 50 Créditos'
-            };
-            
-            // Criar dados da transação
-            const transactionId = generateId();
-            const transaction = {
-                id: transactionId,
-                user_email: currentUser.email,
-                package_type: packageType,
-                amount: price,
-                credits: credits,
-                status: 'pending',
-                created_at: new Date().toISOString()
-            };
-            
-            // Salvar transação como pendente
-            await saveTransaction(transaction);
-            
-            // Mostrar modal de pagamento
-            document.getElementById('paymentModal').classList.add('active');
-            
-            // Mostrar informações de pagamento
-            const paymentContent = document.getElementById('paymentContent');
-            paymentContent.innerHTML = `
-                <div style="text-align: center;">
-                    <p style="margin-bottom: 15px;">
-                        <strong>Pacote:</strong> ${packageNames[packageType]}<br>
-                        <strong>Valor:</strong> R$ ${price.toFixed(2)}<br>
-                        <strong>Créditos:</strong> ${credits}
-                    </p>
-                    
-                    <div style="background: #222; padding: 15px; border-radius: 8px; margin-bottom: 20px; text-align: left;">
-                        <p style="margin-bottom: 10px;"><strong>Chave PIX:</strong> ${PIX_KEY}</p>
-                        <p style="margin-bottom: 10px;"><strong>Favorecido:</strong> ${PIX_NAME}</p>
-                        <button class="btn" style="width: auto;" onclick="copyPixKey()">Copiar Chave</button>
+    <div id="app">
+        <!-- Header -->
+        <header>
+            <div class="container">
+                <div class="header-content">
+                    <div class="logo">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                            <circle cx="12" cy="12" r="3"/>
+                        </svg>
+                        <span>VERIFICA PESSOA</span>
                     </div>
-                    
-                    <p style="margin-bottom: 20px; color: #999;">
-                        Após realizar o pagamento, clique no botão abaixo:
-                    </p>
-                    
-                    <button class="btn" onclick="simulatePayment('${transactionId}', ${credits})">
-                        Simular Pagamento (Teste)
-                    </button>
-                    
-                    <button class="btn btn-secondary" style="margin-top: 10px;" onclick="closeModal()">
-                        Fechar
+                    <div>
+                        <div id="user-info" class="user-info" style="display: none;">
+                            <span id="user-email"></span>
+                            <span id="user-credits"></span>
+                            <button class="btn-secondary" onclick="logout()">Sair</button>
+                        </div>
+                        <button id="login-btn" class="btn" onclick="showLoginModal()">Entrar</button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="container">
+                <h1>
+                    VOCÊ SABE COM<br />
+                    <span class="subtitle">QUEM ESTÁ?</span>
+                </h1>
+                
+                <p>
+                    Descubra a verdade sobre qualquer pessoa em segundos.<br />
+                    <strong>Proteja sua família. Proteja seu futuro.</strong>
+                </p>
+
+                <div class="search-box">
+                    <input 
+                        type="text" 
+                        id="search-input"
+                        class="search-input" 
+                        placeholder="Digite o nome completo da pessoa..."
+                    />
+                    <button class="search-btn" onclick="handleSearch()">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"/>
+                            <path d="m21 21-4.35-4.35"/>
+                        </svg>
                     </button>
                 </div>
-            `;
-        }
-        
-        function copyPixKey() {
-            navigator.clipboard.writeText(PIX_KEY).then(() => {
-                alert('Chave PIX copiada!');
-            });
-        }
-        
-        async function simulatePayment(transactionId, credits) {
-            try {
-                // Atualizar status da transação
-                if (!supabaseClient) {
-                    console.error('❌ Supabase não inicializado');
-                    alert('Erro ao processar pagamento. Tente novamente.');
-                    return;
-                }
+
+                <p style="font-size: 0.9rem; color: #666;">
+                    🔍 Pesquisa em tempo real • 📊 Múltiplas fontes • ⚡ Resultados instantâneos<br />
+                    <strong style="color: #4ade80;">✅ 100% Informações Públicas Legais</strong>
+                </p>
+            </div>
+        </section>
+
+        <!-- Pricing Section -->
+        <section class="pricing" id="pricing">
+            <div class="container">
+                <h2>ESCOLHA SEU PLANO</h2>
+                <p class="pricing-subtitle">Investigações profissionais ao seu alcance</p>
                 
-                const { error } = await supabaseClient
-                    .from('transactions')
-                    .update({ 
-                        status: 'completed',
-                        confirmed_at: new Date().toISOString()
-                    })
-                    .eq('id', transactionId);
-                
-                if (error) {
-                    console.error('❌ Erro ao atualizar transação:', error);
-                    alert('Erro ao processar pagamento. Tente novamente.');
-                    return;
-                }
-                
-                // Adicionar créditos ao usuário
-                const newCredits = await updateUserCredits(currentUser.email, credits);
-                if (newCredits !== null) {
-                    currentUser.credits = newCredits;
-                    updateUserInterface();
-                }
-                
-                alert(`Pagamento confirmado! ${credits} créditos adicionados à sua conta.`);
-                closeModal();
-            } catch (error) {
-                console.error('❌ Erro ao simular pagamento:', error);
-                alert('Erro ao processar pagamento. Tente novamente.');
-            }
-        }
-        
-        // Inicialização
-        document.addEventListener('DOMContentLoaded', function() {
-            initSupabase();
-            updateUserInterface();
-        });
-    </script>
+                <div class="pricing-grid">
+                    <div class="pricing-card">
+                        <h3>Pesquisa Única</h3>
+                        <div class="price">R$ 0,69</div>
+                        <div class="price-details">1 crédito • R$ 0,69 por pesquisa</div>
+                        <button class="btn" onclick="handlePurchase('individual', 0.69, 1)">Comprar Agora</button>
+                    </div>
+
+                    <div class="pricing-card">
+                        <h3>Pacote 10 Créditos</h3>
+                        <div class="price">R$ 5,90</div>
+                        <div class="price-details">10 créditos • R$ 0,59 por pesquisa</div>
+                        <div class="savings">Economize R$ 1,00</div>
+                        <button class="btn" onclick="handlePurchase('pack10', 5.90, 10)">Comprar Agora</button>
+                    </div>
+
+                    <div class="pricing-card">
+                        <h3>Pacote 20 Créditos</h3>
+                        <div class="price">R$ 9,80</div>
+                        <div class="price-details">20 créditos • R$ 0,49 por pesquisa</div>
+                        <div class="savings">Economize R$ 4,00</div>
+                        <button class="btn" onclick="handlePurchase('pack20', 9.80, 20)">Comprar Agora</button>
+                    </div>
+
+                    <div class="pricing-card popular">
+                        <div class="popular-badge">MAIS POPULAR</div>
+                        <h3>Pacote 50 Créditos</h3>
+                        <div class="price">R$ 17,50</div>
+                        <div class="price-details">50 créditos • R$ 0,35 por pesquisa</div>
+                        <div class="savings">Economize R$ 17,00</div>
+                        <button class="btn" onclick="handlePurchase('pack50', 17.50, 50)">Comprar Agora</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer>
+            <div class="container">
+                <p style="color: #666; margin-bottom: 1rem;">
+                    © 2025 VerificaPessoa. Todos os direitos reservados.
+                </p>
+                <div style="display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap;">
+                    <a href="termos.html" style="color: #999; text-decoration: none; font-size: 0.9rem;">Termos de Uso</a>
+                    <a href="admin.html" style="color: #999; text-decoration: none; font-size: 0.9rem;">Admin</a>
+                    <a href="mailto:silas@contabsf.com.br" style="color: #999; text-decoration: none; font-size: 0.9rem;">Contato</a>
+                </div>
+            </div>
+        </footer>
+
+        <!-- Modais -->
+        <div id="login-modal" class="modal">
+            <div class="modal-content">
+                <button class="close-btn" onclick="closeModals()">×</button>
+                <h3>Entrar na sua conta</h3>
+                <form id="login-form">
+                    <div class="form-group">
+                        <label>Email:</label>
+                        <input type="email" id="login-email" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Senha:</label>
+                        <input type="password" id="login-password" required>
+                    </div>
+                    <div id="login-error" class="error" style="display: none;"></div>
+                    <div class="modal-buttons">
+                        <button type="button" class="btn-secondary" onclick="closeModals()">Cancelar</button>
+                        <button type="submit" class="btn">Entrar</button>
+                    </div>
+                </form>
+                <p style="text-align: center; margin-top: 1rem; color: #ccc;">
+                    Não tem conta? <button class="link-btn" onclick="showRegisterModal()">Cadastre-se</button>
+                </p>
+            </div>
+        </div>
+
+        <div id="register-modal" class="modal">
+            <div class="modal-content">
+                <button class="close-btn" onclick="closeModals()">×</button>
+                <h3>Criar Conta</h3>
+                <form id="register-form">
+                    <div class="form-group">
+                        <label>Email:</label>
+                        <input type="email" id="register-email" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Senha:</label>
+                        <input type="password" id="register-password" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Confirmar Senha:</label>
+                        <input type="password" id="register-confirm" required>
+                    </div>
+                    <div class="form-group checkbox-container">
+                        <input type="checkbox" id="accept-terms" required>
+                        <label>Aceito os <a href="termos.html" target="_blank" style="color: #4ade80;">Termos de Uso</a></label>
+                    </div>
+                    <div id="register-error" class="error" style="display: none;"></div>
+                    <div class="modal-buttons">
+                        <button type="submit" class="btn">Criar Conta</button>
+                        <button type="button" class="btn-secondary" onclick="showLoginModal()">Já tenho conta</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
 </body>
 </html>
