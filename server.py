@@ -271,6 +271,37 @@ async def get_user_profile(current_user: dict = Depends(get_current_user)):
         created_at=current_user["created_at"]
     )
 
+# ROTAS ADMIN - ADICIONE ANTES DE /api/health
+@app.get("/api/admin/users")
+async def get_all_users():
+    users = await db.users.find({}, {"password": 0}).to_list(None)  # Sem senhas
+    return {"users": users, "total": len(users)}
+
+@app.get("/api/admin/transactions")  
+async def get_all_transactions():
+    transactions = await db.transactions.find({}).to_list(None)
+    return {"transactions": transactions, "total": len(transactions)}
+
+@app.get("/api/admin/searches")
+async def get_all_searches():
+    searches = await db.searches.find({}).to_list(None)
+    return {"searches": searches, "total": len(searches)}
+
+@app.post("/api/admin/add-credits")
+async def add_credits_to_user(data: dict):
+    email = data.get("email")
+    credits = data.get("credits", 0)
+    
+    result = await db.users.update_one(
+        {"email": email},
+        {"$inc": {"credits": int(credits)}}
+    )
+    
+    if result.matched_count > 0:
+        return {"success": True, "message": f"{credits} créditos adicionados para {email}"}
+    else:
+        raise HTTPException(status_code=404, detail="Usuário não encontrado")
+        
 @app.get("/api/health")
 async def health_check():
     return {"status": "healthy", "timestamp": datetime.now(timezone.utc)}
