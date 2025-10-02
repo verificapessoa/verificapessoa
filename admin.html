@@ -247,26 +247,28 @@
             }, 5000);
         }
         
-        async function loadStats() {
-            try {
-                const response = await fetch(`${BACKEND_URL}/api/admin/stats`);
-                const stats = await response.json();
-                
-                document.getElementById('totalUsers').textContent = stats.total_users || 0;
-                document.getElementById('totalSearches').textContent = stats.total_searches || 0;
-                document.getElementById('totalRevenue').textContent = `R$ ${(stats.total_revenue || 0).toFixed(2).replace('.', ',')}`;
-                document.getElementById('todaySales').textContent = stats.today_sales || 0;
-                
-                console.log('✅ Estatísticas carregadas:', stats);
-            } catch (error) {
-                console.error('❌ Erro ao carregar estatísticas:', error);
-                // Mostrar dados mockados se backend não estiver disponível
-                document.getElementById('totalUsers').textContent = '23';
-                document.getElementById('totalSearches').textContent = '156';
-                document.getElementById('totalRevenue').textContent = 'R$ 487,20';
-                document.getElementById('todaySales').textContent = '8';
-            }
-        }
+       async function loadStats() {
+    try {
+        const response = await fetch(`${BACKEND_URL}/api/admin/stats`);
+        const stats = await response.json();
+        
+        document.getElementById('totalUsers').textContent = stats.total_users || 0;
+        document.getElementById('totalSearches').textContent = stats.total_searches || 0;
+        document.getElementById('totalRevenue').textContent = `R$ ${(stats.total_revenue || 0).toFixed(2).replace('.', ',')}`;
+        document.getElementById('todaySales').textContent = stats.today_sales || 0;
+        
+        console.log('✅ Estatísticas REAIS carregadas:', stats);
+    } catch (error) {
+        console.error('❌ Erro ao carregar estatísticas:', error);
+        showError('Erro ao conectar com a API - Verifique se o backend está funcionando');
+        
+        // Limpar dados falsos
+        document.getElementById('totalUsers').textContent = '0';
+        document.getElementById('totalSearches').textContent = '0';
+        document.getElementById('totalRevenue').textContent = 'R$ 0,00';
+        document.getElementById('todaySales').textContent = '0';
+    }
+}
         
         function refreshStats() {
             loadStats();
@@ -293,23 +295,82 @@
             alert('📊 Dados exportados com sucesso!');
         }
         
-        function viewTransactions() {
-            alert('💰 Funcionalidade em desenvolvimento\\n\\nEm breve você poderá:\\n• Ver todas as transações\\n• Filtrar por data\\n• Exportar relatórios\\n• Confirmar pagamentos PIX manuais');
-        }
+        async function viewTransactions() {
+    try {
+        const response = await fetch(`${BACKEND_URL}/api/admin/transactions`);
+        const data = await response.json();
         
-        function viewUsers() {
-            alert('👥 Funcionalidade em desenvolvimento\\n\\nEm breve você poderá:\\n• Ver lista completa de usuários\\n• Buscar por email\\n• Ver histórico de pesquisas por usuário');
-        }
+        let transactionsList = '';
+        data.transactions.forEach(t => {
+            transactionsList += `
+📄 ID: ${t._id}
+👤 Email: ${t.user_email}
+💰 Valor: R$ ${t.amount.toFixed(2)}
+🎫 Créditos: ${t.credits}
+📅 Data: ${new Date(t.created_at).toLocaleDateString('pt-BR')}
+✅ Status: ${t.status}
+---
+`;
+        });
+        
+        alert(`💰 TRANSAÇÕES REAIS (${data.total}):\n\n${transactionsList}`);
+    } catch (error) {
+        alert('❌ Erro ao carregar transações: ' + error.message);
+    }
+}
 
-        function addCredits() {
-            const email = prompt('Digite o email do usuário:');
-            if (email) {
-                const credits = prompt('Quantos créditos adicionar?');
-                if (credits && !isNaN(credits)) {
-                    alert(`✅ ${credits} créditos adicionados para ${email}\\n\\n⚠️ Funcionalidade será implementada no backend`);
-                }
-            }
+async function viewUsers() {
+    try {
+        const response = await fetch(`${BACKEND_URL}/api/admin/users`);
+        const data = await response.json();
+        
+        let usersList = '';
+        data.users.forEach(u => {
+            usersList += `
+👤 Email: ${u.email}
+🎫 Créditos: ${u.credits}
+📅 Cadastro: ${new Date(u.created_at).toLocaleDateString('pt-BR')}
+---
+`;
+        });
+        
+        alert(`👥 USUÁRIOS REAIS (${data.total}):\n\n${usersList}`);
+    } catch (error) {
+        alert('❌ Erro ao carregar usuários: ' + error.message);
+    }
+}
+
+async function addCredits() {
+    const email = prompt('Digite o email do usuário:');
+    if (!email) return;
+    
+    const credits = prompt('Quantos créditos adicionar?');
+    if (!credits || isNaN(credits)) return;
+    
+    try {
+        const response = await fetch(`${BACKEND_URL}/api/admin/add-credits`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                email: email,
+                credits: parseInt(credits)
+            })
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+            alert(`✅ ${data.message}`);
+            loadStats(); // Atualizar estatísticas
+        } else {
+            alert(`❌ Erro: ${data.detail}`);
         }
+    } catch (error) {
+        alert('❌ Erro ao adicionar créditos: ' + error.message);
+    }
+}
         
         function logout() {
             localStorage.removeItem('admin_logged_in');
