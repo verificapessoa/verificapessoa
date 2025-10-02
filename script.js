@@ -1,5 +1,5 @@
 // Configuração da API Backend - MUDE AQUI quando o backend estiver no Railway
-const BACKEND_URL = 'https://verificapessoa-api.onrender.com'; // Você mudará isso depois
+const BACKEND_URL = 'https://verificapessoa-api.onrender.com';
 
 // Estado da aplicação
 let currentUser = null;
