@@ -271,7 +271,7 @@ async def get_user_profile(current_user: dict = Depends(get_current_user)):
         created_at=current_user["created_at"]
     )
 
-# ROTAS ADMIN - ADICIONE ANTES DE /api/health
+# ROTAS ADMIN 
 @app.get("/api/admin/users")
 async def get_all_users():
     users = await db.users.find({}, {"password": 0}).to_list(None)  # Sem senhas
