@@ -12,13 +12,18 @@ from motor.motor_asyncio import AsyncIOMotorClient
 import uuid
 from bs4 import BeautifulSoup
 from urllib.parse import quote
+from dotenv import load_dotenv
+from pathlib import Path
+
+ROOT_DIR = Path(__file__).parent
+load_dotenv(ROOT_DIR / '.env')
 
 # Configurações do banco de dados
 MONGO_URL = os.environ.get('MONGO_URL', 'mongodb://localhost:27017')
 DB_NAME = os.environ.get('DB_NAME', 'verificapessoa')
 JWT_SECRET = os.environ.get('JWT_SECRET', 'verificapessoa_secret_2025')
 
-# Configurações Mercado Pago - SUBSTITUA pelas suas chaves
+# Configurações Mercado Pago
 MP_PUBLIC_KEY = "APP_USR-aff32c11-93e2-4ed5-8a5a-9e2ca4405766"
 MP_ACCESS_TOKEN = "APP_USR-6850941285056243-092512-017e23d3c41ef7b0c005df7970bf13a1-94875335"
 
@@ -274,7 +279,7 @@ async def get_user_profile(current_user: dict = Depends(get_current_user)):
 # ROTAS ADMIN 
 @app.get("/api/admin/users")
 async def get_all_users():
-    users = await db.users.find({}, {"password": 0}).to_list(None)  # Sem senhas
+    users = await db.users.find({}, {"password": 0}).to_list(None)
     return {"users": users, "total": len(users)}
 
 @app.get("/api/admin/transactions")  
@@ -306,8 +311,11 @@ async def add_credits_to_user(data: dict):
 async def health_check():
     return {"status": "healthy", "timestamp": datetime.now(timezone.utc)}
 
+@app.get("/")
+async def root():
+    return {"message": "VerificaPessoa API is running"}
+
 if __name__ == "__main__":
     import uvicorn
-    import os
     port = int(os.environ.get("PORT", 8001))
     uvicorn.run(app, host="0.0.0.0", port=port)
