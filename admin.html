@@ -4,385 +4,278 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin - VerificaPessoa</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #000;
+            font-family: 'Inter', sans-serif;
+            background: #0a0a0a;
             color: #fff;
-            line-height: 1.6;
             padding: 2rem;
         }
-        
+
         .container {
             max-width: 1200px;
             margin: 0 auto;
         }
-        
-        .header {
-            background: #111;
-            padding: 2rem;
-            border-radius: 12px;
-            border: 1px solid #333;
+
+        h1 {
             margin-bottom: 2rem;
+            color: #4ade80;
         }
-        
+
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            margin: 2rem 0;
+            gap: 1.5rem;
+            margin-bottom: 3rem;
         }
-        
+
         .stat-card {
-            background: #111;
+            background: #1a1a1a;
+            padding: 1.5rem;
+            border-radius: 8px;
             border: 1px solid #333;
-            border-radius: 12px;
-            padding: 2rem;
-            text-align: center;
         }
-        
-        .stat-number {
-            font-size: 2.5rem;
-            font-weight: 300;
-            color: #4ade80;
+
+        .stat-card h3 {
+            color: #999;
+            font-size: 0.9rem;
             margin-bottom: 0.5rem;
         }
-        
-        .stat-label {
-            color: #999;
-            text-transform: uppercase;
-            font-size: 0.9rem;
-            letter-spacing: 0.1em;
+
+        .stat-card .value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #4ade80;
         }
-        
+
+        .section {
+            background: #1a1a1a;
+            padding: 2rem;
+            border-radius: 8px;
+            border: 1px solid #333;
+            margin-bottom: 2rem;
+        }
+
+        .section h2 {
+            margin-bottom: 1.5rem;
+            color: #4ade80;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #333;
+        }
+
+        th {
+            color: #999;
+            font-weight: 500;
+        }
+
         .btn {
-            background: #fff;
+            background: #4ade80;
             color: #000;
             border: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: 6px;
-            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
             cursor: pointer;
-            transition: all 0.2s;
-            font-family: inherit;
-            margin: 0.5rem;
+            font-weight: 600;
         }
-        
+
         .btn:hover {
-            background: #f0f0f0;
-            transform: translateY(-1px);
+            background: #22c55e;
         }
-        
-        .login-form {
-            max-width: 400px;
-            margin: 5rem auto;
-            background: #111;
-            padding: 2rem;
-            border-radius: 12px;
-            border: 1px solid #333;
-        }
-        
+
         .form-group {
             margin-bottom: 1rem;
         }
-        
+
         .form-group label {
             display: block;
             margin-bottom: 0.5rem;
             color: #999;
         }
-        
+
         .form-group input {
             width: 100%;
             padding: 0.75rem;
-            background: #000;
+            background: #0a0a0a;
             border: 1px solid #333;
-            border-radius: 6px;
+            border-radius: 4px;
             color: #fff;
-            font-family: inherit;
-            transition: border-color 0.2s;
-        }
-        
-        .form-group input:focus {
-            outline: none;
-            border-color: #fff;
-        }
-        
-        .error {
-            color: #ef4444;
-            text-align: center;
-            padding: 1rem;
-            background: rgba(239, 68, 68, 0.1);
-            border: 1px solid #ef4444;
-            border-radius: 6px;
-            margin: 1rem 0;
-        }
-        
-        .back-link {
-            display: inline-block;
-            background: #333;
-            color: #fff;
-            padding: 0.75rem 1.5rem;
-            border-radius: 6px;
-            text-decoration: none;
-            margin-bottom: 2rem;
-            transition: all 0.2s;
-        }
-        
-        .back-link:hover {
-            background: #555;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <a href="index.html" class="back-link">← Voltar ao Site</a>
-        
-        <div id="loginSection" class="login-form">
-            <h2 style="text-align: center; margin-bottom: 2rem; color: #4ade80;">Admin Login</h2>
-            <form id="adminLoginForm">
+        <h1>🔐 Painel Admin - VerificaPessoa</h1>
+
+        <!-- Stats -->
+        <div class="stats-grid" id="stats-grid">
+            <div class="stat-card">
+                <h3>Total de Usuários</h3>
+                <div class="value" id="total-users">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>Total de Pesquisas</h3>
+                <div class="value" id="total-searches">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>Receita Total</h3>
+                <div class="value" id="total-revenue">R$ 0,00</div>
+            </div>
+            <div class="stat-card">
+                <h3>Vendas Hoje</h3>
+                <div class="value" id="today-sales">0</div>
+            </div>
+        </div>
+
+        <!-- Add Credits -->
+        <div class="section">
+            <h2>➕ Adicionar Créditos</h2>
+            <form id="add-credits-form">
                 <div class="form-group">
-                    <label>Usuário:</label>
-                    <input type="text" id="username" required>
+                    <label>Email do Usuário:</label>
+                    <input type="email" id="user-email" required>
                 </div>
                 <div class="form-group">
-                    <label>Senha:</label>
-                    <input type="password" id="password" required>
+                    <label>Quantidade de Créditos:</label>
+                    <input type="number" id="credits-amount" required>
                 </div>
-                <div id="loginError" class="error" style="display: none;"></div>
-                <button type="submit" class="btn" style="width: 100%;">Entrar</button>
+                <button type="submit" class="btn">Adicionar Créditos</button>
             </form>
         </div>
-        
-        <div id="adminPanel" style="display: none;">
-            <div class="header">
-                <h1 style="color: #4ade80; margin-bottom: 1rem;">🔧 VerificaPessoa - Painel Administrativo</h1>
-                <p style="color: #999;">Controle total da plataforma de investigação</p>
-                <button onclick="logout()" class="btn" style="float: right; margin-top: -3rem;">Sair</button>
-            </div>
-            
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-number" id="totalUsers">-</div>
-                    <div class="stat-label">Usuários Cadastrados</div>
-                </div>
-                
-                <div class="stat-card">
-                    <div class="stat-number" id="totalSearches">-</div>
-                    <div class="stat-label">Pesquisas Realizadas</div>
-                </div>
-                
-                <div class="stat-card">
-                    <div class="stat-number" id="totalRevenue">R$ -</div>
-                    <div class="stat-label">Receita Total</div>
-                </div>
-                
-                <div class="stat-card">
-                    <div class="stat-number" id="todaySales">-</div>
-                    <div class="stat-label">Vendas Hoje</div>
-                </div>
-            </div>
-            
-            <div style="background: #111; border: 1px solid #333; border-radius: 12px; padding: 2rem; margin-top: 2rem;">
-                <h3 style="color: #fff; margin-bottom: 1rem;">⚡ Ações Administrativas</h3>
-                <button onclick="refreshStats()" class="btn">🔄 Atualizar Estatísticas</button>
-                <button onclick="exportData()" class="btn">📊 Exportar Dados</button>
-                <button onclick="viewTransactions()" class="btn">💰 Ver Transações</button>
-                <button onclick="viewUsers()" class="btn">👥 Ver Usuários</button>
-                <button onclick="addCredits()" class="btn">➕ Adicionar Créditos</button>
-            </div>
 
-            <div style="background: #4d1a1a; border: 1px solid #ff6b6b; border-radius: 6px; padding: 1rem; margin-top: 2rem; color: #ff6b6b;">
-                <strong>⚠️ Aviso Legal:</strong> Este painel é para administração da plataforma VerificaPessoa. 
-                Todas as informações aqui contidas são confidenciais e devem ser tratadas com sigilo absoluto. 
-                O acesso não autorizado constitui violação dos termos de uso.
-            </div>
+        <!-- Users Table -->
+        <div class="section">
+            <h2>👥 Usuários</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Email</th>
+                        <th>Créditos</th>
+                        <th>Data de Cadastro</th>
+                    </tr>
+                </thead>
+                <tbody id="users-table">
+                    <tr><td colspan="3">Carregando...</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Transactions Table -->
+        <div class="section">
+            <h2>💳 Transações</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Email</th>
+                        <th>Pacote</th>
+                        <th>Valor</th>
+                        <th>Status</th>
+                        <th>Data</th>
+                    </tr>
+                </thead>
+                <tbody id="transactions-table">
+                    <tr><td colspan="5">Carregando...</td></tr>
+                </tbody>
+            </table>
         </div>
     </div>
 
     <script>
-        // MUDE AQUI quando o backend estiver no Railway
-        const BACKEND_URL = 'https://verificapessoa-api.onrender.com/';
-        
-        // Verificar se já está logado
-        const isLoggedIn = localStorage.getItem('admin_logged_in');
-        if (isLoggedIn === 'true') {
-            showAdminPanel();
+        const BACKEND_URL = 'https://verificapessoa-api.onrender.com';
+
+        // Load admin data
+        async function loadAdminData() {
+            try {
+                // Load stats
+                const statsResponse = await fetch(`${BACKEND_URL}/api/admin/stats`);
+                const stats = await statsResponse.json();
+                
+                document.getElementById('total-users').textContent = stats.total_users;
+                document.getElementById('total-searches').textContent = stats.total_searches;
+                document.getElementById('total-revenue').textContent = `R$ ${stats.total_revenue.toFixed(2).replace('.', ',')}`;
+                document.getElementById('today-sales').textContent = stats.today_sales;
+
+                // Load users
+                const usersResponse = await fetch(`${BACKEND_URL}/api/admin/users`);
+                const usersData = await usersResponse.json();
+                
+                const usersTable = document.getElementById('users-table');
+                usersTable.innerHTML = usersData.users.map(user => `
+                    <tr>
+                        <td>${user.email}</td>
+                        <td>${user.credits || 0}</td>
+                        <td>${new Date(user.created_at).toLocaleDateString('pt-BR')}</td>
+                    </tr>
+                `).join('');
+
+                // Load transactions
+                const transactionsResponse = await fetch(`${BACKEND_URL}/api/admin/transactions`);
+                const transactionsData = await transactionsResponse.json();
+                
+                const transactionsTable = document.getElementById('transactions-table');
+                transactionsTable.innerHTML = transactionsData.transactions.map(t => `
+                    <tr>
+                        <td>${t.user_email}</td>
+                        <td>${t.package_type}</td>
+                        <td>R$ ${t.amount.toFixed(2).replace('.', ',')}</td>
+                        <td>${t.status}</td>
+                        <td>${new Date(t.created_at).toLocaleDateString('pt-BR')}</td>
+                    </tr>
+                `).join('');
+
+            } catch (error) {
+                console.error('Erro ao carregar dados:', error);
+                alert('Erro ao carregar dados do admin');
+            }
         }
-        
-        document.getElementById('adminLoginForm').addEventListener('submit', function(e) {
+
+        // Add credits form
+        document.getElementById('add-credits-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-            
-            // Credenciais fixas conforme especificado
-            if (username === 'admin' && password === 'Tetateta159@') {
-                localStorage.setItem('admin_logged_in', 'true');
-                showAdminPanel();
-                loadStats();
-            } else {
-                showError('Credenciais incorretas');
+            const email = document.getElementById('user-email').value;
+            const credits = document.getElementById('credits-amount').value;
+
+            try {
+                const response = await fetch(`${BACKEND_URL}/api/admin/add-credits`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, credits: parseInt(credits) })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    alert(data.message);
+                    document.getElementById('add-credits-form').reset();
+                    loadAdminData();
+                } else {
+                    alert('Erro: ' + data.detail);
+                }
+            } catch (error) {
+                alert('Erro de conexão: ' + error.message);
             }
         });
-        
-        function showAdminPanel() {
-            document.getElementById('loginSection').style.display = 'none';
-            document.getElementById('adminPanel').style.display = 'block';
-            loadStats();
-        }
-        
-        function showError(message) {
-            const errorDiv = document.getElementById('loginError');
-            errorDiv.textContent = message;
-            errorDiv.style.display = 'block';
-            setTimeout(() => {
-                errorDiv.style.display = 'none';
-            }, 5000);
-        }
-        
-       async function loadStats() {
-    try {
-        const response = await fetch(`${BACKEND_URL}/api/admin/stats`);
-        const stats = await response.json();
-        
-        document.getElementById('totalUsers').textContent = stats.total_users || 0;
-        document.getElementById('totalSearches').textContent = stats.total_searches || 0;
-        document.getElementById('totalRevenue').textContent = `R$ ${(stats.total_revenue || 0).toFixed(2).replace('.', ',')}`;
-        document.getElementById('todaySales').textContent = stats.today_sales || 0;
-        
-        console.log('✅ Estatísticas REAIS carregadas:', stats);
-    } catch (error) {
-        console.error('❌ Erro ao carregar estatísticas:', error);
-        showError('Erro ao conectar com a API - Verifique se o backend está funcionando');
-        
-        // Limpar dados falsos
-        document.getElementById('totalUsers').textContent = '0';
-        document.getElementById('totalSearches').textContent = '0';
-        document.getElementById('totalRevenue').textContent = 'R$ 0,00';
-        document.getElementById('todaySales').textContent = '0';
-    }
-}
-        
-        function refreshStats() {
-            loadStats();
-            alert('✅ Estatísticas atualizadas!');
-        }
-        
-        function exportData() {
-            const stats = {
-                usuarios: document.getElementById('totalUsers').textContent,
-                pesquisas: document.getElementById('totalSearches').textContent,
-                receita: document.getElementById('totalRevenue').textContent,
-                vendas_hoje: document.getElementById('todaySales').textContent,
-                data_export: new Date().toLocaleString('pt-BR')
-            };
-            
-            const dataStr = JSON.stringify(stats, null, 2);
-            const dataBlob = new Blob([dataStr], {type: 'application/json'});
-            
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(dataBlob);
-            link.download = `verificapessoa_export_${new Date().toISOString().split('T')[0]}.json`;
-            link.click();
-            
-            alert('📊 Dados exportados com sucesso!');
-        }
-        
-        async function viewTransactions() {
-    try {
-        const response = await fetch(`${BACKEND_URL}/api/admin/transactions`);
-        const data = await response.json();
-        
-        let transactionsList = '';
-        data.transactions.forEach(t => {
-            transactionsList += `
-📄 ID: ${t._id}
-👤 Email: ${t.user_email}
-💰 Valor: R$ ${t.amount.toFixed(2)}
-🎫 Créditos: ${t.credits}
-📅 Data: ${new Date(t.created_at).toLocaleDateString('pt-BR')}
-✅ Status: ${t.status}
----
-`;
-        });
-        
-        alert(`💰 TRANSAÇÕES REAIS (${data.total}):\n\n${transactionsList}`);
-    } catch (error) {
-        alert('❌ Erro ao carregar transações: ' + error.message);
-    }
-}
 
-async function viewUsers() {
-    try {
-        const response = await fetch(`${BACKEND_URL}/api/admin/users`);
-        const data = await response.json();
-        
-        let usersList = '';
-        data.users.forEach(u => {
-            usersList += `
-👤 Email: ${u.email}
-🎫 Créditos: ${u.credits}
-📅 Cadastro: ${new Date(u.created_at).toLocaleDateString('pt-BR')}
----
-`;
-        });
-        
-        alert(`👥 USUÁRIOS REAIS (${data.total}):\n\n${usersList}`);
-    } catch (error) {
-        alert('❌ Erro ao carregar usuários: ' + error.message);
-    }
-}
-
-async function addCredits() {
-    const email = prompt('Digite o email do usuário:');
-    if (!email) return;
-    
-    const credits = prompt('Quantos créditos adicionar?');
-    if (!credits || isNaN(credits)) return;
-    
-    try {
-        const response = await fetch(`${BACKEND_URL}/api/admin/add-credits`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                email: email,
-                credits: parseInt(credits)
-            })
-        });
-        
-        const data = await response.json();
-        
-        if (response.ok) {
-            alert(`✅ ${data.message}`);
-            loadStats(); // Atualizar estatísticas
-        } else {
-            alert(`❌ Erro: ${data.detail}`);
-        }
-    } catch (error) {
-        alert('❌ Erro ao adicionar créditos: ' + error.message);
-    }
-}
-        
-        function logout() {
-            localStorage.removeItem('admin_logged_in');
-            window.location.reload();
-        }
-        
-        // Auto-refresh das estatísticas a cada 30 segundos
-        setInterval(() => {
-            if (localStorage.getItem('admin_logged_in') === 'true') {
-                loadStats();
-            }
-        }, 30000);
+        // Load data on page load
+        loadAdminData();
     </script>
 </body>
 </html>
