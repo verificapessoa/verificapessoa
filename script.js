@@ -1,5 +1,5 @@
-// Configuração da API Backend - MUDE AQUI quando o backend estiver no Railway
-const BACKEND_URL = 'https://verificapessoa-api.onrender.com/';
+// Configuração da API Backend 
+const BACKEND_URL = 'https://verificapessoa-api.onrender.com';
 
 // Estado da aplicação
 let currentUser = null;
@@ -7,8 +7,10 @@ let loading = false;
 
 // Verificar se usuário está logado ao carregar a página
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('✅ DOM carregado, iniciando aplicação...');
     const token = localStorage.getItem('verificapessoa_token');
     if (token) {
+        console.log('🔑 Token encontrado, buscando perfil...');
         fetchUserProfile(token);
     }
     
@@ -17,23 +19,38 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function setupEventListeners() {
+    console.log('⚙️ Configurando event listeners...');
+    
     // Formulário de login
-    document.getElementById('login-form').addEventListener('submit', handleLogin);
+    const loginForm = document.getElementById('login-form');
+    if (loginForm) {
+        loginForm.addEventListener('submit', handleLogin);
+        console.log('✅ Login form listener adicionado');
+    }
     
     // Formulário de registro
-    document.getElementById('register-form').addEventListener('submit', handleRegister);
+    const registerForm = document.getElementById('register-form');
+    if (registerForm) {
+        registerForm.addEventListener('submit', handleRegister);
+        console.log('✅ Register form listener adicionado');
+    }
     
     // Enter no campo de busca
-    document.getElementById('search-input').addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') {
-            handleSearch();
-        }
-    });
+    const searchInput = document.getElementById('search-input');
+    if (searchInput) {
+        searchInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                handleSearch();
+            }
+        });
+        console.log('✅ Search input listener adicionado');
+    }
 }
 
 // Funções de autenticação
 async function fetchUserProfile(token) {
     try {
+        console.log(`🌐 Buscando perfil em: ${BACKEND_URL}/api/user/profile`);
         const response = await fetch(`${BACKEND_URL}/api/user/profile`, {
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -42,18 +59,21 @@ async function fetchUserProfile(token) {
         
         if (response.ok) {
             const userData = await response.json();
+            console.log('✅ Perfil carregado:', userData);
             setCurrentUser(userData);
         } else {
+            console.log('❌ Erro ao buscar perfil, removendo token');
             localStorage.removeItem('verificapessoa_token');
         }
     } catch (error) {
-        console.error('Erro ao buscar perfil:', error);
+        console.error('❌ Erro ao buscar perfil:', error);
         localStorage.removeItem('verificapessoa_token');
     }
 }
 
 async function handleLogin(e) {
     e.preventDefault();
+    console.log('🔐 Tentando fazer login...');
     
     if (loading) return;
     loading = true;
@@ -62,6 +82,7 @@ async function handleLogin(e) {
     const password = document.getElementById('login-password').value;
     
     try {
+        console.log(`🌐 POST ${BACKEND_URL}/api/auth/login`);
         const response = await fetch(`${BACKEND_URL}/api/auth/login`, {
             method: 'POST',
             headers: {
@@ -73,14 +94,17 @@ async function handleLogin(e) {
         const data = await response.json();
 
         if (response.ok) {
+            console.log('✅ Login bem-sucedido!');
             localStorage.setItem('verificapessoa_token', data.token);
             setCurrentUser(data.user);
             closeModals();
             document.getElementById('login-form').reset();
         } else {
+            console.log('❌ Erro no login:', data.detail);
             showError('login-error', data.detail || 'Erro no login');
         }
     } catch (error) {
+        console.error('❌ Erro de conexão:', error);
         showError('login-error', 'Erro de conexão. Tente novamente.');
     } finally {
         loading = false;
@@ -89,6 +113,7 @@ async function handleLogin(e) {
 
 async function handleRegister(e) {
     e.preventDefault();
+    console.log('📝 Tentando registrar...');
     
     if (loading) return;
     loading = true;
@@ -112,6 +137,7 @@ async function handleRegister(e) {
     }
 
     try {
+        console.log(`🌐 POST ${BACKEND_URL}/api/auth/register`);
         const response = await fetch(`${BACKEND_URL}/api/auth/register`, {
             method: 'POST',
             headers: {
@@ -123,14 +149,17 @@ async function handleRegister(e) {
         const data = await response.json();
 
         if (response.ok) {
+            console.log('✅ Registro bem-sucedido!');
             alert('Conta criada com sucesso! Faça login para continuar.');
             closeModals();
             showLoginModal();
             document.getElementById('register-form').reset();
         } else {
+            console.log('❌ Erro no registro:', data.detail);
             showError('register-error', data.detail || 'Erro no cadastro');
         }
     } catch (error) {
+        console.error('❌ Erro de conexão:', error);
         showError('register-error', 'Erro de conexão. Tente novamente.');
     } finally {
         loading = false;
@@ -140,6 +169,7 @@ async function handleRegister(e) {
 // Função de busca
 async function handleSearch() {
     const searchQuery = document.getElementById('search-input').value.trim();
+    console.log('🔍 Iniciando busca:', searchQuery);
     
     if (!searchQuery) {
         alert('Digite o nome completo da pessoa para pesquisar');
@@ -163,6 +193,7 @@ async function handleSearch() {
 
     try {
         const token = localStorage.getItem('verificapessoa_token');
+        console.log(`🌐 POST ${BACKEND_URL}/api/search`);
         
         const response = await fetch(`${BACKEND_URL}/api/search`, {
             method: 'POST',
@@ -176,6 +207,7 @@ async function handleSearch() {
         const results = await response.json();
 
         if (response.ok) {
+            console.log('✅ Busca realizada com sucesso');
             hideSearchProgress();
             displaySearchResults(results);
             // Atualizar créditos do usuário
@@ -185,6 +217,7 @@ async function handleSearch() {
             throw new Error(results.detail || 'Erro na pesquisa');
         }
     } catch (error) {
+        console.error('❌ Erro na pesquisa:', error);
         hideSearchProgress();
         alert('Erro na pesquisa: ' + error.message);
     }
@@ -192,6 +225,8 @@ async function handleSearch() {
 
 // Função de compra
 async function handlePurchase(packageType, amount, credits) {
+    console.log('💳 Iniciando compra:', packageType);
+    
     if (!currentUser) {
         alert('Faça login para comprar créditos');
         showLoginModal();
@@ -200,6 +235,8 @@ async function handlePurchase(packageType, amount, credits) {
 
     try {
         const token = localStorage.getItem('verificapessoa_token');
+        console.log(`🌐 POST ${BACKEND_URL}/api/purchase`);
+        
         const response = await fetch(`${BACKEND_URL}/api/purchase`, {
             method: 'POST',
             headers: {
@@ -216,6 +253,7 @@ async function handlePurchase(packageType, amount, credits) {
         const data = await response.json();
 
         if (response.ok) {
+            console.log('✅ Pedido criado com sucesso');
             showPaymentModal({
                 transaction_id: data.transaction_id,
                 package_name: getPackageName(packageType),
@@ -227,6 +265,7 @@ async function handlePurchase(packageType, amount, credits) {
             alert('Erro ao criar pedido: ' + data.detail);
         }
     } catch (error) {
+        console.error('❌ Erro na compra:', error);
         alert('Erro de conexão: ' + error.message);
     }
 }
@@ -255,6 +294,7 @@ function updateUserDisplay() {
 }
 
 function logout() {
+    console.log('👋 Fazendo logout...');
     localStorage.removeItem('verificapessoa_token');
     currentUser = null;
     updateUserDisplay();
@@ -527,3 +567,5 @@ document.addEventListener('click', function(e) {
         closeModals();
     }
 });
+
+console.log('✅ Script.js carregado completamente!');
