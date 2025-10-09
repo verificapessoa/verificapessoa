@@ -33,13 +33,30 @@ PIX_NAME = "Verifica Pessoa"
 
 app = FastAPI(title="VerificaPessoa API", version="1.0.0")
 
-# CORS
+# Middleware personalizado para garantir CORS
+@app.middleware("http")
+async def add_cors_headers(request, call_next):
+    response = await call_next(request)
+    response.headers["Access-Control-Allow-Origin"] = "*"
+    response.headers["Access-Control-Allow-Credentials"] = "true"
+    response.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS, PATCH"
+    response.headers["Access-Control-Allow-Headers"] = "*"
+    return response
+
+# CORS - CONFIGURAÇÃO CORRIGIDA
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=[
+        "https://verificapessoa.com",
+        "https://www.verificapessoa.com",
+        "http://localhost:3000",
+        "*"
+    ],
     allow_credentials=True,
-    allow_methods=["*"],
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
     allow_headers=["*"],
+    expose_headers=["*"],
+    max_age=3600,
 )
 
 # Conexão MongoDB
