@@ -120,7 +120,10 @@
 </head>
 <body>
     <div class="container">
-        <h1>🔐 Painel Admin - VerificaPessoa</h1>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+            <h1 style="margin: 0;">🔐 Painel Admin - VerificaPessoa</h1>
+            <button onclick="logout()" class="btn" style="background: #ff4444;">Sair</button>
+        </div>
 
         <!-- Stats -->
         <div class="stats-grid" id="stats-grid">
@@ -198,8 +201,61 @@
     <script>
         const BACKEND_URL = 'https://verificapessoa-api.onrender.com';
 
+        // Sistema de autenticação do Admin
+        const ADMIN_USERNAME = 'admin';
+        const ADMIN_PASSWORD = 'Tetateta159@';
+
+        // Verificar se está autenticado
+        function checkAuth() {
+            const isAuthenticated = sessionStorage.getItem('admin_authenticated');
+            if (!isAuthenticated) {
+                showLoginScreen();
+                return false;
+            }
+            return true;
+        }
+
+        // Mostrar tela de login
+        function showLoginScreen() {
+            document.body.innerHTML = `
+                <div style="display: flex; justify-content: center; align-items: center; height: 100vh; background: #0a0a0a;">
+                    <div style="background: #1a1a1a; padding: 2rem; border-radius: 8px; border: 1px solid #333; max-width: 400px; width: 100%;">
+                        <h2 style="color: #4ade80; margin-bottom: 2rem; text-align: center;">🔐 Login Admin</h2>
+                        <form id="admin-login-form">
+                            <div style="margin-bottom: 1rem;">
+                                <label style="display: block; margin-bottom: 0.5rem; color: #999;">Usuário:</label>
+                                <input type="text" id="admin-username" required style="width: 100%; padding: 0.75rem; background: #0a0a0a; border: 1px solid #333; border-radius: 4px; color: #fff;">
+                            </div>
+                            <div style="margin-bottom: 1.5rem;">
+                                <label style="display: block; margin-bottom: 0.5rem; color: #999;">Senha:</label>
+                                <input type="password" id="admin-password" required style="width: 100%; padding: 0.75rem; background: #0a0a0a; border: 1px solid #333; border-radius: 4px; color: #fff;">
+                            </div>
+                            <div id="login-error" style="color: #ff4444; margin-bottom: 1rem; display: none;"></div>
+                            <button type="submit" class="btn" style="width: 100%; background: #4ade80; color: #000; border: none; padding: 0.75rem; border-radius: 4px; cursor: pointer; font-weight: 600;">Entrar</button>
+                        </form>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('admin-login-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const username = document.getElementById('admin-username').value;
+                const password = document.getElementById('admin-password').value;
+
+                if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
+                    sessionStorage.setItem('admin_authenticated', 'true');
+                    location.reload();
+                } else {
+                    const errorDiv = document.getElementById('login-error');
+                    errorDiv.textContent = 'Usuário ou senha incorretos';
+                    errorDiv.style.display = 'block';
+                }
+            });
+        }
+
         // Load admin data
         async function loadAdminData() {
+            if (!checkAuth()) return;
             try {
                 // Load stats
                 const statsResponse = await fetch(`${BACKEND_URL}/api/admin/stats`);
@@ -274,8 +330,16 @@
             }
         });
 
+        // Função de logout
+        function logout() {
+            sessionStorage.removeItem('admin_authenticated');
+            location.reload();
+        }
+
         // Load data on page load
-        loadAdminData();
+        if (checkAuth()) {
+            loadAdminData();
+        }
     </script>
 </body>
 </html>
