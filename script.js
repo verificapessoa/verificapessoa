@@ -26,6 +26,8 @@ function setupEventListeners() {
     if (loginForm) {
         loginForm.addEventListener('submit', handleLogin);
         console.log('✅ Login form listener adicionado');
+    } else {
+        console.warn('❌ Login form não encontrado');
     }
     
     // Formulário de registro
@@ -33,6 +35,8 @@ function setupEventListeners() {
     if (registerForm) {
         registerForm.addEventListener('submit', handleRegister);
         console.log('✅ Register form listener adicionado');
+    } else {
+        console.warn('❌ Register form não encontrado');
     }
     
     // Enter no campo de busca
@@ -44,6 +48,8 @@ function setupEventListeners() {
             }
         });
         console.log('✅ Search input listener adicionado');
+    } else {
+        console.warn('❌ Search input não encontrado');
     }
 }
 
@@ -115,22 +121,43 @@ async function handleRegister(e) {
     e.preventDefault();
     console.log('📝 Tentando registrar...');
     
-    if (loading) return;
+    if (loading) {
+        console.log('⏳ Já está processando...');
+        return;
+    }
     loading = true;
     
-    const email = document.getElementById('register-email').value;
-    const password = document.getElementById('register-password').value;
-    const confirmPassword = document.getElementById('register-confirm').value;
-    const acceptTerms = document.getElementById('accept-terms').checked;
+    const emailInput = document.getElementById('register-email');
+    const passwordInput = document.getElementById('register-password');
+    const confirmPasswordInput = document.getElementById('register-confirm');
+    const acceptTermsInput = document.getElementById('accept-terms');
+    
+    if (!emailInput || !passwordInput || !confirmPasswordInput || !acceptTermsInput) {
+        console.error('❌ Campos do formulário não encontrados!');
+        alert('Erro: Campos do formulário não encontrados. Recarregue a página.');
+        loading = false;
+        return;
+    }
+    
+    const email = emailInput.value;
+    const password = passwordInput.value;
+    const confirmPassword = confirmPasswordInput.value;
+    const acceptTerms = acceptTermsInput.checked;
+    
+    console.log('📧 Email:', email);
+    console.log('🔒 Senha digitada:', password ? 'Sim' : 'Não');
+    console.log('✅ Termos aceitos:', acceptTerms);
     
     // Validações
     if (password !== confirmPassword) {
+        console.log('❌ Senhas não coincidem');
         showError('register-error', 'Senhas não coincidem');
         loading = false;
         return;
     }
     
     if (!acceptTerms) {
+        console.log('❌ Termos não aceitos');
         showError('register-error', 'Aceite os termos de uso para continuar');
         loading = false;
         return;
@@ -138,6 +165,8 @@ async function handleRegister(e) {
 
     try {
         console.log(`🌐 POST ${BACKEND_URL}/api/auth/register`);
+        console.log('📤 Enviando dados:', { email, password: '***' });
+        
         const response = await fetch(`${BACKEND_URL}/api/auth/register`, {
             method: 'POST',
             headers: {
@@ -146,7 +175,9 @@ async function handleRegister(e) {
             body: JSON.stringify({ email, password })
         });
 
+        console.log('📥 Status da resposta:', response.status);
         const data = await response.json();
+        console.log('📥 Dados recebidos:', data);
 
         if (response.ok) {
             console.log('✅ Registro bem-sucedido!');
@@ -163,6 +194,7 @@ async function handleRegister(e) {
         showError('register-error', 'Erro de conexão. Tente novamente.');
     } finally {
         loading = false;
+        console.log('🔓 Loading liberado');
     }
 }
 
