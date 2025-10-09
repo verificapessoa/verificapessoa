@@ -1,0 +1,161 @@
+"<!DOCTYPE html>
+<html lang=\"pt-BR\">
+<head>
+    <meta charset=\"UTF-8\">
+    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">
+    <title>Teste de Registro - VerificaPessoa</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #0a0a0a;
+            color: #fff;
+            padding: 2rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #999;
+        }
+        input[type=\"email\"], input[type=\"password\"] {
+            width: 100%;
+            padding: 0.75rem;
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 4px;
+            color: #fff;
+            font-size: 16px;
+        }
+        button {
+            background: #4ade80;
+            color: #000;
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 16px;
+            width: 100%;
+        }
+        button:hover {
+            background: #22c55e;
+        }
+        .log {
+            background: #1a1a1a;
+            padding: 1rem;
+            border: 1px solid #333;
+            border-radius: 4px;
+            margin-top: 2rem;
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .log div {
+            margin: 0.5rem 0;
+        }
+        .success { color: #4ade80; }
+        .error { color: #ff4444; }
+        .info { color: #4da6ff; }
+        .warning { color: #ffa500; }
+        h1 { color: #4ade80; }
+        h2 { color: #4ade80; margin-top: 2rem; }
+    </style>
+</head>
+<body>
+    <h1>🧪 Teste de Registro</h1>
+    <p style=\"color: #999;\">Este é um teste isolado para verificar o cadastro.</p>
+
+    <form id=\"test-register-form\">
+        <div class=\"form-group\">
+            <label>Email:</label>
+            <input type=\"email\" id=\"test-email\" value=\"teste@exemplo.com\" required>
+        </div>
+        <div class=\"form-group\">
+            <label>Senha:</label>
+            <input type=\"password\" id=\"test-password\" value=\"senha123\" required>
+        </div>
+        <div class=\"form-group\">
+            <label>Confirmar Senha:</label>
+            <input type=\"password\" id=\"test-confirm\" value=\"senha123\" required>
+        </div>
+        <button type=\"submit\">🚀 Testar Registro</button>
+    </form>
+
+    <h2>📋 Log de Debug:</h2>
+    <div class=\"log\" id=\"log\"></div>
+
+    <script>
+        const BACKEND_URL = 'https://verificapessoa-api.onrender.com';
+        const logDiv = document.getElementById('log');
+
+        function addLog(message, type = 'info') {
+            const logEntry = document.createElement('div');
+            logEntry.className = type;
+            logEntry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            logDiv.appendChild(logEntry);
+            logDiv.scrollTop = logDiv.scrollHeight;
+            console.log(message);
+        }
+
+        document.getElementById('test-register-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            logDiv.innerHTML = '';
+            
+            addLog('🚀 Iniciando teste de registro...', 'info');
+            
+            const email = document.getElementById('test-email').value;
+            const password = document.getElementById('test-password').value;
+            const confirm = document.getElementById('test-confirm').value;
+            
+            addLog(`📧 Email: ${email}`, 'info');
+            addLog(`🔒 Senha: ${password ? '***' : 'VAZIA'}`, 'info');
+            
+            if (password !== confirm) {
+                addLog('❌ ERRO: Senhas não coincidem', 'error');
+                return;
+            }
+            
+            addLog('✅ Validações OK', 'success');
+            addLog(`🌐 URL: ${BACKEND_URL}/api/auth/register`, 'info');
+            
+            try {
+                addLog('📤 Enviando requisição...', 'info');
+                
+                const response = await fetch(`${BACKEND_URL}/api/auth/register`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+                
+                addLog(`📥 Status HTTP: ${response.status}`, response.ok ? 'success' : 'error');
+                
+                const data = await response.json();
+                addLog(`📥 Resposta: ${JSON.stringify(data, null, 2)}`, response.ok ? 'success' : 'error');
+                
+                if (response.ok) {
+                    addLog('✅ SUCESSO! Conta criada!', 'success');
+                    alert('✅ Conta criada com sucesso!');
+                } else {
+                    addLog(`❌ ERRO: ${data.detail || 'Erro desconhecido'}`, 'error');
+                    alert(`❌ Erro: ${data.detail}`);
+                }
+                
+            } catch (error) {
+                addLog(`❌ ERRO DE CONEXÃO: ${error.message}`, 'error');
+                addLog(`❌ Tipo do erro: ${error.name}`, 'error');
+                addLog(`❌ Stack: ${error.stack}`, 'error');
+                alert(`❌ Erro de conexão: ${error.message}`);
+            }
+        });
+
+        addLog('✅ Página carregada e pronta para teste', 'success');
+    </script>
+</body>
+</html>"
