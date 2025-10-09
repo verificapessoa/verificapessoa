@@ -66,9 +66,24 @@ db = None
 @app.on_event("startup")
 async def startup_db_client():
     global client, db
-    client = AsyncIOMotorClient(MONGO_URL)
-    db = client[DB_NAME]
-    print(f"✅ MongoDB conectado: {DB_NAME}")
+    try:
+        # Configuração SSL melhorada para MongoDB
+        client = AsyncIOMotorClient(
+            MONGO_URL,
+            serverSelectionTimeoutMS=5000,
+            connectTimeoutMS=10000,
+            socketTimeoutMS=10000,
+            tls=True,
+            tlsAllowInvalidCertificates=True  # Para ambientes de produção com certificados auto-assinados
+        )
+        # Testar conexão
+        await client.admin.command('ping')
+        db = client[DB_NAME]
+        print(f"✅ MongoDB conectado: {DB_NAME}")
+    except Exception as e:
+        print(f"❌ ERRO ao conectar MongoDB: {e}")
+        print(f"❌ MONGO_URL: {MONGO_URL[:50]}...")  # Mostrar parte da URL (sem senha)
+        raise
 
 @app.on_event("shutdown")
 async def shutdown_db_client():
