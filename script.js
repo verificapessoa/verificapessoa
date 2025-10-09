@@ -299,22 +299,22 @@ function showPaymentModal(paymentData) {
     const modal = document.createElement('div');
     modal.className = 'modal active';
     modal.innerHTML = `
-        <div class=\"modal-content\">
-            <button class=\"close-btn\" onclick=\"this.parentElement.parentElement.remove()\">×</button>
+        <div class="modal-content">
+            <button class="close-btn" onclick="this.parentElement.parentElement.remove()">×</button>
             <h3>💳 Pagamento</h3>
             <p><strong>Produto:</strong> ${paymentData.package_name}</p>
             <p><strong>Valor:</strong> R$ ${paymentData.amount.toFixed(2).replace('.', ',')}</p>
             <p><strong>Créditos:</strong> ${paymentData.credits}</p>
-            <div class=\"pix-container\">
+            <div class="pix-container">
                 <h4>🔑 Pagamento PIX</h4>
-                <div class=\"pix-info\">${paymentData.pix_info.key}</div>
-                <button class=\"btn-secondary\" onclick=\"copyToClipboard('${paymentData.pix_info.key}')\">📋 Copiar Chave PIX</button>
-                <p style=\"color: #999; font-size: 0.9rem; margin: 1rem 0;\">
+                <div class="pix-info">${paymentData.pix_info.key}</div>
+                <button class="btn-secondary" onclick="copyToClipboard('${paymentData.pix_info.key}')">📋 Copiar Chave PIX</button>
+                <p style="color: #999; font-size: 0.9rem; margin: 1rem 0;">
                     Favorecido: ${paymentData.pix_info.name}<br />
                     Valor: R$ ${paymentData.amount.toFixed(2).replace('.', ',')}
                 </p>
             </div>
-            <p style=\"color: #666; font-size: 0.8rem; margin: 1rem 0; text-align: center;\">
+            <p style="color: #666; font-size: 0.8rem; margin: 1rem 0; text-align: center;">
                 Após o pagamento, envie o comprovante para silas@contabsf.com.br
             </p>
         </div>
@@ -327,11 +327,11 @@ function showSearchProgress() {
     modal.id = 'search-progress-modal';
     modal.className = 'modal active';
     modal.innerHTML = `
-        <div class=\"modal-content\" style=\"max-width: 500px;\">
+        <div class="modal-content" style="max-width: 500px;">
             <h3>🔍 Pesquisa em Andamento</h3>
-            <div style=\"text-align: center; padding: 2rem;\">
-                <div class=\"loading-spinner\"></div>
-                <div id=\"search-progress-text\" style=\"margin: 1rem 0; color: #fff;\">Iniciando busca...</div>
+            <div style="text-align: center; padding: 2rem;">
+                <div class="loading-spinner"></div>
+                <div id="search-progress-text" style="margin: 1rem 0; color: #fff;">Iniciando busca...</div>
             </div>
         </div>
     `;
@@ -365,23 +365,40 @@ function displaySearchResults(results) {
     const modal = document.createElement('div');
     modal.className = 'modal active';
     modal.innerHTML = `
-        <div class=\"modal-content search-results-modal\">
-            <button class=\"close-btn\" onclick=\"this.parentElement.parentElement.remove()\">×</button>
-            <h3>🔍 Relatório - ${results.name}</h3>
-            <div class=\"disclaimer-box\">
-                <strong style=\"color: #4ade80;\">✅ INFORMAÇÕES 100% PÚBLICAS</strong><br>
-                <span style=\"font-size: 0.9rem; color: #ccc;\">${results.disclaimer}</span>
+        <div class="modal-content search-results-modal" style="max-width: 900px;">
+            <button class="close-btn" onclick="this.parentElement.parentElement.remove()">×</button>
+            <h3 style="text-align: center; color: #4ade80; margin-bottom: 1.5rem;">🔍 RELATÓRIO DE INVESTIGAÇÃO</h3>
+            <h4 style="text-align: center; color: #fff; margin-bottom: 2rem;">${results.name}</h4>
+            
+            <div class="disclaimer-box" style="background: #1a1a1a; border-left: 4px solid #4ade80; padding: 1rem; margin-bottom: 2rem;">
+                <strong style="color: #4ade80;">✅ INFORMAÇÕES 100% PÚBLICAS</strong><br>
+                <span style="font-size: 0.9rem; color: #ccc;">${results.disclaimer}</span>
             </div>
-            <div class=\"summary-box\">
-                <strong>📊 Resumo:</strong><br>
-                • ${results.profiles_found} perfis encontrados<br>
+            
+            <div class="summary-box" style="background: #1a1a1a; padding: 1rem; border-radius: 8px; margin-bottom: 2rem;">
+                <strong>📊 Resumo da Pesquisa:</strong><br>
+                • ${results.profiles_found} resultados encontrados<br>
                 • ${results.sources_searched} fontes consultadas<br>
-                • Confiança: ${results.confidence_score}%
+                • Data: ${new Date(results.timestamp).toLocaleString('pt-BR')}
             </div>
+            
             ${generateResultsSections(results)}
-            <div class=\"important-notice\">
-                <strong>⚠️ IMPORTANTE</strong><br>
-                Verificação cruzada obrigatória. <a href=\"termos.html\" target=\"_blank\" style=\"color: #4ade80;\">Termos</a>
+            
+            <div class="important-notice" style="background: #2a1a1a; border: 1px solid #ff6b6b; padding: 1rem; border-radius: 8px; margin-top: 2rem;">
+                <strong style="color: #ff6b6b;">⚠️ IMPORTANTE - VERIFICAÇÃO OBRIGATÓRIA</strong><br>
+                <span style="font-size: 0.9rem;">
+                Este relatório apresenta informações coletadas automaticamente de fontes públicas disponíveis na internet. 
+                <strong>É OBRIGATÓRIO realizar verificação cruzada independente</strong> antes de tomar qualquer decisão. 
+                Podem existir homônimos ou dados desatualizados. 
+                <a href="termos.html" target="_blank" style="color: #4ade80;">Leia nossos termos completos</a>.
+                </span>
+            </div>
+            
+            <div style="text-align: center; margin-top: 2rem; display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                <button class="btn" onclick="window.print()" style="background: #4ade80; color: #000;">🖨️ Imprimir</button>
+                <button class="btn" onclick="downloadReportHTML('${results.name}')" style="background: #3498db; color: #fff;">📥 Baixar HTML</button>
+                <button class="btn" onclick="downloadReportPDF('${results.name}')" style="background: #9b59b6; color: #fff;">📄 Baixar PDF</button>
+                <button class="btn-secondary" onclick="this.closest('.modal').remove()" style="background: #666; color: #fff; border: none; padding: 0.75rem 1.5rem; border-radius: 4px; cursor: pointer;">Fechar</button>
             </div>
         </div>
     `;
@@ -391,26 +408,95 @@ function displaySearchResults(results) {
 function generateResultsSections(results) {
     let html = '';
     
+    // Redes Sociais
     if (results.social_media?.length) {
-        html += `<div class=\"results-section\"><h4>📱 Redes Sociais</h4>`;
+        html += `
+            <div class="results-section" style="background: #1a1a1a; padding: 1.5rem; border-radius: 8px; margin-bottom: 1.5rem;">
+                <h4 style="color: #4ade80; margin-bottom: 1rem; border-bottom: 2px solid #333; padding-bottom: 0.5rem;">
+                    📱 REDES SOCIAIS (${results.social_media.length})
+                </h4>`;
         results.social_media.forEach(p => {
-            html += `<div class=\"result-item\"><strong>${p.platform}</strong><br>${p.status}</div>`;
+            html += `
+                <div class="result-item" style="background: #0a0a0a; padding: 1rem; margin-bottom: 1rem; border-radius: 4px; border-left: 3px solid #4ade80;">
+                    <strong style="color: #fff; font-size: 1.1rem;">${p.platform || p.profile}</strong><br>
+                    <span style="color: #ccc;">${p.status || p.profile || 'Informação não disponível'}</span><br>
+                    ${p.url ? `<a href="${p.url}" target="_blank" style="color: #4ade80; font-size: 0.9rem;">🔗 Ver perfil</a><br>` : ''}
+                    ${p.note ? `<span style="color: #999; font-size: 0.85rem;">💡 ${p.note}</span>` : ''}
+                </div>`;
         });
         html += `</div>`;
     }
     
+    // Processos Judiciais
+    if (results.legal_records?.length) {
+        html += `
+            <div class="results-section" style="background: #1a1a1a; padding: 1.5rem; border-radius: 8px; margin-bottom: 1.5rem;">
+                <h4 style="color: #ff6b6b; margin-bottom: 1rem; border-bottom: 2px solid #333; padding-bottom: 0.5rem;">
+                    ⚖️ PROCESSOS JUDICIAIS (${results.legal_records.length})
+                </h4>`;
+        results.legal_records.forEach(proc => {
+            html += `
+                <div class="result-item" style="background: #0a0a0a; padding: 1rem; margin-bottom: 1rem; border-radius: 4px; border-left: 3px solid #ff6b6b;">
+                    <strong style="color: #fff;">${proc.type || proc.title}</strong><br>
+                    <span style="color: #ccc;">${proc.description || proc.title}</span><br>
+                    <span style="color: #999; font-size: 0.85rem;">📍 Fonte: ${proc.source}</span><br>
+                    ${proc.note ? `<span style="color: #999; font-size: 0.85rem;">💡 ${proc.note}</span>` : ''}
+                </div>`;
+        });
+        html += `</div>`;
+    }
+    
+    // Vínculos Empresariais
     if (results.professional?.length) {
-        html += `<div class=\"results-section\"><h4>💼 Profissional</h4>`;
-        results.professional.forEach(i => {
-            html += `<div class=\"result-item\"><strong>${i.type}</strong><br>Fonte: ${i.source}</div>`;
+        html += `
+            <div class="results-section" style="background: #1a1a1a; padding: 1.5rem; border-radius: 8px; margin-bottom: 1.5rem;">
+                <h4 style="color: #ffa500; margin-bottom: 1rem; border-bottom: 2px solid #333; padding-bottom: 0.5rem;">
+                    💼 VÍNCULOS EMPRESARIAIS (${results.professional.length})
+                </h4>`;
+        results.professional.forEach(emp => {
+            html += `
+                <div class="result-item" style="background: #0a0a0a; padding: 1rem; margin-bottom: 1rem; border-radius: 4px; border-left: 3px solid #ffa500;">
+                    <strong style="color: #fff;">${emp.type || emp.company}</strong><br>
+                    <span style="color: #ccc;">${emp.details || emp.company}</span><br>
+                    <span style="color: #999; font-size: 0.85rem;">📍 Fonte: ${emp.source}</span><br>
+                    ${emp.note ? `<span style="color: #999; font-size: 0.85rem;">💡 ${emp.note}</span>` : ''}
+                </div>`;
         });
         html += `</div>`;
     }
     
+    // Informações Familiares
+    if (results.family_info?.length) {
+        html += `
+            <div class="results-section" style="background: #1a1a1a; padding: 1.5rem; border-radius: 8px; margin-bottom: 1.5rem;">
+                <h4 style="color: #9b59b6; margin-bottom: 1rem; border-bottom: 2px solid #333; padding-bottom: 0.5rem;">
+                    👥 INFORMAÇÕES FAMILIARES (${results.family_info.length})
+                </h4>`;
+        results.family_info.forEach(fam => {
+            html += `
+                <div class="result-item" style="background: #0a0a0a; padding: 1rem; margin-bottom: 1rem; border-radius: 4px; border-left: 3px solid #9b59b6;">
+                    <strong style="color: #fff;">${fam.type}</strong><br>
+                    <span style="color: #ccc;">${fam.status}</span><br>
+                    ${fam.note ? `<span style="color: #999; font-size: 0.85rem;">💡 ${fam.note}</span>` : ''}
+                </div>`;
+        });
+        html += `</div>`;
+    }
+    
+    // Registros Públicos / Outras Informações
     if (results.public_records?.length) {
-        html += `<div class=\"results-section\"><h4>🏛️ Registros Públicos</h4>`;
-        results.public_records.forEach(r => {
-            html += `<div class=\"result-item\"><strong>${r.type}</strong><br>Fonte: ${r.source}</div>`;
+        html += `
+            <div class="results-section" style="background: #1a1a1a; padding: 1.5rem; border-radius: 8px; margin-bottom: 1.5rem;">
+                <h4 style="color: #3498db; margin-bottom: 1rem; border-bottom: 2px solid #333; padding-bottom: 0.5rem;">
+                    🏛️ OUTRAS INFORMAÇÕES (${results.public_records.length})
+                </h4>`;
+        results.public_records.forEach(rec => {
+            html += `
+                <div class="result-item" style="background: #0a0a0a; padding: 1rem; margin-bottom: 1rem; border-radius: 4px; border-left: 3px solid #3498db;">
+                    <strong style="color: #fff;">${rec.title || rec.source}</strong><br>
+                    <span style="color: #ccc;">${rec.snippet || rec.title}</span><br>
+                    <span style="color: #999; font-size: 0.85rem;">📍 Fonte: ${rec.source}</span>
+                </div>`;
         });
         html += `</div>`;
     }
@@ -449,5 +535,72 @@ function copyToClipboard(text) {
 document.addEventListener('click', function(e) {
     if (e.target.classList.contains('modal')) closeModals();
 });
+
+// Função para baixar relatório em HTML
+function downloadReportHTML(personName) {
+    const modal = document.querySelector('.search-results-modal');
+    if (!modal) return;
+    
+    const content = modal.innerHTML;
+    const html = `
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Relatório - ${personName}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #0a0a0a;
+            color: #fff;
+            padding: 2rem;
+            line-height: 1.6;
+        }
+        .modal-content {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #1a1a1a;
+            padding: 2rem;
+            border-radius: 8px;
+        }
+        h3, h4 { color: #4ade80; }
+        .disclaimer-box { background: #1a1a1a; border-left: 4px solid #4ade80; padding: 1rem; margin: 1rem 0; }
+        .summary-box { background: #1a1a1a; padding: 1rem; border-radius: 8px; margin: 1rem 0; }
+        .results-section { background: #1a1a1a; padding: 1.5rem; border-radius: 8px; margin: 1rem 0; }
+        .result-item { background: #0a0a0a; padding: 1rem; margin: 0.5rem 0; border-radius: 4px; }
+        .important-notice { background: #2a1a1a; border: 1px solid #ff6b6b; padding: 1rem; border-radius: 8px; margin: 1rem 0; }
+        button { display: none; }
+        .close-btn { display: none; }
+    </style>
+</head>
+<body>
+    <div class="modal-content">
+        ${content}
+    </div>
+    <footer style="text-align: center; margin-top: 2rem; color: #666; font-size: 0.9rem;">
+        <p>VerificaPessoa.com - Relatório gerado em ${new Date().toLocaleString('pt-BR')}</p>
+        <p>© 2025 VerificaPessoa. Todos os direitos reservados.</p>
+    </footer>
+</body>
+</html>`;
+    
+    const blob = new Blob([html], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `relatorio-${personName.replace(/\s+/g, '-')}-${Date.now()}.html`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    
+    alert('✅ Relatório HTML baixado com sucesso!');
+}
+
+// Função para baixar relatório em PDF (usando impressão)
+function downloadReportPDF(personName) {
+    alert('📄 Para baixar em PDF:\n\n1. Clique em "Imprimir"\n2. Escolha "Salvar como PDF"\n3. Clique em "Salvar"\n\nOu use Ctrl+P (Windows) / Cmd+P (Mac)');
+    window.print();
+}
 
 console.log('✅ Script carregado!');
