@@ -112,47 +112,237 @@ class PurchaseRequest(BaseModel):
     amount: float
     credits: int
 
-# Sistema de Busca Real
+# Sistema de Busca Real com Web Scraping
 class RealPersonSearch:
     def __init__(self):
-        self.timeout = 15
+        self.timeout = 30
         self.headers = {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+            'Accept-Language': 'pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7',
+            'Referer': 'https://www.google.com/'
         }
         
+    async def search_google(self, name: str) -> List[Dict[str, Any]]:
+        """Busca informações gerais no Google"""
+        try:
+            query = quote(f'"{name}" Brasil')
+            url = f'https://www.google.com/search?q={query}&num=10'
+            
+            response = requests.get(url, headers=self.headers, timeout=self.timeout)
+            soup = BeautifulSoup(response.text, 'html.parser')
+            
+            results = []
+            # Procurar por menções em resultados
+            for result in soup.find_all('div', class_='g')[:5]:
+                title_elem = result.find('h3')
+                snippet_elem = result.find('div', class_='VwiC3b')
+                
+                if title_elem and snippet_elem:
+                    results.append({
+                        "source": "Google Search",
+                        "title": title_elem.get_text(),
+                        "snippet": snippet_elem.get_text()[:200]
+                    })
+            
+            return results
+        except Exception as e:
+            print(f"Erro Google Search: {e}")
+            return []
+    
+    async def search_jusbrasil(self, name: str) -> List[Dict[str, Any]]:
+        """Busca processos judiciais no Jusbrasil"""
+        try:
+            query = quote(name)
+            url = f'https://www.jusbrasil.com.br/busca?q={query}'
+            
+            response = requests.get(url, headers=self.headers, timeout=self.timeout)
+            soup = BeautifulSoup(response.text, 'html.parser')
+            
+            processes = []
+            # Procurar por processos
+            for item in soup.find_all('article')[:5]:
+                title = item.find('h3') or item.find('h2')
+                desc = item.find('p')
+                
+                if title:
+                    processes.append({
+                        "type": "Processo Judicial",
+                        "title": title.get_text().strip()[:150],
+                        "description": desc.get_text().strip()[:200] if desc else "Detalhes não disponíveis",
+                        "source": "Jusbrasil"
+                    })
+            
+            return processes
+        except Exception as e:
+            print(f"Erro Jusbrasil: {e}")
+            return []
+    
+    async def search_linkedin(self, name: str) -> List[Dict[str, Any]]:
+        """Busca perfis no LinkedIn"""
+        try:
+            query = quote(f'{name} site:linkedin.com/in/')
+            url = f'https://www.google.com/search?q={query}'
+            
+            response = requests.get(url, headers=self.headers, timeout=self.timeout)
+            soup = BeautifulSoup(response.text, 'html.parser')
+            
+            profiles = []
+            for result in soup.find_all('div', class_='g')[:3]:
+                title = result.find('h3')
+                link = result.find('a')
+                
+                if title and link and 'linkedin.com' in link.get('href', ''):
+                    profiles.append({
+                        "platform": "LinkedIn",
+                        "profile": title.get_text(),
+                        "url": link.get('href'),
+                        "status": "Perfil público encontrado"
+                    })
+            
+            return profiles
+        except Exception as e:
+            print(f"Erro LinkedIn: {e}")
+            return []
+    
+    async def search_facebook(self, name: str) -> List[Dict[str, Any]]:
+        """Busca perfis no Facebook"""
+        try:
+            query = quote(f'{name} site:facebook.com')
+            url = f'https://www.google.com/search?q={query}'
+            
+            response = requests.get(url, headers=self.headers, timeout=self.timeout)
+            soup = BeautifulSoup(response.text, 'html.parser')
+            
+            profiles = []
+            for result in soup.find_all('div', class_='g')[:3]:
+                title = result.find('h3')
+                link = result.find('a')
+                
+                if title and link and 'facebook.com' in link.get('href', ''):
+                    profiles.append({
+                        "platform": "Facebook",
+                        "profile": title.get_text(),
+                        "url": link.get('href'),
+                        "status": "Perfil público encontrado"
+                    })
+            
+            return profiles
+        except Exception as e:
+            print(f"Erro Facebook: {e}")
+            return []
+    
+    async def search_empresas(self, name: str) -> List[Dict[str, Any]]:
+        """Busca vínculos empresariais"""
+        try:
+            query = quote(f'{name} CNPJ empresa sócio')
+            url = f'https://www.google.com/search?q={query}'
+            
+            response = requests.get(url, headers=self.headers, timeout=self.timeout)
+            soup = BeautifulSoup(response.text, 'html.parser')
+            
+            empresas = []
+            for result in soup.find_all('div', class_='g')[:5]:
+                title = result.find('h3')
+                snippet = result.find('div', class_='VwiC3b')
+                
+                if title and snippet:
+                    text = snippet.get_text()
+                    if any(word in text.lower() for word in ['cnpj', 'empresa', 'sócio', 'administrador']):
+                        empresas.append({
+                            "type": "Vínculo Empresarial",
+                            "company": title.get_text()[:100],
+                            "details": text[:200],
+                            "source": "Registro Público"
+                        })
+            
+            return empresas
+        except Exception as e:
+            print(f"Erro busca empresas: {e}")
+            return []
+    
     async def search_person(self, full_name: str) -> Dict[str, Any]:
-        """Busca real agregando informações de fontes públicas"""
+        """Busca real agregando informações de múltiplas fontes públicas"""
+        
+        print(f"🔍 Iniciando busca REAL por: {full_name}")
+        
+        # Executar buscas em paralelo
+        google_results = await self.search_google(full_name)
+        await asyncio.sleep(1)  # Delay para não sobrecarregar
+        
+        processos = await self.search_jusbrasil(full_name)
+        await asyncio.sleep(1)
+        
+        linkedin = await self.search_linkedin(full_name)
+        await asyncio.sleep(1)
+        
+        facebook = await self.search_facebook(full_name)
+        await asyncio.sleep(1)
+        
+        empresas = await self.search_empresas(full_name)
+        
+        # Montar redes sociais
+        social_media = []
+        social_media.extend(linkedin)
+        social_media.extend(facebook)
+        
+        # Se não encontrou nada específico, adicionar resultado genérico
+        if not social_media:
+            social_media.append({
+                "platform": "Busca Geral",
+                "profile": f"Nenhum perfil público encontrado para {full_name}",
+                "status": "Não encontrado",
+                "note": "Recomenda-se busca manual em redes sociais"
+            })
+        
+        # Processos judiciais
+        legal_records = processos if processos else [{
+            "type": "Processos Judiciais",
+            "title": "Nenhum processo encontrado em busca pública",
+            "source": "Jusbrasil",
+            "note": "Verificar manualmente em portais oficiais (CNJ, TJ estaduais)"
+        }]
+        
+        # Vínculos empresariais
+        professional = empresas if empresas else [{
+            "type": "Vínculos Empresariais",
+            "company": "Nenhum vínculo empresarial encontrado",
+            "source": "Busca Pública",
+            "note": "Verificar na Receita Federal e Juntas Comerciais"
+        }]
+        
+        # Informações gerais
+        public_records = google_results if google_results else [{
+            "source": "Busca Geral",
+            "title": "Informações limitadas disponíveis",
+            "snippet": "Recomenda-se verificação em fontes oficiais"
+        }]
+        
+        # Familiares (complexo de obter via scraping público)
+        family_info = [{
+            "type": "Informações Familiares",
+            "status": "Não disponível em fontes públicas",
+            "note": "Informações familiares requerem acesso a registros civis oficiais"
+        }]
+        
+        sources_searched = 5
+        profiles_found = len(social_media) + len(legal_records) + len(professional)
         
         results = {
             "name": full_name,
             "timestamp": datetime.now(timezone.utc).isoformat(),
-            "sources_searched": 6,
-            "profiles_found": 2,
-            "social_media": [{
-                "platform": "LinkedIn",
-                "status": "Perfil público encontrado",
-                "confidence": "Média",
-                "note": "Verificação manual recomendada"
-            }],
-            "professional": [{
-                "type": "Vínculo empresarial encontrado",
-                "source": "Registro empresarial público",
-                "confidence": "Alta",
-                "note": "Confirmar na Receita Federal"
-            }],
-            "legal_records": [],
-            "education": [],
-            "family_info": [],
-            "public_records": [{
-                "type": "Registro governamental",
-                "source": "Portal de transparência",
-                "confidence": "Alta",
-                "note": "Dados de fonte oficial"
-            }],
-            "confidence_score": 75,
-            "risk_assessment": "low",
-            "disclaimer": "Informações coletadas de fontes públicas. Verificação cruzada recomendada."
+            "sources_searched": sources_searched,
+            "profiles_found": profiles_found,
+            "social_media": social_media,
+            "legal_records": legal_records,
+            "professional": professional,
+            "family_info": family_info,
+            "public_records": public_records,
+            "risk_assessment": "baixo" if not processos else "médio",
+            "disclaimer": "⚠️ IMPORTANTE: Informações coletadas de fontes públicas disponíveis na internet. Este relatório é apenas um ponto de partida. É OBRIGATÓRIO realizar verificação cruzada independente em fontes oficiais antes de tomar qualquer decisão. Podem existir homônimos ou dados desatualizados."
         }
+        
+        print(f"✅ Busca concluída: {profiles_found} resultados encontrados")
         
         return results
 
