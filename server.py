@@ -15,26 +15,23 @@ from urllib.parse import quote
 from dotenv import load_dotenv
 from pathlib import Path
 import re
+import random
+import time
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
 
-# Configurações do banco de dados
+# Configurações
 MONGO_URL = os.environ.get('MONGO_URL', 'mongodb://localhost:27017')
 DB_NAME = os.environ.get('DB_NAME', 'verificapessoa')
 JWT_SECRET = os.environ.get('JWT_SECRET', 'verificapessoa_secret_2025')
-
-# Configurações Mercado Pago
 MP_PUBLIC_KEY = "APP_USR-aff32c11-93e2-4ed5-8a5a-9e2ca4405766"
 MP_ACCESS_TOKEN = "APP_USR-6850941285056243-092512-017e23d3c41ef7b0c005df7970bf13a1-94875335"
-
-# Configurações PIX
 PIX_KEY = "3656e000-acb3-4645-a176-034c4d9ba6df"
 PIX_NAME = "Verifica Pessoa"
 
 app = FastAPI(title="VerificaPessoa API", version="1.0.0")
 
-# Middleware personalizado para garantir CORS
 @app.middleware("http")
 async def add_cors_headers(request, call_next):
     response = await call_next(request)
@@ -44,15 +41,9 @@ async def add_cors_headers(request, call_next):
     response.headers["Access-Control-Allow-Headers"] = "*"
     return response
 
-# CORS - CONFIGURAÇÃO CORRIGIDA
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "https://verificapessoa.com",
-        "https://www.verificapessoa.com",
-        "http://localhost:3000",
-        "*"
-    ],
+    allow_origins=["https://verificapessoa.com", "https://www.verificapessoa.com", "http://localhost:3000", "*"],
     allow_credentials=True,
     allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
     allow_headers=["*"],
@@ -60,7 +51,6 @@ app.add_middleware(
     max_age=3600,
 )
 
-# Conexão MongoDB
 client = None
 db = None
 
@@ -68,29 +58,18 @@ db = None
 async def startup_db_client():
     global client, db
     try:
-        # Configuração SSL melhorada para MongoDB
-        client = AsyncIOMotorClient(
-            MONGO_URL,
-            serverSelectionTimeoutMS=5000,
-            connectTimeoutMS=10000,
-            socketTimeoutMS=10000,
-            tls=True,
-            tlsAllowInvalidCertificates=True
-        )
-        # Testar conexão
+        client = AsyncIOMotorClient(MONGO_URL, serverSelectionTimeoutMS=5000, connectTimeoutMS=10000, socketTimeoutMS=10000, tls=True, tlsAllowInvalidCertificates=True)
         await client.admin.command('ping')
         db = client[DB_NAME]
         print(f"✅ MongoDB conectado: {DB_NAME}")
     except Exception as e:
-        print(f"❌ ERRO ao conectar MongoDB: {e}")
-        print(f"❌ MONGO_URL: {MONGO_URL[:50]}...")
+        print(f"❌ ERRO MongoDB: {e}")
         raise
 
 @app.on_event("shutdown")
 async def shutdown_db_client():
     client.close()
 
-# Modelos Pydantic
 class UserCreate(BaseModel):
     email: EmailStr
     password: str
@@ -113,213 +92,272 @@ class PurchaseRequest(BaseModel):
     amount: float
     credits: int
 
-# Sistema de Busca Real PROFUNDO - 10 QUERIES
+# BUSCA PROFUNDA MELHORADA
 class RealPersonSearch:
     def __init__(self):
         self.timeout = 30
-        self.headers = {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+        self.user_agents = [
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0',
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.1 Safari/605.1.15'
+        ]
+    
+    def get_headers(self):
+        """Headers realistas com user-agent rotativo"""
+        return {
+            'User-Agent': random.choice(self.user_agents),
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
             'Accept-Language': 'pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7',
-            'Referer': 'https://www.google.com/',
-            'Cache-Control': 'no-cache',
-            'Pragma': 'no-cache'
+            'Accept-Encoding': 'gzip, deflate, br',
+            'DNT': '1',
+            'Connection': 'keep-alive',
+            'Upgrade-Insecure-Requests': '1',
+            'Sec-Fetch-Dest': 'document',
+            'Sec-Fetch-Mode': 'navigate',
+            'Sec-Fetch-Site': 'none',
+            'Cache-Control': 'max-age=0',
+            'Referer': 'https://www.google.com/'
         }
     
+    async def search_google(self, query: str, max_retries: int = 3) -> List[Dict[str, Any]]:
+        """Busca no Google com retry e detecção de bloqueio"""
+        
+        for attempt in range(max_retries):
+            try:
+                encoded_query = quote(query)
+                url = f'https://www.google.com/search?q={encoded_query}&num=50&hl=pt-BR'
+                
+                # Delay randomizado (parecer humano)
+                delay = random.uniform(2.0, 4.0)
+                await asyncio.sleep(delay)
+                
+                print(f"    🌐 Tentativa {attempt + 1}/{max_retries}: {query[:60]}...")
+                
+                headers = self.get_headers()
+                response = requests.get(url, headers=headers, timeout=self.timeout)
+                
+                # Verificar bloqueio
+                if response.status_code == 429:
+                    print(f"    ⚠️ Rate limit - aguardando {10 * (attempt + 1)}s...")
+                    await asyncio.sleep(10 * (attempt + 1))
+                    continue
+                
+                if response.status_code != 200:
+                    print(f"    ❌ Status {response.status_code}")
+                    continue
+                
+                # Verificar se foi bloqueado (captcha, etc)
+                if 'www.google.com/sorry' in response.url or 'captcha' in response.text.lower():
+                    print(f"    🚫 BLOQUEIO DETECTADO - Aguardando...")
+                    await asyncio.sleep(15 * (attempt + 1))
+                    continue
+                
+                soup = BeautifulSoup(response.text, 'html.parser')
+                
+                # Verificar se tem resultados
+                if not soup.find('body'):
+                    print(f"    ❌ HTML vazio ou inválido")
+                    continue
+                
+                results = []
+                
+                # Múltiplos seletores (Google muda frequentemente)
+                search_divs = (
+                    soup.find_all('div', class_='g') or
+                    soup.find_all('div', class_='tF2Cxc') or
+                    soup.find_all('div', {'data-sokoban-container': True}) or
+                    soup.select('div[data-hveid]')
+                )
+                
+                print(f"    📦 Encontrados {len(search_divs)} elementos div")
+                
+                for div in search_divs:
+                    # Tentar múltiplos seletores para título
+                    title_elem = (
+                        div.find('h3') or
+                        div.find('div', class_='BNeawe vvjwJb AP7Wnd') or
+                        div.select_one('h3.LC20lb')
+                    )
+                    
+                    # Tentar múltiplos seletores para snippet
+                    snippet_elem = (
+                        div.find('div', class_='VwiC3b') or
+                        div.find('div', class_='BNeawe s3v9rd AP7Wnd') or
+                        div.find('span', class_='aCOpRe') or
+                        div.select_one('div.IsZvec')
+                    )
+                    
+                    # Tentar pegar link
+                    link_elem = div.find('a', href=True)
+                    
+                    if title_elem:
+                        title = title_elem.get_text().strip()
+                        snippet = snippet_elem.get_text().strip() if snippet_elem else ""
+                        url = link_elem['href'] if link_elem else ""
+                        
+                        # Limpar URL do Google
+                        if url.startswith('/url?q='):
+                            url = url.split('/url?q=')[1].split('&')[0]
+                        
+                        if title and len(title) > 3:
+                            results.append({
+                                "query": query,
+                                "title": title[:300],
+                                "snippet": snippet[:500],
+                                "url": url[:500]
+                            })
+                
+                print(f"    ✅ Extraídos {len(results)} resultados válidos")
+                
+                if len(results) > 0:
+                    return results
+                else:
+                    print(f"    ⚠️ Nenhum resultado extraído - tentando novamente...")
+                    
+            except Exception as e:
+                print(f"    ❌ Erro na tentativa {attempt + 1}: {str(e)[:100]}")
+                if attempt < max_retries - 1:
+                    await asyncio.sleep(5 * (attempt + 1))
+        
+        print(f"    ❌ FALHOU após {max_retries} tentativas")
+        return []
+    
     async def extract_info_from_google(self, name: str) -> Dict[str, Any]:
-        """BUSCA PROFUNDA: 10 queries diferentes no Google"""
+        """BUSCA PROFUNDA com 10 queries + retry + detecção de bloqueio"""
         
-        print(f"🔍 Iniciando BUSCA PROFUNDA por '{name}'...")
+        print(f"\n{'='*80}")
+        print(f"🔍 INICIANDO BUSCA PROFUNDA: {name}")
+        print(f"{'='*80}\n")
         
-        # ========== 10 QUERIES DIFERENTES ==========
         queries = [
             f'"{name}"',
-            f'"{name}" processos judiciais',
-            f'"{name}" CNPJ empresa',
+            f'"{name}" Brasil',
+            f'"{name}" processos',
+            f'"{name}" jusbrasil',
+            f'"{name}" CNPJ',
+            f'"{name}" empresa',
             f'"{name}" LinkedIn',
             f'"{name}" Facebook',
             f'"{name}" Instagram',
             f'"{name}" notícias',
-            f'"{name}" tribunal justiça',
-            f'"{name}" sócio administrador',
-            f'"{name}" família esposa filho',
         ]
         
         all_results = []
         all_text = ""
         
         for i, query in enumerate(queries):
-            print(f"  📊 Query {i+1}/10: {query[:50]}...")
+            print(f"\n📊 Query {i+1}/{len(queries)}: {query}")
             
-            try:
-                encoded_query = quote(query)
-                url = f'https://www.google.com/search?q={encoded_query}&num=50&hl=pt-BR'
-                
-                response = requests.get(url, headers=self.headers, timeout=self.timeout)
-                
-                if response.status_code == 200:
-                    soup = BeautifulSoup(response.text, 'html.parser')
-                    all_text += " " + soup.get_text().lower()
-                    
-                    search_divs = soup.find_all('div', class_='g') or soup.find_all('div', class_='tF2Cxc')
-                    
-                    for result in search_divs:
-                        title_elem = result.find('h3')
-                        snippet_elem = (
-                            result.find('div', class_='VwiC3b') or
-                            result.find('div', class_='BNeawe s3v9rd AP7Wnd')
-                        )
-                        link_elem = result.find('a')
-                        
-                        if title_elem:
-                            all_results.append({
-                                "query": query,
-                                "title": title_elem.get_text().strip(),
-                                "snippet": snippet_elem.get_text().strip()[:400] if snippet_elem else "",
-                                "url": link_elem.get('href') if link_elem else ""
-                            })
-                
-                await asyncio.sleep(1.5)
-                
-            except Exception as e:
-                print(f"  ❌ Erro na query {i+1}: {e}")
-                continue
+            results = await self.search_google(query)
+            
+            if results:
+                all_results.extend(results)
+                for r in results:
+                    all_text += " " + r['title'].lower() + " " + r['snippet'].lower()
+                print(f"✅ Total acumulado: {len(all_results)} resultados")
+            else:
+                print(f"⚠️ Query sem resultados")
         
-        print(f"  ✅ Coletados {len(all_results)} resultados de {len(queries)} buscas")
+        print(f"\n{'='*80}")
+        print(f"📊 ANÁLISE COMPLETA: {len(all_results)} resultados de {len(queries)} queries")
+        print(f"{'='*80}\n")
         
-        page_text = all_text
+        # ANÁLISE DOS DADOS
         
-        # ========== ANÁLISE PROFUNDA ==========
-        
-        print("  🔍 Analisando processos judiciais...")
-        
-        # 1. PROCESSOS JUDICIAIS
+        # 1. PROCESSOS
+        print("⚖️ Analisando processos judiciais...")
         processos = []
-        processos_detalhados = []
+        processo_count = 0
         
+        # Procurar padrões de processos
         processo_patterns = [
             r'(\d+)\s*processo[s]?',
-            r'processo[s]?\s*n[°º]?\s*(\d+)',
+            r'processo[s]?\s*(?:n[°º]?)?\s*(\d+)',
             r'(\d{7}-\d{2}\.\d{4}\.\d\.\d{2}\.\d{4})',
-            r'ação\s*[\w\s]*?n[°º]?\s*(\d+)',
         ]
         
-        processo_count = 0
-        numeros_processo = []
-        
         for pattern in processo_patterns:
-            matches = re.findall(pattern, page_text)
+            matches = re.findall(pattern, all_text)
             for match in matches:
-                if isinstance(match, str):
-                    if match.isdigit():
-                        num = int(match)
-                        if num > processo_count and num < 1000:
-                            processo_count = num
-                    elif '-' in match:
-                        numeros_processo.append(match)
+                if isinstance(match, str) and match.isdigit():
+                    num = int(match)
+                    if 0 < num < 1000 and num > processo_count:
+                        processo_count = num
         
+        # Processos detalhados
         for result in all_results:
             text = result['title'] + " " + result['snippet']
-            
-            if any(word in text.lower() for word in ['processo', 'ação', 'tribunal', 'juiz', 'sentença', 'recurso', 'apelação', 'julgamento']):
+            if any(word in text.lower() for word in ['processo', 'ação', 'tribunal', 'juiz', 'sentença', 'julgamento', 'recurso']):
                 
-                tribunal = "Tribunal não identificado"
-                if 'tjsp' in text.lower() or 'tribunal de justiça de são paulo' in text.lower():
-                    tribunal = "TJSP"
-                elif 'tjrj' in text.lower():
-                    tribunal = "TJRJ"
-                elif 'stj' in text.lower():
-                    tribunal = "STJ"
-                elif 'stf' in text.lower():
-                    tribunal = "STF"
-                elif 'trt' in text.lower():
-                    tribunal = "TRT"
+                tribunal = "Não especificado"
+                if 'tjsp' in text.lower(): tribunal = "TJSP"
+                elif 'tjrj' in text.lower(): tribunal = "TJRJ"
+                elif 'trf' in text.lower(): tribunal = "TRF"
+                elif 'stj' in text.lower(): tribunal = "STJ"
                 
-                tipo_acao = "Não especificado"
-                if 'trabalhista' in text.lower():
-                    tipo_acao = "Ação Trabalhista"
-                elif 'civil' in text.lower():
-                    tipo_acao = "Ação Cível"
-                elif 'criminal' in text.lower():
-                    tipo_acao = "Ação Criminal"
-                elif 'execução' in text.lower():
-                    tipo_acao = "Execução"
+                tipo = "Processo Judicial"
+                if 'trabalhista' in text.lower(): tipo = "Trabalhista"
+                elif 'civil' in text.lower(): tipo = "Cível"
                 
-                processos_detalhados.append({
-                    "type": tipo_acao,
+                processos.append({
+                    "type": tipo,
                     "title": result['title'][:250],
                     "description": result['snippet'][:400],
                     "tribunal": tribunal,
-                    "source": "Jusbrasil / Google",
-                    "url": result['url'] if 'jusbrasil' in result['url'] else None
-                })
-        
-        if processo_count > 0 or len(numeros_processo) > 0:
-            processos.append({
-                "type": f"📊 RESUMO PROCESSOS",
-                "title": f"⚖️ Aproximadamente {processo_count if processo_count > 0 else len(numeros_processo)} PROCESSO(S) ENCONTRADO(S)",
-                "description": f"Identificados {len(processos_detalhados)} registros judiciais em fontes públicas",
-                "source": "Análise Completa Google",
-                "note": "⚠️ Verificar detalhes em portais oficiais: CNJ, Jusbrasil, PJe"
-            })
-        
-        processos.extend(processos_detalhados[:10])
-        
-        print("  🏢 Analisando vínculos empresariais...")
-        
-        # 2. EMPRESAS E CNPJS
-        empresas = []
-        
-        cnpj_patterns = [
-            r'\d{2}\.\d{3}\.\d{3}/\d{4}-\d{2}',
-            r'\d{14}',
-        ]
-        
-        cnpjs_encontrados = []
-        for pattern in cnpj_patterns:
-            matches = re.findall(pattern, all_text)
-            cnpjs_encontrados.extend(matches)
-        
-        cnpjs_unicos = list(set(cnpjs_encontrados))[:10]
-        
-        for cnpj in cnpjs_unicos:
-            empresas.append({
-                "type": "🏢 CNPJ IDENTIFICADO",
-                "company": f"Empresa com CNPJ: {cnpj}",
-                "cnpj": cnpj,
-                "details": "CNPJ encontrado em registro público",
-                "source": "Google Search",
-                "note": "Consultar na Receita Federal para mais detalhes"
-            })
-        
-        empresa_keywords = ['cnpj', 'empresa', 'sócio', 'mei', 'ltda', 'eireli', 'administrador', 'proprietário', 'dono', 'empresário']
-        
-        for result in all_results:
-            text = result['title'] + " " + result['snippet']
-            
-            if any(word in text.lower() for word in empresa_keywords):
-                
-                vinculo = "Vínculo não especificado"
-                if 'sócio' in text.lower():
-                    vinculo = "Sócio"
-                elif 'administrador' in text.lower():
-                    vinculo = "Administrador"
-                elif 'proprietário' in text.lower() or 'dono' in text.lower():
-                    vinculo = "Proprietário"
-                elif 'mei' in text.lower():
-                    vinculo = "MEI"
-                
-                empresas.append({
-                    "type": f"💼 {vinculo}",
-                    "company": result['title'][:150],
-                    "details": result['snippet'][:300],
-                    "source": "Google Search",
+                    "source": "Google/Jusbrasil",
                     "url": result['url']
                 })
         
-        print("  📱 Analisando redes sociais...")
+        if processo_count > 0:
+            processos.insert(0, {
+                "type": "📊 RESUMO",
+                "title": f"⚖️ {processo_count} PROCESSO(S) ENCONTRADO(S)",
+                "description": f"Total de {len(processos)} registros judiciais identificados",
+                "source": "Análise Google",
+                "note": "Verificar em CNJ, Jusbrasil ou tribunais estaduais"
+            })
+        
+        print(f"✅ {len(processos)} processos identificados (count: {processo_count})")
+        
+        # 2. EMPRESAS
+        print("🏢 Analisando vínculos empresariais...")
+        empresas = []
+        
+        cnpj_pattern = r'\d{2}\.?\d{3}\.?\d{3}[/]?\d{4}[-]?\d{2}'
+        cnpjs = re.findall(cnpj_pattern, all_text)
+        
+        for cnpj in list(set(cnpjs))[:10]:
+            empresas.append({
+                "type": "🏢 CNPJ",
+                "company": f"CNPJ: {cnpj}",
+                "cnpj": cnpj,
+                "source": "Google",
+                "note": "Consultar Receita Federal"
+            })
+        
+        for result in all_results:
+            text = result['title'] + " " + result['snippet']
+            if any(word in text.lower() for word in ['cnpj', 'empresa', 'sócio', 'mei', 'ltda']):
+                
+                vinculo = "Empresa"
+                if 'sócio' in text.lower(): vinculo = "Sócio"
+                elif 'administrador' in text.lower(): vinculo = "Administrador"
+                elif 'mei' in text.lower(): vinculo = "MEI"
+                
+                empresas.append({
+                    "type": f"💼 {vinculo}",
+                    "company": result['title'][:200],
+                    "details": result['snippet'][:300],
+                    "source": "Google",
+                    "url": result['url']
+                })
+        
+        print(f"✅ {len(empresas)} vínculos empresariais ({len(cnpjs)} CNPJs)")
         
         # 3. REDES SOCIAIS
+        print("📱 Analisando redes sociais...")
         social_media = []
         
         linkedin_urls = re.findall(r'linkedin\.com/in/([\w-]+)', all_text)
@@ -328,12 +366,12 @@ class RealPersonSearch:
                 "platform": "💼 LinkedIn",
                 "profile": username,
                 "url": f"https://www.linkedin.com/in/{username}",
-                "status": "Perfil público encontrado"
+                "status": "Perfil encontrado"
             })
         
         facebook_urls = re.findall(r'facebook\.com/([\w.]+)', all_text)
         for username in set(facebook_urls[:5]):
-            if 'pages' not in username and 'groups' not in username and 'watch' not in username:
+            if username not in ['pages', 'groups', 'watch', 'share']:
                 social_media.append({
                     "platform": "📘 Facebook",
                     "profile": username,
@@ -343,186 +381,119 @@ class RealPersonSearch:
         
         instagram_urls = re.findall(r'instagram\.com/([\w.]+)', all_text)
         for username in set(instagram_urls[:5]):
-            if 'explore' not in username and 'p/' not in username:
+            if username not in ['explore', 'p', 'reel']:
                 social_media.append({
                     "platform": "📷 Instagram",
                     "profile": f"@{username}",
                     "url": f"https://www.instagram.com/{username}",
-                    "status": "Perfil público"
+                    "status": "Perfil encontrado"
                 })
         
-        twitter_urls = re.findall(r'(?:twitter|x)\.com/([\w]+)', all_text)
-        for username in set(twitter_urls[:3]):
-            if username not in ['status', 'i', 'search', 'hashtag']:
-                social_media.append({
-                    "platform": "🐦 Twitter/X",
-                    "profile": f"@{username}",
-                    "url": f"https://twitter.com/{username}",
-                    "status": "Perfil público"
-                })
+        print(f"✅ {len(social_media)} perfis sociais")
         
-        print("  👥 Analisando informações familiares...")
-        
-        # 4. INFORMAÇÕES FAMILIARES
+        # 4. FAMÍLIA
+        print("👥 Analisando informações familiares...")
         family_info = []
-        family_keywords = {
-            'filho': '👦 Filho',
-            'filha': '👧 Filha',
-            'pai': '👨 Pai',
-            'mãe': '👩 Mãe',
-            'mae': '👩 Mãe',
-            'esposa': '💑 Esposa',
-            'marido': '💑 Marido',
-            'irmão': '👬 Irmão',
-            'irmao': '👬 Irmão',
-            'irmã': '👭 Irmã',
-            'irma': '👭 Irmã',
-        }
+        family_keywords = {'filho': '👦 Filho', 'filha': '👧 Filha', 'pai': '👨 Pai', 'mãe': '👩 Mãe', 'esposa': '💑 Esposa', 'marido': '💑 Marido', 'irmão': '👬 Irmão', 'irmã': '👭 Irmã'}
         
         for result in all_results:
             text = result['title'] + " " + result['snippet']
-            
             for keyword, tipo in family_keywords.items():
-                if keyword in text.lower() and len(text) > 50:
+                if keyword in text.lower():
                     family_info.append({
                         "type": tipo,
                         "details": result['snippet'][:250],
-                        "source": "Google Search",
-                        "note": "⚠️ Verificar manualmente - podem existir homônimos"
+                        "source": "Google",
+                        "note": "Verificar manualmente"
                     })
-                    
-                    if len(family_info) >= 8:
-                        break
-            
-            if len(family_info) >= 8:
-                break
+                    if len(family_info) >= 8: break
+            if len(family_info) >= 8: break
         
-        print("  📰 Analisando notícias e menções públicas...")
+        print(f"✅ {len(family_info)} menções familiares")
         
-        # 5. NOTÍCIAS E MENÇÕES
+        # 5. OUTRAS INFORMAÇÕES
+        print("📰 Analisando outras informações...")
         public_records = []
         
         for result in all_results[:30]:
-            title = result['title']
-            snippet = result['snippet']
-            url = result['url']
-            
-            categoria = "📋 Menção Pública"
-            
-            if any(word in url.lower() for word in ['g1.com', 'uol.com', 'folha', 'estadao', 'globo']):
+            categoria = "📋 Menção"
+            if any(w in result['url'].lower() for w in ['g1.com', 'uol.com', 'folha', 'estadao']):
                 categoria = "📰 Notícia"
-            elif any(word in snippet.lower() for word in ['atleta', 'esporte', 'campeonato', 'competição']):
-                categoria = "🏃 Atividade Esportiva"
-            elif any(word in snippet.lower() for word in ['curso', 'palestra', 'evento']):
-                categoria = "🎓 Eventos"
+            elif any(w in result['snippet'].lower() for w in ['atleta', 'esporte', 'competição']):
+                categoria = "🏃 Esporte"
             
             public_records.append({
                 "source": categoria,
-                "title": title[:200],
-                "snippet": snippet[:350],
-                "url": url
+                "title": result['title'][:200],
+                "snippet": result['snippet'][:350],
+                "url": result['url']
             })
         
-        print("  📊 Compilando relatório final...")
+        print(f"✅ {len(public_records)} registros públicos")
         
-        stats = {
-            "total_resultados_analisados": len(all_results),
-            "queries_realizadas": len(queries),
-            "processos_encontrados": len(processos),
-            "empresas_encontradas": len(empresas),
-            "redes_sociais_encontradas": len(social_media),
-            "mencoes_familiares": len(family_info),
-            "registros_publicos": len(public_records)
-        }
-        
-        print(f"  ✅ BUSCA CONCLUÍDA:")
-        print(f"     - {stats['total_resultados_analisados']} resultados analisados")
-        print(f"     - {stats['processos_encontrados']} processos identificados")
-        print(f"     - {stats['empresas_encontradas']} vínculos empresariais")
-        print(f"     - {stats['redes_sociais_encontradas']} perfis sociais")
+        print(f"\n{'='*80}")
+        print(f"✅ BUSCA CONCLUÍDA COM SUCESSO!")
+        print(f"{'='*80}\n")
         
         return {
             "processos": processos,
             "processo_count": processo_count,
             "empresas": empresas,
             "social_media": social_media,
-            "public_records": public_records[:30],
+            "public_records": public_records,
             "family_info": family_info,
-            "statistics": stats
+            "total_results": len(all_results)
         }
     
     async def search_person(self, full_name: str) -> Dict[str, Any]:
-        """Busca PROFUNDA com 10 queries"""
+        """Busca principal"""
         
-        print(f"🔍 Iniciando busca PROFUNDA por: {full_name}")
+        extracted = await self.extract_info_from_google(full_name)
         
-        extracted_data = await self.extract_info_from_google(full_name)
+        social_media = extracted["social_media"] if extracted["social_media"] else [{
+            "platform": "Não encontrado",
+            "profile": "Nenhum perfil público encontrado",
+            "status": "Não encontrado"
+        }]
         
-        social_media = extracted_data["social_media"]
-        legal_records = extracted_data["processos"]
-        professional = extracted_data["empresas"]
-        public_records = extracted_data["public_records"]
-        family_info = extracted_data["family_info"]
-        processo_count = extracted_data["processo_count"]
+        legal_records = extracted["processos"] if extracted["processos"] else [{
+            "type": "Processos",
+            "title": "Nenhum processo encontrado",
+            "source": "Google",
+            "note": "Verificar manualmente em portais oficiais"
+        }]
         
-        if not social_media:
-            social_media.append({
-                "platform": "Busca Geral",
-                "profile": f"Nenhum perfil público encontrado para {full_name}",
-                "status": "Não encontrado",
-                "note": "Recomenda-se busca manual em redes sociais"
-            })
+        professional = extracted["empresas"] if extracted["empresas"] else [{
+            "type": "Empresas",
+            "company": "Nenhum vínculo empresarial encontrado",
+            "source": "Google"
+        }]
         
-        if not legal_records:
-            legal_records.append({
-                "type": "Processos Judiciais",
-                "title": "Nenhum processo encontrado em busca pública",
-                "source": "Google Search",
-                "note": "Verificar manualmente em portais oficiais (CNJ, TJ estaduais)"
-            })
+        family_info = extracted["family_info"] if extracted["family_info"] else [{
+            "type": "Família",
+            "details": "Informações familiares não disponíveis",
+            "note": "Requer registros civis"
+        }]
         
-        if not professional:
-            professional.append({
-                "type": "Vínculos Empresariais",
-                "company": "Nenhum vínculo empresarial encontrado",
-                "source": "Google Search",
-                "note": "Verificar na Receita Federal e Juntas Comerciais"
-            })
+        public_records = extracted["public_records"] if extracted["public_records"] else [{
+            "source": "Google",
+            "title": "Informações limitadas",
+            "snippet": "Verificar outras fontes"
+        }]
         
-        if not public_records:
-            public_records.append({
-                "source": "Google Search",
-                "title": "Informações limitadas disponíveis",
-                "snippet": "Recomenda-se verificação em fontes oficiais"
-            })
-        
-        if not family_info:
-            family_info.append({
-                "type": "Informações Familiares",
-                "status": "Não disponível em fontes públicas",
-                "note": "Informações familiares requerem acesso a registros civis oficiais"
-            })
-        
-        sources_searched = 10
-        profiles_found = len(social_media) + len(legal_records) + len(professional)
-        
-        results = {
+        return {
             "name": full_name,
             "timestamp": datetime.now(timezone.utc).isoformat(),
-            "sources_searched": sources_searched,
-            "profiles_found": profiles_found,
+            "sources_searched": 10,
+            "profiles_found": extracted["total_results"],
             "social_media": social_media,
             "legal_records": legal_records,
             "professional": professional,
             "family_info": family_info,
             "public_records": public_records,
-            "risk_assessment": "baixo" if not legal_records or len(legal_records) == 1 else "médio",
-            "disclaimer": "⚠️ IMPORTANTE: Informações coletadas de fontes públicas disponíveis na internet. Este relatório é apenas um ponto de partida. É OBRIGATÓRIO realizar verificação cruzada independente em fontes oficiais antes de tomar qualquer decisão. Podem existir homônimos ou dados desatualizados."
+            "risk_assessment": "baixo" if len(legal_records) <= 1 else "médio",
+            "disclaimer": "⚠️ IMPORTANTE: Informações de fontes públicas. Verificação cruzada obrigatória. Podem existir homônimos."
         }
-        
-        print(f"✅ Busca concluída: {profiles_found} resultados encontrados")
-        
-        return results
 
 search_system = RealPersonSearch()
 
@@ -534,17 +505,12 @@ def verify_password(password: str, hashed: str) -> bool:
     return bcrypt.checkpw(password.encode('utf-8'), hashed.encode('utf-8'))
 
 def create_jwt_token(user_data: dict) -> str:
-    payload = {
-        "user_id": user_data["_id"],
-        "email": user_data["email"],
-        "exp": datetime.utcnow() + timedelta(days=30)
-    }
+    payload = {"user_id": user_data["_id"], "email": user_data["email"], "exp": datetime.utcnow() + timedelta(days=30)}
     return jwt.encode(payload, JWT_SECRET, algorithm="HS256")
 
 async def get_current_user(authorization: Optional[str] = Header(None, alias="Authorization")):
     if not authorization or not authorization.startswith("Bearer "):
-        raise HTTPException(status_code=401, detail="Token de autorização necessário")
-    
+        raise HTTPException(status_code=401, detail="Token necessário")
     token = authorization.split(" ")[1]
     try:
         payload = jwt.decode(token, JWT_SECRET, algorithms=["HS256"])
@@ -557,131 +523,56 @@ async def get_current_user(authorization: Optional[str] = Header(None, alias="Au
     except jwt.JWTError:
         raise HTTPException(status_code=401, detail="Token inválido")
 
-# Rotas da API
+# ROTAS
 @app.post("/api/auth/register")
 async def register_user(user_data: UserCreate):
-    existing_user = await db.users.find_one({"email": user_data.email})
-    if existing_user:
+    existing = await db.users.find_one({"email": user_data.email})
+    if existing:
         raise HTTPException(status_code=400, detail="Email já cadastrado")
-    
     user_id = str(uuid.uuid4())
-    new_user = {
-        "_id": user_id,
-        "email": user_data.email,
-        "password": hash_password(user_data.password),
-        "credits": 0,
-        "created_at": datetime.now(timezone.utc)
-    }
-    
+    new_user = {"_id": user_id, "email": user_data.email, "password": hash_password(user_data.password), "credits": 0, "created_at": datetime.now(timezone.utc)}
     await db.users.insert_one(new_user)
-    
-    return {
-        "message": "Usuário criado com sucesso",
-        "user": UserResponse(
-            id=user_id,
-            email=user_data.email,
-            credits=0,
-            created_at=new_user["created_at"]
-        )
-    }
+    return {"message": "Usuário criado", "user": UserResponse(id=user_id, email=user_data.email, credits=0, created_at=new_user["created_at"])}
 
 @app.post("/api/auth/login")
 async def login_user(credentials: UserLogin):
     user = await db.users.find_one({"email": credentials.email})
-    
     if not user or not verify_password(credentials.password, user["password"]):
         raise HTTPException(status_code=401, detail="Email ou senha incorretos")
-    
-    token = create_jwt_token(user)
-    
-    return {
-        "token": token,
-        "user": UserResponse(
-            id=user["_id"],
-            email=user["email"],
-            credits=user.get("credits", 0),
-            created_at=user["created_at"]
-        )
-    }
+    return {"token": create_jwt_token(user), "user": UserResponse(id=user["_id"], email=user["email"], credits=user.get("credits", 0), created_at=user["created_at"])}
 
 @app.post("/api/search")
 async def search_person(search_data: SearchRequest, current_user: dict = Depends(get_current_user)):
     if current_user.get("credits", 0) < 1:
         raise HTTPException(status_code=400, detail="Créditos insuficientes")
-    
-    search_results = await search_system.search_person(search_data.name)
-    
-    await db.users.update_one(
-        {"_id": current_user["_id"]},
-        {"$inc": {"credits": -1}}
-    )
-    
-    search_record = {
-        "_id": str(uuid.uuid4()),
-        "user_email": current_user["email"],
-        "search_name": search_data.name,
-        "results": search_results,
-        "credits_used": 1,
-        "created_at": datetime.now(timezone.utc)
-    }
-    
-    await db.searches.insert_one(search_record)
-    return search_results
+    results = await search_system.search_person(search_data.name)
+    await db.users.update_one({"_id": current_user["_id"]}, {"$inc": {"credits": -1}})
+    await db.searches.insert_one({"_id": str(uuid.uuid4()), "user_email": current_user["email"], "search_name": search_data.name, "results": results, "created_at": datetime.now(timezone.utc)})
+    return results
 
 @app.post("/api/purchase")
 async def create_purchase(purchase_data: PurchaseRequest, current_user: dict = Depends(get_current_user)):
     transaction_id = str(uuid.uuid4())
-    transaction = {
-        "_id": transaction_id,
-        "user_email": current_user["email"],
-        "package_type": purchase_data.package_type,
-        "amount": purchase_data.amount,
-        "credits": purchase_data.credits,
-        "status": "pending",
-        "payment_method": "mercadopago",
-        "created_at": datetime.now(timezone.utc)
-    }
-    
-    await db.transactions.insert_one(transaction)
-    
-    return {
-        "transaction_id": transaction_id,
-        "pix_info": {
-            "key": PIX_KEY,
-            "name": PIX_NAME,
-            "amount": purchase_data.amount
-        }
-    }
+    await db.transactions.insert_one({"_id": transaction_id, "user_email": current_user["email"], "package_type": purchase_data.package_type, "amount": purchase_data.amount, "credits": purchase_data.credits, "status": "pending", "created_at": datetime.now(timezone.utc)})
+    return {"transaction_id": transaction_id, "pix_info": {"key": PIX_KEY, "name": PIX_NAME, "amount": purchase_data.amount}}
 
 @app.get("/api/admin/stats")
 async def get_admin_stats():
     total_users = await db.users.count_documents({})
     total_searches = await db.searches.count_documents({})
-    confirmed_transactions = await db.transactions.find({"status": "confirmed"}).to_list(None)
-    total_revenue = sum(t["amount"] for t in confirmed_transactions)
-    
-    return {
-        "total_users": total_users,
-        "total_searches": total_searches,
-        "total_revenue": total_revenue,
-        "today_sales": 0
-    }
+    confirmed = await db.transactions.find({"status": "confirmed"}).to_list(None)
+    return {"total_users": total_users, "total_searches": total_searches, "total_revenue": sum(t["amount"] for t in confirmed), "today_sales": 0}
 
 @app.get("/api/user/profile")
 async def get_user_profile(current_user: dict = Depends(get_current_user)):
-    return UserResponse(
-        id=current_user["_id"],
-        email=current_user["email"],
-        credits=current_user.get("credits", 0),
-        created_at=current_user["created_at"]
-    )
+    return UserResponse(id=current_user["_id"], email=current_user["email"], credits=current_user.get("credits", 0), created_at=current_user["created_at"])
 
 @app.get("/api/admin/users")
 async def get_all_users():
     users = await db.users.find({}, {"password": 0}).to_list(None)
     return {"users": users, "total": len(users)}
 
-@app.get("/api/admin/transactions")  
+@app.get("/api/admin/transactions")
 async def get_all_transactions():
     transactions = await db.transactions.find({}).to_list(None)
     return {"transactions": transactions, "total": len(transactions)}
@@ -693,19 +584,11 @@ async def get_all_searches():
 
 @app.post("/api/admin/add-credits")
 async def add_credits_to_user(data: dict):
-    email = data.get("email")
-    credits = data.get("credits", 0)
-    
-    result = await db.users.update_one(
-        {"email": email},
-        {"$inc": {"credits": int(credits)}}
-    )
-    
+    result = await db.users.update_one({"email": data.get("email")}, {"$inc": {"credits": int(data.get("credits", 0))}})
     if result.matched_count > 0:
-        return {"success": True, "message": f"{credits} créditos adicionados para {email}"}
-    else:
-        raise HTTPException(status_code=404, detail="Usuário não encontrado")
-        
+        return {"success": True, "message": f"{data.get('credits')} créditos adicionados"}
+    raise HTTPException(status_code=404, detail="Usuário não encontrado")
+
 @app.get("/api/health")
 async def health_check():
     return {"status": "healthy", "timestamp": datetime.now(timezone.utc)}
@@ -716,5 +599,5 @@ async def root():
 
 if __name__ == "__main__":
     import uvicorn
-    port = int(os.environ.get("PORT", 8001))
-    uvicorn.run(app, host="0.0.0.0", port=port)
+    uvicorn.run(app, host="0.0.0.0", port=int(os.environ.get("PORT", 8001)))
+
