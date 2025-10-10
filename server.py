@@ -597,7 +597,47 @@ async def health_check():
 async def root():
     return {"message": "VerificaPessoa API is running"}
 
+@app.get("/api/debug/test-google")
+async def test_google_scraping():
+    """Endpoint de DEBUG para testar o scraping do Google"""
+    try:
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+            'Accept-Language': 'pt-BR,pt;q=0.9',
+        }
+        
+        test_query = "Silas André Bazzilli Caliari"
+        url = f'https://www.google.com/search?q={quote(test_query)}&num=10&hl=pt-BR'
+        
+        response = requests.get(url, headers=headers, timeout=10)
+        
+        soup = BeautifulSoup(response.text, 'html.parser')
+        
+        # Tentar extrair resultados
+        divs = soup.find_all('div', class_='g')
+        divs2 = soup.find_all('div', class_='tF2Cxc')
+        h3s = soup.find_all('h3')
+        
+        # Salvar HTML para debug
+        html_preview = response.text[:2000]  # Primeiros 2000 caracteres
+        
+        return {
+            "status": "debug",
+            "status_code": response.status_code,
+            "url_acessada": url,
+            "html_length": len(response.text),
+            "divs_class_g": len(divs),
+            "divs_tF2Cxc": len(divs2),
+            "h3_encontrados": len(h3s),
+            "bloqueado": "captcha" in response.text.lower() or "sorry" in response.url.lower(),
+            "html_preview": html_preview,
+            "tem_body": bool(soup.find('body')),
+            "tem_resultados": len(divs) > 0 or len(divs2) > 0
+        }
+    except Exception as e:
+        return {"error": str(e), "type": type(e).__name__}
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=int(os.environ.get("PORT", 8001)))
-
